@@ -1,0 +1,164 @@
+  .main-card {
+    /* height: 201px;
+      background: #1890ff;
+      margin: 10px;
+      border-radius: 5px;
+      box-shadow: 0 1px 6px 0 rgba(32,33,36,.28);
+      padding: 8px; */
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .cards-container {
+    display: flex;
+    width: 100%;
+    border-radius: 7px;
+    margin-left: 4px;
+    margin-top: 4px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .aggregate {
+    min-width: 100px;
+    width: 100%;
+    min-height: 100px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    padding: 5px 15px;
+    //box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
+    border-radius: 4px;
+  }
+  .expense-title {
+    flex: 1;
+    font-size: 1.2rem;
+  }
+  .cost {
+    flex: 4;
+    word-wrap: break-word;
+    margin: 8px 0;
+  }
+  // .cost span {
+  //     font-weight: 400;
+  //     font-size:  0.9rem;
+  // }
+  // .date-refresh {
+  //     font-size: 0.7rem;
+  //     align-items: flex-end;
+  //     flex: 1;
+  // }
+  .date-refresh i {
+    margin-right: 8px;
+  }
+  .bg-icon {
+    font-size: 7rem;
+    position: absolute;
+    height: 120px;
+    bottom: calc(100% - 120px);
+    opacity: 0.1;
+    left: calc(100% - 80px);
+  }
+  .ins {
+    display: flex;
+  }
+  .side {
+    margin-left: 5px;
+  }
+  p {
+    font-weight: bold;
+  }
+  .makeBold {
+    color: rgba(0, 0, 0, 0.85);
+    font-weight: 500;
+  }
+  .shadow-d1{
+    box-shadow: 0 1px 6px 1.5px rgba(32,33,36,.28) !important;
+  }
+  .full-width {
+    width: 100%;
+  }
+  .add-icon {
+    position: absolute;
+    right: 3px;
+    top: -10px;
+    cursor: pointer;
+  }
+  .wid {
+    width: 99%;
+    // cursor: pointer;
+  }
+  .pointer {
+    cursor: pointer;
+  }
+  .text-left {
+    text-align: left;
+  }
+  .text-right {
+    text-align: right;
+  }
+  .aggregate {
+    padding: 6px;
+  }
+  .head {
+    padding: 12px;
+    margin-top: 5px;
+    border-radius: 7px;
+    position: relative;
+  }
+  #content {
+    height: 500px;
+    width: 2000px;
+    background-color: coral;
+  }
+  .shd {
+    background: red;
+  }
+
+  .SelectHighlight {
+    background: rgb(169, 169, 169) !important;
+  }
+  
+  th{
+    text-transform: uppercase !important;
+    background-color:#3e51b5 !important;
+    color: white!important;
+    border-color: #000!important;
+    text-align: center!important;
+  }
+  .align{
+    display: flex;
+  }
+  .grey {
+    color: black;
+  }
+  @page {
+    size: auto;
+    margin: 2mm;
+  }
+  @media print {
+    html, body {
+      height: 100vh;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    #myDIV {
+      height: 500px;
+    }
+    nz-select, nz-date-picker, input {
+      width: 100%;
+    }
+  }
+  @media screen and (max-width: 720px) {
+    .flex-container {
+      display: flex;
+      flex-direction: column;
+    }
+    .flex-container > div {
+      width: 100%;
+    }
+  }
+  @media screen and (max-width: 500px) {
+    #myDIV {
+      height: 30vh;
+    }
+  }
+  

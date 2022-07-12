@@ -1,0 +1,18 @@
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.flex-container > div {
+  width: auto;
+  margin: 15px;
+}
+.buttonAdd{
+  width: auto;
+  margin: 15px;
+}
+.btn-icon{
+  padding: 0;
+  border: none;
+  background: none;
+  outline:none;
+}

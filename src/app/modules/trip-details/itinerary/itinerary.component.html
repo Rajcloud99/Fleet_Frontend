@@ -1,0 +1,127 @@
+<div class="insight">
+  <div class="insight-head">
+    <div class="insight-tools">
+      <div class="tool">
+        <span class="mbbtn bold" style="margin-right:13vw;">Trip Itinerary({{selectedTripData?.vehicle_no}})</span>
+      </div>
+    </div>
+  </div>
+  <div class="insight-description" >
+    <div style="height: fit-content"
+        class="col-md-12 card m-b-5"
+        style="border-top: 1px solid #e6e6e6; padding: 1px 0 0 0;"
+          >
+    <div style="border-bottom: 5px solid #e6e6e6; padding: 1px 0 0 0;width:100%;">
+      <agm-map [style.height]="innerWidth <=500 ? '40vh' :'75vh'" [latitude]="marker.lat" [longitude]="marker.lng"  [zoom]="zoom" [streetViewControl]="false" [keyboardShortcuts]="false"
+                [fullscreenControl]="false" [gestureHandling]="'greedy'"  [fitBounds]="true">
+
+        <agm-marker *ngFor="let m of markers; let i = index;" [latitude]="m.lat" [longitude]="m.lng"
+                    [iconUrl]="stopFlag"  [agmFitBounds]="true">
+          <agm-info-window [disableAutoPan]="false" [isOpen]="m.isOpen" [maxWidth]="250">
+            <div>
+              <div class="col-md-12"><span class="pp">Start:</span> {{m.start_time| date: 'medium'}}</div>
+              <div class="col-md-12" ><span class="pp">End :</span> {{m.end_time| date: 'medium'}}</div>
+              <div class="col-md-12"><span class="pp">Residence:</span>{{m.duration}}</div>
+              <div class="col-md-12"><span class="pp">address :</span>{{m.stop_addr}}</div>
+            </div>
+
+          </agm-info-window>
+        </agm-marker>
+
+        <agm-marker *ngFor="let m of startEnd;" [latitude]="m.lat" [longitude]="m.lng" [iconUrl]="m.flag">
+          <agm-info-window [disableAutoPan]="false" [isOpen]="m.isOpen" [maxWidth]="250">
+            <div>
+              <div class="col-md-12"><span class="pp">Start:</span> {{m.start_time| date: 'medium'}}</div>
+              <div class="col-md-12" ><span class="pp">End :</span> {{m.end_time| date: 'medium'}}</div>
+              <div class="col-md-12"><span class="pp">Residence:</span>{{m.duration}}</div>
+              <div class="col-md-12"><span class="pp">address :</span>{{m.stop_addr}}</div>
+            </div>
+
+          </agm-info-window>
+        </agm-marker>
+
+        <ng-container>
+          <agm-polyline [strokeColor]="polyLine.color">
+            <agm-icon-sequence [fixedRotation]="false"
+                               [repeat]= "'50px'"
+                               [rotation]="0"
+                               [path]="'FORWARD_OPEN_ARROW'">
+            </agm-icon-sequence>
+            <agm-polyline-point *ngFor="let point of drawLine.latLng" [latitude]="point.lat"
+                                [longitude]="point.lng">
+            </agm-polyline-point>
+          </agm-polyline>
+        </ng-container>
+
+      </agm-map>
+
+    </div>
+    <div class="aggregate" style="overflow: scroll; height: 300px;">
+      <div  *ngFor=" let data of playBackData.points"
+           class="head shadow-d1">
+        <div *ngIf="selectedTripData.tripBase == 'Sim Based'" (click)="setviewpostion(data)">
+          <div
+            class="col-md-12 start p-2  p-l-15 pointer" style="overflow: hidden;"
+          > &nbsp; &nbsp;
+            {{data.place_name}}
+          </div>
+          <div>
+          <div class="col-md-12 dis p-2 p-l-15">&nbsp; &nbsp;
+            <!-- {{data.start_time|date:'dd MMM'}}
+            {{data.start_time|date:'H:mm'}} -->
+            {{data.start_time}}
+          </div>
+          <div>
+            <div class="col-md-12 dis p-2 p-l-15">&nbsp; &nbsp;
+              {{data.counter}} )<span class="text-danger bold">Stopped</span> {{data.duration}}
+            </div>
+          </div>
+          <div class="col-md-12 dis p-2 p-l-15">&nbsp; &nbsp;
+            <!-- {{data.end_time|date:'dd MMM'}} -->
+            <!-- {{data.end_time|date:'H:mm'}} -->
+            {{data.leaving_time}}
+          </div>
+          </div>
+        </div>
+
+
+      </div>
+      <div *ngFor=" let data of playData.data"
+           class="head shadow-d1">
+        <div *ngIf="selectedTripData.tripBase != 'Sim Based'" (click)="data.status == 'stopped'?setviewpostion(data):''">
+          <div
+            class="col-md-12 start p-2  p-l-15 pointer" style="overflow: hidden;"
+          > &nbsp; &nbsp;
+            {{data.start_addr}}
+          </div>
+          <div>
+          <div class="col-md-12 dis p-2 p-l-15">&nbsp; &nbsp;
+            {{data.start_time|date:'dd MMM'}}
+            {{data.start_time|date:'H:mm'}}
+          </div>
+          <div class="col-md-12 dis p-2 p-l-15" *ngIf="data.status == 'running'">&nbsp; &nbsp;
+            {{data.distance}} Km in {{data.duration}}
+          </div>
+            <div *ngIf="data.status =='stopped'">
+              <div class="col-md-12 dis p-2 p-l-15">&nbsp; &nbsp;
+                {{data.counter}} )<span class="text-danger bold">Stopped</span> {{data.duration}}
+              </div>
+            </div>
+          <div class="col-md-12 dis p-2 p-l-15">&nbsp; &nbsp;
+            {{data.end_time|date:'dd MMM'}}
+            {{data.end_time|date:'H:mm'}}
+          </div>
+          <div *ngIf="data.status == 'running'"
+            class="col-md-12 end p-2 p-l-15"
+          > &nbsp; &nbsp;
+            {{data.stop_addr}}
+          </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+</div>
+</div>
+</div>

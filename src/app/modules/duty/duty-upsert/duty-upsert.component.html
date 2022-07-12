@@ -1,0 +1,110 @@
+<div class="insight">
+
+  <div class="insight-description">
+    <form nz-form [formGroup]="dutyForm" (ngSubmit)="onSubmit()">
+      <div nz-row>
+        <nz-form-item  nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Duty Type<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <nz-select [nzDropdownMatchSelectWidth]="false" formControlName="booking_type" nzPlaceHolder="Search Duty"
+              nzShowSearch  nzServerSearch autocomplete="off" nzAllowClear
+              required>
+              <nz-option *ngFor="let type of aBookingTypes" nzLabel="{{type}}" [nzValue]="type">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Duty Date<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <nz-date-picker style="width: 100%"  [nzDisabledDate]="disabledDate" formControlName="booking_date"
+              nzPlaceHolder="Serve Start">
+            </nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Serve Start<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <nz-date-picker style="width: 100%"  [nzDisabledDate]="disabledDate" formControlName="serve_start"
+              nzPlaceHolder="Serve Start">
+            </nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Serve End<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <nz-date-picker style="width: 100%" formControlName="serve_end" nzPlaceHolder="Serve End">
+            </nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Branch Name<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <nz-select [nzDropdownMatchSelectWidth]="false" formControlName="branch_id" nzPlaceHolder="Select Branch"
+              nzShowSearch (nzOnSearch)="branchSearch($event)" nzServerSearch autocomplete="off" nzAllowClear
+              required>
+              <nz-option *ngFor="let branch of receivedAllBranches" nzLabel="{{ branch?.name}}" [nzValue]="branch._id">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Customer Name<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <nz-select [nzDropdownMatchSelectWidth]="false" formControlName="customer" nzPlaceHolder="Select customer"
+              nzShowSearch (nzOnSearch)="customerSearch($event)" nzServerSearch autocomplete="off" nzAllowClear
+              required>
+              <nz-option *ngFor="let customer of receivedAllCustomers" nzLabel="{{ customer?.name}}"
+              [nzValue]="customer._id">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Remark</nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input autocomplete="off" placeholder="Enter Remark" id="remark"
+              formControlName="remark" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Route<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <nz-select [nzDropdownMatchSelectWidth]="false" formControlName="route" nzPlaceHolder="Select Route"
+              nzShowSearch (nzOnSearch)="getRoute($event)" nzServerSearch autocomplete="off" nzAllowClear
+              required>
+              <nz-option *ngFor="let item of aRoute" nzLabel="{{item.name}}" [nzValue]="item._id">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Material<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <nz-select [nzDropdownMatchSelectWidth]="false" formControlName="material_type" nzPlaceHolder="Select Material"
+              nzShowSearch (nzOnSearch)="materialSearch($event)" nzServerSearch autocomplete="off" nzAllowClear
+              required>
+              <nz-option *ngFor="let material of receivedAllMaterials" nzLabel="{{ material?.name}}"
+              [nzValue]="material._id">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <nz-form-item style="padding-top: 5%;">
+        <nz-form-control [nzSpan]="20">
+          <button nz-button nzType="primary" type="submit" [disabled]="dutyForm?.invalid">{{getId ? 'Update' : 'Add'}}</button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+</div>

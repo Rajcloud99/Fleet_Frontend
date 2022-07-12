@@ -1,0 +1,220 @@
+<div class="insight">
+  <div class="insight-head" *ngIf="innerWidth >=500">
+    <div class="insight-tools">
+<!--      mobile View-->
+      <div class="tool" *ngIf="innerWidth<=500">
+        <div class="mbbtn " nz-tooltip nzTooltipTitle="Add Vehicle" (click)="navigateToAdd()">
+          <fa-icon [icon]="faPlusSquare" ></fa-icon>
+        </div>
+        <div class="mbbtn "  nz-tooltip nzTooltipTitle="Edit Details" (click)="navigateToEdit()">
+          <fa-icon [icon]="faEdit" ></fa-icon>
+        </div>
+        <div *ngIf="!selectedRowId" nz-button class="mbbtn" nz-tooltip nzTooltipTitle="Disable"
+                (click)="showDeleteConfirm(this.selectedItem.vehicle_reg_no)">
+          <fa-icon [icon]="faTrash" style="color: red"></fa-icon>
+        </div>
+        <a #donwload target="_blank"></a>
+        <div class="mbbtn " nz-tooltip nzTooltipTitle="Download" (click)="downloadReport()">
+          <fa-icon [icon]="faDownload" ></fa-icon>
+        </div>
+        <div  class="mbbtn " *ngIf="innerWidth <= 500" nz-tooltip nz-button nzTooltipTitle="Show Filters"
+             type="button" (click)="isMobFilterVisible=isMobFilterVisible?false:true;">
+          <fa-icon [icon]="faFilter"></fa-icon>
+        </div>
+      </div>
+<!--      //***********-->
+      <div class="tool" *ngIf="innerWidth>500">
+        <button class="my-btn bg-primary" nz-tooltip nzTooltipTitle="Add Vehicle" (click)="navigateToAdd()">
+          <fa-icon [icon]="faPlusSquare" style="font-size: 15px;"></fa-icon>
+        </button>
+        <button class="my-btn bg-primary"  nz-tooltip nzTooltipTitle="Edit Details" (click)="navigateToEdit()">
+          <fa-icon [icon]="faEdit" style="font-size: 15px;"></fa-icon>
+        </button>
+        <button [disabled]="!selectedRowId" nz-button class="my-btn btn-danger shd" nz-tooltip nzTooltipTitle="Disable"
+                (click)="showDeleteConfirm(this.selectedItem.vehicle_reg_no)">
+          <fa-icon [icon]="faTrash" style="font-size: 15px"></fa-icon>
+        </button>
+        <a #donwload target="_blank"></a>
+        <button class="my-btn bg-primary" nz-tooltip nzTooltipTitle="Download" (click)="downloadReport()">
+          <fa-icon [icon]="faDownload" style="font-size: 15px"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="insight-description">
+<!--    for mobile view-->
+    <div *ngIf="isMobFilterVisible && innerWidth <= 500">
+      <div>
+        <div class="flex-cont">
+          <label></label>
+          <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 100% " nzPlaceHolder="Search Vehicle"
+                     [(ngModel)]="filterObj && filterObj.vehicle_reg_no" nzShowSearch (nzOnSearch)="onSearchvehicle($event)" nzServerSearch nzAllowClear>
+            <nz-option *ngFor="let vehicle of vehicleget"
+                       nzLabel="{{ vehicle?.vehicle_reg_no}}" [nzValue]="vehicle.vehicle_reg_no">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="flex-cont">
+          <label></label>
+          <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 300px" nzPlaceHolder="Search Vendor" style="width: 100% "
+                     [(ngModel)]="filterObj && filterObj.vendor_id" nzShowSearch (nzOnSearch)="onSearchvender($event)" nzServerSearch nzAllowClear>
+            <nz-option *ngFor="let vendor of venderget"
+                       nzLabel="{{ vendor?.name}}" [nzValue]="vendor._id">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="flex-cont">
+          <label></label>
+          <nz-select nzShowSearch style="width: 140px" nzPlaceHolder="Ownership Type" style="width: 100% "
+                     [(ngModel)]="filterObj && filterObj.ownershipType" nzAllowClear>
+            <nz-option *ngFor="let st of Ownershipfilter" nzLabel="{{ st.name }}" [nzValue]="st.value">
+            </nz-option>
+          </nz-select>
+        </div>
+      </div>
+
+      <div style="margin-top: 5%; margin-bottom:10%">
+        <button style="width: 50%;color:white;" type="button" class="bg-primary" nz-button
+                (click)="search();isMobFilterVisible = false;">Search</button>
+        <button style="width: 50%;color:white;" type="button" class="bg-primary" nz-button
+                (click)="reset();isMobFilterVisible = false;">Reset</button>
+      </div>
+
+    </div>
+<!--    mobile view end-->
+    <!-- filters -->
+    <div class="filters-row" *ngIf="innerWidth>500">
+      <div class="my-row">
+        <!--        vehicle search-->
+
+        <div class="my-card">
+          <div class="my-card-header">
+            <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 300px" nzPlaceHolder="Search Vehicle"
+                       [(ngModel)]="filterObj && filterObj.vehicle_reg_no" nzShowSearch (nzOnSearch)="onSearchvehicle($event)" nzServerSearch nzAllowClear>
+              <nz-option *ngFor="let vehicle of vehicleget"
+                         nzLabel="{{ vehicle?.vehicle_reg_no}}" [nzValue]="vehicle.vehicle_reg_no">
+              </nz-option>
+            </nz-select>
+          </div></div>
+<!--          vendor search-->
+          <div class="my-card">
+            <div class="my-card-header">
+              <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 300px" nzPlaceHolder="Search Vendor"
+                         [(ngModel)]="filterObj && filterObj.vendor_id" nzShowSearch (nzOnSearch)="onSearchvender($event)" nzServerSearch nzAllowClear>
+                <nz-option *ngFor="let vendor of venderget"
+                           nzLabel="{{ vendor?.name}}" [nzValue]="vendor._id">
+                </nz-option>
+              </nz-select>
+            </div>
+
+        </div>
+        <!--        ownership type filter-->
+        <div class="my-card">
+          <div class="my-card-header">
+            <nz-select nzShowSearch style="width: 140px" nzPlaceHolder="Ownership Type"
+                       [(ngModel)]="filterObj && filterObj.ownershipType" nzAllowClear>
+              <nz-option *ngFor="let st of Ownershipfilter" nzLabel="{{ st.name }}" [nzValue]="st.value">
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <!--        search-->
+        <div class="my-card">
+          <div class="my-card-header">
+            <button nz-button nzType="primary" (click)="search()"><i nz-icon nzType="search"></i></button>
+          </div>
+        </div>
+        <div class="my-card">
+          <div class="my-card-header ">
+            <button nz-button nzType="primary" (click)=" reset()">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="myDIV" *ngIf="innerWidth > 500">
+      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
+                nzSize="small"  [nzScroll]="{ x: '2000', y: '350px' }" style="overflow-x: auto">
+        <thead>
+        <tr>
+          <th nzWidth="120px" nzAlign="center">vehicle No</th>
+          <th nzWidth="120px" nzAlign="center">Vehicle Status</th>
+          <th nzWidth="150px" nzAlign="center">Device IMEI</th>
+          <th nzWidth="80px" nzAlign="center">Ownership</th>
+          <th nzWidth="150px" nzAlign="center">Vendor</th>
+          <th nzWidth="120px" nzAlign="center">Vehicle Type</th>
+          <th nzWidth="120px" nzAlign="center">Segment</th>
+          <th nzWidth="120px" nzAlign="center">Vehicle Group</th>
+          <th nzWidth="120px" nzAlign="center">Vehicle category</th>
+          <th nzWidth="120px" nzAlign="center">account</th>
+          <th nzWidth="150px" nzAlign="center">Created by</th>
+          <th nzWidth="150px" nzAlign="center">Created at</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+          style="cursor: pointer"
+          *ngFor="let item of receivedData"
+          (click)="selectItem(item)"
+          [ngClass]="{SelectHighlight :  selectedRowId && (item?._id === selectedRowId)}">
+          <td nzAlign="center">{{ item?.vehicle_reg_no || "NA"}}</td>
+          <td nzAlign="center">{{ item?.status  || "NA"}}</td>
+          <td nzAlign="center">{{ item?.device_imei || "NA"}}</td>
+          <td nzAlign="center">{{ item?.ownershipType || "NA"}}</td>
+          <td nzAlign="center">{{ item?.vendor_name || "NA"}}</td>
+          <td nzAlign="center">{{ item?.veh_type_name  || "NA"}}</td>
+          <td nzAlign="center">{{ item?.segment_type  || "NA"}}</td>
+          <td nzAlign="center">{{ item?.veh_group_name  || "NA"}}</td>
+          <td nzAlign="center">{{ item?.category  || "NA"}}</td>
+          <td nzAlign="center">{{ item?.account && item?.account.name  || "NA"}}</td>
+          <td nzAlign="center">{{ item?.created_by_name  || "NA"}}</td>
+          <td nzAlign="center">{{ (item?.created_at|date)  || "NA"}}</td>
+
+
+
+        </tr>
+        </tbody>
+      </nz-table>
+      <br/><br/>
+    </div>
+
+
+    <!--     vehicle  table convert in card view-->
+    <div *ngIf="innerWidth <= 500" class="aggregate">
+      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
+                nzSize="small"  [nzScroll]="{ y: '425px' }" style="overflow-x: auto">
+        <div
+          class="head shadow-d1 "
+          *ngFor="let d of receivedData"
+          (click)="selectItem(d)"  [ngClass]="{SelectHighlight :  selectedRowId && (d?._id === selectedRowId)}">
+          <div class="align">
+            <div class="grey"><b>Vehicle No:</b> {{ d?.vehicle_reg_no || 'NA'  }}</div>
+
+          </div>
+          <div class="align">
+            <div class="grey"><b>Vehicle Status:</b> {{ d?.status || 'NA'}}</div>
+
+          </div>
+          <div class="align">
+            <div class="grey"><b>Ownership:</b> {{ d?.ownershipType || 'NA'}}</div>
+
+          </div>
+          <div class="align">
+            <div class="grey"><b>Device IMEI:</b> {{ d?.device_imei || 'Na' }}</div>
+
+          </div>
+          <div *ngIf="d?.veh_type_name " class="align">
+            <div class="grey"><b>Vehicle Type:</b> {{ d?.veh_type_name || 'Na' }}</div>
+
+          </div>
+<!--          <div class="align">-->
+<!--            <div class="grey"><b>Vendor:</b> {{ d?.vendor_name || 'NA'}}</div>-->
+
+<!--          </div>-->
+
+        </div>
+      </nz-table>
+    </div>
+
+    <!--    vehicle table card view end -->
+  </div>
+</div>

@@ -1,0 +1,170 @@
+<div class="insight">
+    <div class="insight-head" *ngIf="innerWidth > 500"> 
+       <div class="insight-tools">
+        <div class="tool">
+        </div>
+      </div>
+    </div>
+    <div class="insight-description">
+      <div *ngIf="isMobFilterVisible && innerWidth<=500">
+        <div>
+          <div class="flex-cont">
+            <label></label>
+            <nz-select nzPlaceHolder="Search by Vehicle name"
+                       nzShowSearch nzAllowClear (nzOnSearch)="searchVehicle($event)" [(ngModel)]="filterObj && filterObj.imei">
+              <nz-option *ngFor="let veh of vehData"
+                         nzLabel="{{ veh?.vehicle_reg_no }}" [nzValue]="veh.device_imei">
+              </nz-option>
+            </nz-select>
+          </div>
+          <div class="flex-cont">
+            <label></label>
+            <nz-select  nzPlaceHolder="Search by Alarm type"
+                       nzShowSearch nzAllowClear [(ngModel)]="filterObj && filterObj.atype" >
+              <nz-option *ngFor="let type of typeList"
+                         nzLabel="{{ type?.label}}" [nzValue]="type.value">
+              </nz-option>
+            </nz-select>
+          </div>
+          <div class="flex-cont">
+            <label></label>
+            <nz-select  nzPlaceHolder="Search Status"
+                       [(ngModel)]="filterObj && filterObj.enabled" nzShowSearch nzAllowClear>
+              <nz-option *ngFor="let s of aStatus"
+                         nzLabel="{{ s?.label}}" [nzValue]="s.value">
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div style="margin-top: 17px;">
+          <button style="width: 50%; color: white;" type="button" class="bg-primary" nz-button (click)="search(); isMobFilterVisible = false;">Search</button>
+          <button style="width: 50%; color: white;" type="button" class="bg-primary" nz-button (click)="reset(); isMobFilterVisible = false;">Reset</button>
+        </div>
+      </div>
+        <div *ngIf="innerWidth >= 500" class="filters-row">
+            <div class="my-row">
+              <!-- branch name or code -->
+              <div class="my-card">
+                <div class="my-card-header">
+                  <nz-select style="min-width: 300px;" nzAllowClear nzPlaceHolder="Search by Vehicle name"
+                    [(ngModel)]="filterObj && filterObj.imei" nzShowSearch (nzOnSearch)="searchVehicle($event)">
+                    <nz-option *ngFor="let veh of vehData"
+                      nzLabel="{{ veh?.vehicle_reg_no}}" [nzValue]="veh.device_imei">
+                    </nz-option>
+                  </nz-select>
+                </div>
+              </div>
+              <div class="my-card">
+                <div class="my-card-header">
+                  <nz-select style="min-width: 300px;" nzAllowClear [(ngModel)]="filterObj && filterObj.atype" nzPlaceHolder="Search by Alarm type">
+                    <nz-option *ngFor="let type of typeList" nzLabel="{{ type.label }}" [nzValue]="type.value">
+                    </nz-option>
+                  </nz-select>
+                </div>
+              </div>
+              <div class="my-card">
+                <div class="my-card-header">
+                  <nz-select style="min-width: 300px;" nzAllowClear [(ngModel)]="filterObj && filterObj.enabled" nzPlaceHolder="Search Status">
+                    <nz-option *ngFor="let s of aStatus" nzLabel="{{ s.label }}" [nzValue]="s.value">
+                    </nz-option>
+                  </nz-select>
+                </div>
+              </div>
+              <div class="my-card">
+                <div class="my-card-header">
+                  <button class="my-btn bg-primary" (click)="search()">
+                    <fa-icon [icon]="faSearch" style="font-size: 15px"></fa-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="my-card">
+                <div class="my-card-header">
+                  <button class="my-btn bg-primary" (click)="reset()">
+                    <fa-icon [icon]="faTimes" style="font-size: 19px"></fa-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+      <!-- table view start -->
+      <div id="myDIV" (scroll)="getDataOnScroll()">
+        <div *ngIf="innerWidth < 500" class="aggregate">
+          <div class="head shadow-d1"  *ngFor="let d of receivedData"
+                (click)="selectItem(d)" [ngClass]="{SelectHighlight :  selectedRowId && (d?.aid === selectedRowId)}">
+            <div class="align">
+              <div class="grey">Vehicle No.:</div>
+              <div class="ml-1">{{d?.vehicle_no || 'NA'}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Alert Category:</div>
+              <div class="ml-1">{{d?.atype}} ({{d?.category}})</div>
+            </div>
+            <div class="align">
+              <div class="grey">Geofence:</div>
+              <div class="ml-1">{{d?.atype == 'geofence' ? d?.name : (d?.atype== 'halt' ? d?.halt_duration : d?.over_speed)}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Contact</div>
+              <div class="ml-1">{{d?.driver_name || 'NA'}}</div>
+            </div>
+            <!-- <div class="align">
+              <div class="grey">Status</div>
+              <div class="ml-1">{{d?.type}}</div>
+            </div> -->
+          </div>
+        </div>
+        <nz-table
+        *ngIf="innerWidth >= 500"
+        (scroll)="getDataOnScroll()"
+          #nzTable
+          nzBordered
+          [nzShowPagination]="false"
+          [nzData]="receivedData ? receivedData : ''"
+          nzSize="small"
+          [nzScroll]="{ x: '600px', y: '400px' }"
+          style="overflow-x: auto"
+        >
+          <thead>
+            <tr style="background-color: #3e51b5 !important;">
+              <th nzWidth="120px" nzAlign="center">Vehicle No. </th>
+              <th nzWidth="80px"  nzAlign="center">Alert Category</th>
+              <th nzWidth="80px"  nzAlign="center">Geofence</th>
+              <th nzWidth="150px" nzAlign="center">Contact</th>
+              <th nzWidth="120px" nzAlign="center">Status</th>
+            </tr>
+          </thead>
+          <tbody >
+            <tr
+              style="cursor: pointer"
+              *ngFor="let item of receivedData; let i = index;"
+              (click)="selectItem(item)"
+              [ngClass]="{SelectHighlight :  selectedRowId && (item?.aid === selectedRowId)}"
+            >
+              <td nzAlign="center">{{ item?.vehicle_no || 'NA'}}</td>
+              <td nzAlign="center">{{ item?.atype }} ({{item?.category}})</td>
+              <td nzAlign="center">{{ item?.atype == 'geofence' ? item?.name : (item?.atype== 'halt' ? item?.halt_duration : item?.over_speed)}}</td>
+              <td nzAlign="center">{{ item?.driver_name || 'NA'}}</td>
+              <td nzAlign="center"><nz-switch [(ngModel)]="item.enabled" (ngModelChange)="updateAlertToggle(item)" ></nz-switch></td>
+            </tr>
+          </tbody> </nz-table
+        ><br /><br />
+      </div>
+  </div>
+  <!-- <div *ngIf="isMobFilterVisible">
+    <div>
+      <div class="flex-cont">
+        <label></label>
+        <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 230px" nzPlaceHolder="Search Branch with name or code"
+                [(ngModel)]="filterObj && filterObj.name" nzShowSearch (nzOnSearch)="onSearch($event)" nzServerSearch>
+          <nz-option *ngFor="let branch of receivedAllBranches"
+            nzLabel="{{ branch?.name}}" [nzValue]="branch.name">
+          </nz-option>
+        </nz-select>
+      </div>
+    </div>
+    <div style="margin-top: 5%; margin-bottom:10%">
+      <button style="width: 50%;color: white;" type="button" class="bg-primary" nz-button (click)="search(); isMobFilterVisible = false;">Search</button>
+      <button style="width: 50%;color: white;" type="button" class="bg-primary" nz-button (click)="reset(); isMobFilterVisible = false;">Reset</button>
+    </div>
+  </div> -->
+

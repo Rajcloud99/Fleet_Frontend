@@ -1,0 +1,94 @@
+<div class="insight">
+  <div class="insight-head">
+    <div style="display: flex;">
+      <div *ngIf="innerWidth < 500" class="mbbtn" style="margin-right: 30vw;">
+        <app-back-button *ngIf="innerWidth <= 500"></app-back-button>
+      </div>
+      <div style="font-weight: bold; margin-right: 40vw;">Upload</div>
+    </div>
+  </div>
+
+  <div class="insight-description">
+    <Accordion [defaultActiveKey]="activeKey[0]" [activeKey]="activeKey" (onChange)="onChange($event)">
+      <AccordionPanel
+        *ngFor="let item of accordions; let i = index"
+        [key]= activeKey[i]
+        [header]="item.title"
+        [disabled]="item.inactive"
+      >
+        <List className="my-list">
+          <ListItem *ngFor="let content of item.child; let j = index">
+            <span *ngIf=!content.scan style='margin-right:16px;font-size:10px;padding-left: 15px;
+    font-weight: bold;' class="example-spacer">{{ content.name }}</span>
+            <br>
+            <span *ngIf=!content.scan class="row col-md-12">
+              <div class="col-md-5">
+            <img *ngIf=content.url src={{content.url}} class="img-thumbnail rounded img-fluid" style="width:100px; height:100px;border-color: currentColor; margin-right:40px;" (click)="PreviewImage(content.url)" />
+               <img *ngIf=!content.url src='./assets/noImg.jpg' class="img-thumbnail rounded img-fluid" style="width:100px; height:100px;border-color: currentColor;margin-right:40px;"/>
+              </div>
+<!--            <ng-image-fullscreen-view-->
+<!--              [images]="imageObject"-->
+<!--              [imageIndex]="selectedImageIndex"-->
+<!--              [show]="showFlag"-->
+<!--              (close)="closeEvent()"></ng-image-fullscreen-view>-->
+              <div class="col-md-7" style="padding-top: 70px;">
+            <div *ngIf=allowUpload class="mbbtn"  style='margin-right:16px' (click)="handleCamera(content)">  <fa-icon [icon]="faCamera"></fa-icon></div>
+              <button *ngIf=content.enableSave class="mbbtn btn btn-primary1" style='font-size: 11px;' (click)="saveDocs(content)">  Save </button>
+              </div>
+            </span>
+            <span *ngIf=!content.scan layout="row"><hr flex/></span>
+
+            <span *ngIf=content.scan class="row col-md-12">
+              <div class="col-md-5">
+               <img *ngIf=content.url src={{content.url}} class="img-thumbnail rounded img-fluid" style="width:100px; height:100px;border-color: currentColor; margin-right:40px;" (click)="PreviewImage(content.url)" />
+               <img *ngIf=!content.url src='./assets/noImg.jpg' class="img-thumbnail rounded img-fluid" style="width:100px; height:100px;border-color: currentColor;margin-right:40px;"/>
+                  </div>
+              <div class="col-md-7">
+                <span *ngIf=content.scan  class="col-md-6" style='margin-right:10px;font-size:11px;' class="example-spacer"><b>Position:</b></span><span class="col-md-6">{{ content.name }}</span><br>
+                <span *ngIf="content.scan && content.scanVal"  class="col-md-6" style='margin-right:25px;font-size:11px;' class="example-spacer"><b>SNo.:</b></span><span *ngIf="content.scan && content.scanVal" class="col-md-6">{{ content.scanVal }}</span><br *ngIf="content.scan && content.scanVal">
+                <span *ngIf="content.scan && content.date && !content.compaire"   class="col-md-1" style='margin-right:0px;font-size:11px;' class="example-spacer"><b>Added On:</b></span><span *ngIf="content.scan && content.date && !content.compaire"  class="col-md-8">{{ content.date| date: 'dd-MMM-yyyy' }}</span><br *ngIf="content.scan && content.date && !content.compaire" >
+                <span *ngIf="content.scan && content.compaire"  class="col-md-6" style='margin-right:16px;font-size:11px;' class="example-spacer"><b>Status:</b></span><span *ngIf="content.scan && content.compaire"  [ngStyle]="{'font': 'bold', 'color': (content?.status === 'Match') ? '#4bf002' : ((content?.status=== 'Not Match') ? '#f44336': '#f1c232') }" class="col-md-6">{{content.status || 'Pending'}}</span><br *ngIf="content.scan && content.compaire">
+                 <span *ngIf="content.scan && content.date && content.compaire"   class="col-md-0" style='margin-right:0px;font-size:11px;' class="example-spacer"><b>Removed:</b></span><span *ngIf="content.scan && content.date && content.compaire"  class="col-md-8">{{ content.date| date: 'dd-MMM-yyyy' }}</span><br>
+                <div *ngIf=allowUpload class="mbbtn"  style='margin-right:16px' (click)="handleCamera(content)">  <fa-icon [icon]="faCamera"></fa-icon> </div>
+               <div *ngIf="content.scan && allowUpload" class="mbbtn" style='margin-right:16px' (click)="handleBarCode(content)"> <fa-icon [icon]="faQrcode"></fa-icon> </div>
+                <button *ngIf=content.enableSave class="mbbtn btn btn-primary1 pull-right" style='font-size: 11px;' (click)="saveDocs(content)">  Save </button>
+              </div>
+            </span>
+
+
+            <span *ngIf="content.scan && content.compaire" layout="row"><hr class="new1" flex/></span>
+          </ListItem>
+        </List>
+      </AccordionPanel>
+    </Accordion>
+    <ng-template #vehicle>
+      <div class="accordion" style='font-size:16px; font-weight: bold;padding-left: 15px;' > Vehicle </div>
+    </ng-template>
+    <ng-template #gps>
+      <div class="accordion" style='font-size:16px; font-weight: bold;padding-left: 15px;'> GPS Device</div>
+    </ng-template>
+    <ng-template #driver>
+      <div class="accordion" style='font-size:16px; font-weight: bold;padding-left: 15px;'>Driver</div>
+    </ng-template>
+    <ng-template #tags>
+      <div class="accordion" style='font-size:16px; font-weight: bold;padding-left: 15px;'>Tags</div>
+    </ng-template>
+    <ng-template #material>
+      <div class="accordion" style='font-size:16px; font-weight: bold;padding-left: 15px;'>Material</div>
+    </ng-template>
+    <ng-template #others>
+      <div class="accordion" style='font-size:16px; font-weight: bold;padding-left: 15px;'>Others</div>
+    </ng-template>
+
+  </div>
+  <nz-modal style="z-index: 50;"[(nzVisible)]="visible" nzTitle="Preview" (nzOnCancel)="handleCancel()" [nzFooter]="null"
+            >
+    <ng-container *nzModalContent>
+      <img *ngIf=this.imgpreviewdata src={{this.imgpreviewdata}} class="img-thumbnail rounded img-fluid" style="width:100%; height:400px;border-color: currentColor;" />
+
+
+    </ng-container>
+  </nz-modal>
+
+
+</div>

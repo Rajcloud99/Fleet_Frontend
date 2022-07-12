@@ -1,0 +1,290 @@
+<div class="insight">
+  <div class="insight-head">
+    <div class="insight-title">Create Trip</div>
+    <div class="insight-tools">
+      <div class="tool">
+
+      </div>
+    </div>
+  </div>
+  <div class="insight-description">
+    <!-- <nz-spin [nzSize]="'large'" [ngClass]="{'loader': loadingObservable | async}" nzSimple [nzSpinning]="loadingObservable | async"></nz-spin> -->
+    <!-- <div class="overlay" *ngIf= "loadingObservable | async"></div> -->
+    <form nz-form [formGroup]="createTripForm">
+      <div nz-row class="my-row">
+        <!-- vehicle type -->
+        <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label style="text-align: left">Vehicle Type<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control>
+            <nz-select style="width: 95%" [nzDropdownMatchSelectWidth]="false" nzPlaceHolder="Vehicle type"
+              formControlName="ownership_type" required>
+              <nz-option *ngFor="let type of typeList" nzLabel="{{ type }}" [nzValue]="type">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+        <!-- vehicle no -->
+        <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label style="text-align: left">Vehicle No<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control>
+            <nz-select style="width: 88%" [nzDropdownMatchSelectWidth]="false" nzPlaceHolder="Search Vehicle no."
+              nzShowSearch nzAllowClear (nzOnSearch)="onSearch($event)" nzServerSearch formControlName="vehicle_no"
+              (ngModelChange)="changeVehicle(f.vehicle_no.value)" [(ngModel)]="vehicle">
+              <nz-option *ngFor="let vehicle of receivedAllVehicles"
+                nzLabel="{{ vehicle?.vehicle_reg_no }} ({{ vehicle.status }})" [nzValue]="vehicle">
+              </nz-option>
+            </nz-select>
+            <button nz-button type="button"   class="btn-icon" nz-tooltip nzTooltipTitle="Add Vehicle"
+              (click)="addVehicle()">
+              <i nz-icon nzType="plus-circle" style="font-size: 15px" nzTheme="outline"></i>
+            </button>
+          </nz-form-control>
+        </div>
+
+        <!-- driver -->
+        <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label style="text-align: left">Driver</nz-form-label>
+          <nz-form-control>
+            <nz-select style="width: 95%"nzPlaceHolder="Search by driver name" nzShowSearch nzAllowClear
+              (nzOnSearch)="onSearchDriver($event)" nzServerSearch formControlName="driver_name"
+              (ngModelChange)="changeDriver()" [(ngModel)]="driver">
+              <nz-option *ngFor="let driver of receivedAllDrivers" nzLabel="{{driver?.name}} ({{driver?.license_no}})"
+                [nzValue]="driver">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+
+        <!-- customer -->
+        <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label style="text-align: left">Customer</nz-form-label>
+          <nz-form-control>
+            <nz-select style="width: 95%" nzPlaceHolder="Search by customer name" nzShowSearch nzAllowClear
+              (nzOnSearch)="onSearchCustomer($event)" nzServerSearch [ngModelOptions]="{standalone:true}"
+              [(ngModel)]="customer">
+              <nz-option *ngFor="let customer of receivedAllCustomers" nzLabel="{{customer?.name}}"
+                [nzValue]="customer">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+
+        <!-- vendor -->
+        <div *ngIf="this.f.ownership_type.value === 'Market'" nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label style="text-align: left">Vendor name</nz-form-label>
+          <nz-form-control>
+            <nz-select style="width: 88%" [nzDropdownMatchSelectWidth]="false" nzPlaceHolder="Search Vendor"
+              nzShowSearch nzAllowClear (nzOnSearch)="onSearchvender($event)" nzServerSearch formControlName="vendor">
+              <nz-option *ngFor="let vendor of receivedAllVendors" nzLabel="{{ vendor?.name }}" [nzValue]="vendor">
+              </nz-option>
+            </nz-select>
+            <button nz-button type="button" class="btn-icon" (click)="addVendor()">
+              <i nz-icon nzType="plus-circle" style="font-size: 15px;" nzTheme="outline"></i>
+            </button>
+          </nz-form-control>
+        </div>
+
+        <!-- service type -->
+
+        <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label style="text-align: left">Service Type</nz-form-label>
+          <nz-form-control>
+            <nz-select style="width: 95%"[(ngModel)]="serviceTyp" [ngModelOptions]="{ standalone: true }"
+              nzPlaceHolder="Service type">
+              <nz-option *ngFor="let item of aServiceTyp" nzLabel="{{ item }}" [nzValue]="item">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+
+        <!-- route -->
+        <div *ngIf="!(configs.booking && configs.booking.showGoogleRoute)" nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label style="text-align: left">Route<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control>
+            <nz-select style="width: 95%" nzPlaceHolder="Route Search..." nzShowSearch nzAllowClear
+              (nzOnSearch)="getRoute($event)" nzServerSearch [(ngModel)]="route_name"
+              [ngModelOptions]="{ standalone: true }">
+              <nz-option *ngFor="let item of aRoute" nzLabel="{{item.name}}" [nzValue]="item">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+
+        <!-- loading point -->
+        <div *ngIf="configs.booking && configs.booking.showGoogleRoute" nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label style="text-align: left">Loading Point:<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control>
+            <input nz-input id="loading" #ld appAddrSearch (calDist)="setRouteKm()" style="width: 95%"
+              [(ngModel)]="loading_point" [ngModelOptions]="{ standalone: true }" />
+          </nz-form-control>
+        </div>
+
+        <!-- unloading point -->
+        <div *ngIf="configs.booking && configs.booking.showGoogleRoute" nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label style="text-align: left">Unloading Point:<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control>
+            <input nz-input #ud id="unloading" appAddrSearch (calDist)="setRouteKm()" style="width: 95%"
+              [(ngModel)]="unloading_point" [ngModelOptions]="{ standalone: true }" />
+          </nz-form-control>
+        </div>
+
+        <!--        intermittent point-->
+        <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label style="text-align: left">Intermittent Point</nz-form-label>
+          <nz-form-control>
+            <nz-select [nzMaxTagCount]="3" nzMode="multiple" style="width: 95%"
+                       nzPlaceHolder="Intermittent Search..." nzShowSearch nzAllowClear (nzOnSearch)="intermittentPoint($event)"
+                       nzServerSearch [(ngModel)]="imd" [ngModelOptions]="{ standalone: true }">
+              <nz-option *ngFor="let item of Route" nzLabel="{{item.c}} ({{item.d}}) ({{item.s}})" [nzValue]="item">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+
+        <!-- km -->
+        <div *ngIf="configs.booking && configs.booking.showGoogleRoute" nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label style="text-align: left">Km:<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control>
+            <input nz-input type="number"  style="width: 95%" [ngModelOptions]="{ standalone: true }" [(ngModel)]="rKm" id="code" />
+          </nz-form-control>
+        </div>
+
+        <!-- start date and time -->
+        <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label style="text-align: left">Trip Start Date<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control>
+            <span>
+              <nz-date-picker  style="width: 70%" [nzDisabledDate]="disabledDate"  nzFormat="dd-MM-yyyy"
+                 [(ngModel)]="date" [ngModelOptions]="{ standalone: true }">
+              </nz-date-picker>
+              <nz-time-picker  style="width: 25%"[(ngModel)]="time" [ngModelOptions]="{ standalone: true }" nzFormat="HH:mm">
+              </nz-time-picker>
+            </span>
+          </nz-form-control>
+        </div>
+      </div>
+        <div style="margin-top: 5px" *ngIf="innerWidth <= 500">
+          <button nz-button style="margin-bottom: 5px; width:100%;" class="invbtn"  nzType="primary" (click)="upsertGrModal('Add GR',null,-1,$event)">
+            ADD GR
+          </button>
+          <button *ngIf="configs.tripMemo && configs.tripMemo.show" nzType="primary" nz-button style="margin-bottom: 5px; width:100%;" class="invbtn"
+            (click)="AdTMmodel('Trip Memo Popup',null,-1)">
+            TRIP MEMO
+          </button>
+
+          <button *ngIf="this.f.ownership_type.value === 'Market'"  nzType="primary" nz-button class="invbtn" style="margin-bottom: 5px; width:100%;"
+            (click)="addvendordealModal('Edit Vendor Deal',VdealpopupData,0)">
+            VENDOR DEAL
+          </button>
+        </div>
+        <br>
+        <!-- <div *ngIf="innerWidth > 500">
+          <button nz-button style="margin-right: 2%; min-width: 210px;" class="invbtn" (click)="upsertGrModal('Add GR',null,-1,$event)">
+            ADD GR
+          </button>
+           <button *ngIf="configs.tripMemo && configs.tripMemo.show" nz-button style="margin-right: 2%;min-width: 210px;" class="invbtn" (click)="AdTMmodel('Trip Memo Popup',null,-1)">
+            TRIP MEMO
+          </button>
+
+          <button *ngIf="this.f.ownership_type.value === 'Market'" nz-button class="invbtn" style="margin-bottom: 5px; min-width: 210px;" (click)="addvendordealModal('Edit Vendor Deal',VdealpopupData,0)">
+            VENDOR DEAL
+          </button>
+        </div> -->
+        <div *ngIf="innerWidth <= 500 && preparegrArr.length" class="aggregate" >
+            <div class="heads shadow-d1" *ngFor="let data of preparegrArr; let i = index"
+              (click)="upsertGrModaldata('Edit GR',data,i)">
+              <div *ngIf="data?.tMemo" class="align">
+                <div class="grey">TMNo : </div>
+                <div class="ml-1">{{data?.tMemo?.tMNo || 'NA'}}</div>
+              </div>
+              <div *ngIf="data?.grNumber" class="align">
+                <div class="grey">GR No : </div>
+                <div class="ml-1">{{data?.grNumber || 'NA'}}</div>
+              </div>
+              <div *ngIf="data?.customer" class="align">
+                <div class="grey">Customer : </div>
+                <div class="ml-1">{{data?.customer?.name || 'NA'}}</div>
+              </div>
+              <div *ngIf="data?.billingParty" class="align">
+                <div class="grey">Billing Party : </div>
+                <div class="ml-1">{{data?.billingParty?.name || 'NA'}}</div>
+              </div>
+              <div *ngIf="data?.consignor" class="align">
+                <div class="grey">Consignor : </div>
+                <div class="ml-1">{{data?.consignor?.name || 'NA'}}</div>
+              </div>
+              <div *ngIf="data?.consignee" class="align">
+                <div class="grey">Consignee</div>
+                <div class="ml-1">{{data?.consignee?.name || 'NA'}}</div>
+              </div>
+            </div>
+
+        </div>
+
+    </form>
+    <div *ngIf="innerWidth > 500">
+      <span (click)="addRow()" style="cursor: pointer;"><i nz-icon nzType="plus" nzTheme="outline"></i></span>
+    </div>
+    <nz-table *ngIf="innerWidth > 500">
+      <thead>
+        <th>#</th>
+        <th>Customer</th>
+        <th>GR Info</th>
+        <th *ngIf="configs.tripMemo && configs.tripMemo.show">Trip Memo</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of preparegrArr; let i=index;">
+          <td nzAlign="center"><span style="text-decoration: underline; color: blue; cursor: pointer;"
+              (click)="delRow(i)">Delete</span></td>
+          <td nzAlign="center">{{customer?.name || ''}}</td>
+          <td nzAlign="center"><span style="text-decoration: underline; color: blue; cursor: pointer;"
+              (click)="upsertGrModaldata('Edit GR',data,i)">Gr Details</span></td>
+          <td nzAlign="center" *ngIf="configs.tripMemo && configs.tripMemo.show"><span
+              style="text-decoration: underline; color: blue; cursor: pointer;"
+              (click)="AdTMmodel('Trip Memo Popup',data,-1)">Trip Memo Info</span></td>
+        </tr>
+      </tbody>
+    </nz-table>
+    <!--    <button nz-button class="invbtn" (click)="onSubmit($event)" type="submit" style="margin-top: 5px" [disabled]="createTripForm?.invalid || !vdealValid || !isGRValid">-->
+    <!--      Submit-->
+    <!--    </button>-->
+    <div [ngClass]="{ 'pull-right':innerWidth > 500 }">
+      <nz-form-item>
+        <nz-form-control>
+          <button [disabled]="createTripForm?.invalid || !vdealValid || !isGRValid" class=" invbtn"
+            style="margin-top: 15px; width:140px; margin-right: 5px" (click)="onSubmit($event)" type="submit" nz-button
+            nzType="primary">SUBMIT</button>
+          <button nzDanger class="invbtnback" style="margin-top: 15px ;width: 140px" (click)="backToListView();">BACK
+          </button>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <!-- table view start -->
+    <!-- card view end -->
+  </div>
+  <nz-modal style="z-index: 50" [(nzVisible)]="visible" nzTitle="Add vendor" (nzOnCancel)="handleCancel()"
+    (nzOnOk)="handleOk()">
+    <ng-container *nzModalContent>
+      <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+        <nz-form-label style="text-align: left" nzFor="Name">Vendor name<span class="red-mark">*</span></nz-form-label>
+        <nz-form-control>
+          <input nz-input style="width: 95%" [(ngModel)]="name" [ngModelOptions]="{ standalone: true }"
+            placeholder="Enter Vendor name " autocomplete="off" />
+        </nz-form-control>
+      </div>
+      <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+        <nz-form-label style="text-align: left" nzFor="prim_contact_no">Mobile No. <span class="red-mark">*</span>
+        </nz-form-label>
+        <nz-form-control>
+          <input nz-input style="width: 95%" autocomplete="off" [(ngModel)]="prim_contact_no" minlength="10"
+            maxlength="10" #mobile_no="ngModel" [ngModelOptions]="{ standalone: true }"
+            placeholder="Enter 10 Digit Mobile No." />
+          <span *ngIf="mobile_no.errors" style="color: red">
+            Please enter 10 Digit Mobile No.
+          </span>
+        </nz-form-control>
+      </div>
+    </ng-container>
+  </nz-modal>
+</div>

@@ -1,0 +1,29 @@
+<div>
+  <button class="my-btn bg-primary" nz-tooltip nzTooltipTitle="Edit" (click)="navigateToEdit(receivedData)">
+    <fa-icon [icon]="faEdit" style="font-size: 15px"></fa-icon>
+  </button>
+</div>
+
+<div> <b>Category: </b>{{receivedData?.category || 0}}</div>
+
+  <div> <b>Material Name: </b>{{receivedData?.material || "NA"}}</div>
+
+  <div> <b>Per Unit Weight: </b>{{receivedData?.pUnitWt || 0}}</div>
+
+ <div> <b>Unit: </b>{{receivedData?.unit || 0}}</div>
+
+  <div> <b>GST: </b>{{receivedData?.gstPercent || 0}}</div>
+
+  <div> <b>SAC Code: </b>{{receivedData?.sacCode || "NA"}}</div>
+
+  <div> <b>Created By: </b>{{receivedData?.created_by_name || "NA"}}</div>
+
+  <div> <b>Created At: </b>{{receivedData?.created_at || "NA"}}</div>
+
+  <div> <b>Last Modified By: </b>{{receivedData?.last_modified_by_name || "NA"}}</div>
+
+  <div> <b>Last Modified At: </b>{{receivedData?.last_modified_at || "NA"}}</div>
+
+
+
+

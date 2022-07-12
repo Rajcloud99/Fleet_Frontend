@@ -1,0 +1,58 @@
+<div class="insight">
+    <div class="insight-head">
+
+    </div>
+    <div class="insight-description">
+      <!-- <nz-spin [ngClass]="{'loader': loadingObservable | async}" nzSimple [nzSpinning]="loadingObservable | async"></nz-spin> -->
+      <!-- <div class="overlay" *ngIf= "loadingObservable | async"></div> -->
+
+      <form  nz-form [formGroup]="branchForm" (ngSubmit)="onSubmit()" autocomplete="off">
+        <div nz-row>
+        <nz-form-item nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Name<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="name" id="Name" required/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Branch Code<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="code" id="code" required/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Contact No.<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="prim_contact_no" id="mobile" required/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Email<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="prim_email" id="Email" required/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Branch Type<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <nz-select nzPlaceHolder="Select Branch Type" nzShowSearch nzAllowClear nzServerSearch formControlName="type" required>
+              <nz-option *ngFor="let type of typeList" nzLabel="{{type}}"
+              [nzValue]="type">
+            </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+        <nz-form-item style="padding-top: 5%;">
+          <nz-form-control  [nzSpan]="20" nzErrorTip="Input is required">
+            <button nz-button nzType="primary" type="submit" [disabled]="branchForm?.invalid" >{{getId ? 'Update' : 'Submit'}}</button>
+          </nz-form-control>
+        </nz-form-item>
+
+      </form>
+    </div>
+  </div>

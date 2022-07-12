@@ -1,0 +1,209 @@
+<div class="insight">
+  <!-- <div class="insight-head">
+    <div class="insight-title"></div>
+    <div class="insight-tools">
+      <div class="tool">
+        <div *ngIf="innerWidth < 500" class="mbbtn" style="margin-right: 25vw;">
+          <app-back-button *ngIf="innerWidth <= 500"></app-back-button>
+
+        </div>
+        <span class="mbbtn" style="margin-right:35vw;">Trip Details</span>
+      </div>
+    </div>
+  </div> -->
+  <div class="insight-description">
+    <!-- table view start -->
+    <div id="myDIV">
+      <div *ngIf="innerWidth < 500" class="aggregate">
+
+        <div *ngIf="innerWidth < 500 && receivedData && receivedData.length" class="aggregate">
+          <div class="head shadow-d1" *ngFor="let d of receivedData" (click)="selectItem(d)"
+               [ngClass]="{SelectHighlight :  selectedRowId && (d?._id === selectedRowId)}" style="background-color:#F2F5E9">
+            <div class="align" style="justify-content: space-between;" *ngIf="d?.gr && d?.gr[0] && d?.gr[0]?.customer">
+              <div class="ml-1"><b>{{d?.vehicle_no}}</b><!--<span [ngStyle]="{'color': (d?.vehicle?.ownershipType === 'Own') ? '#4bf002' : ((d?.vehicle?.ownershipType=== 'Market') ? '#f44336': '#f1c232') }">({{d?.vehicle?.ownershipType}})</span>--></div>
+              <div class="mr-1">{{d?.vehicle?.ownershipType === 'Market' ? d?.vehicle?.vendor_name : d?.driver?.name}}</div>
+            </div>
+            <div class="align" style="justify-content: space-between;">
+              <div class="ml-1" style="font-size: small;">Customer:</div>
+              <div class="ml-1" style="font-size: small;">{{d?.gr[0]?.customer?.name}}</div>
+            </div>
+            <div class="align" style="justify-content: space-between;">
+              <div class="ml-1" style="font-size: small;">Device:</div>
+              <div class="ml-1" style="font-size: small;">{{d?.device?.imei}}</div>
+            </div>
+            <div class="align" style="justify-content: space-between;">
+              <div class="ml-1">{{d?.src || 'NA'}}</div>↔️️
+              <div >{{d?.rKm || d?.route?.route_distance + ' KM'}}</div>↔️
+              <!-- <div><hr style="border-top:4px solid #000; border-radius:2px;"></div> -->
+              <div>{{d?.dest || 'NA'}}</div>
+            </div>
+            <div class="align" style="justify-content:space-between;">
+              <div class="ml-1">{{d?.statuses |filterstringgetdate:'Trip started'| date: 'dd-MM-yyyy h:mma'}}</div>
+              <div>{{d?.statuses |filterstringgetdate:'Trip ended'| date: 'dd-MM-yyyy h:mma'}}</div>
+            </div>
+            <div class="align" *ngIf="!(d?.gr && d?.gr[0] && d?.gr[0].grNumber)">
+              <!-- <div class="grey">Trip Status: </div> -->
+              <div class="ml-1">
+                <span><fa-icon [ngStyle]="{'color': (d?.status === 'Trip started') ? '#4bf002' : ((d?.status=== 'Trip ended') ? '#f44336': '#f1c232') }" [icon]="faDotCircle"></fa-icon></span>{{d?.status}}
+              </div>
+            </div>
+            <div  class="align" style="justify-content: space-between;" *ngIf="d?.gr && d?.gr[0] && d?.gr[0].grNumber">
+              <!-- <div class="grey">Trip Status: </div> -->
+              <div>
+                {{d?.status}}
+              </div>
+              <div style="margin-right: 1px;">
+                {{d?.gr[0].grNumber}}
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 5px" *ngIf="innerWidth <= 500">
+
+          <button [hidden]="selectedTrip?.isCancelled || selectedTrip?.status === 'Trip ended'"
+                  nz-button style="margin-bottom: 5px; width:50%;" class="invbtn"
+                  nzType="primary" (click)="openStatuspoup()">{{aStatusChange[aStatusChange.indexOf(selectedTrip?.status)+1]}}
+          </button>
+
+          <button *ngIf="roles['Trip GPS Details']['Trip Analytics'] && selectedTrip?.start_date && selectedTrip?.vehicle?.device_imei || selectedTrip?.device?.imei"
+                  nz-button style="margin-bottom: 5px; width:50%;" class="invbtn"
+                  nzType="primary" (click)="openAnalytics(selectedTrip)">Analytics</button>
+
+          <button *ngIf="roles['Trip GPS Details']['Trip Playback'] && selectedTrip?.tripBase === 'Sim Based' ? true: selectedTrip?.start_date && selectedTrip?.vehicle?.device_imei || selectedTrip?.device?.imei"
+                  nz-button style="margin-bottom: 5px; width:50%;" class="invbtn"
+                  nzType="primary" (click)="openPlayBack(selectedTrip)">Playback</button>
+
+          <button *ngIf="roles['Trip GPS Details']['Trip Itinerary'] && selectedTrip?.tripBase === 'Sim Based' ? true: selectedTrip?.start_date &&  selectedTrip?.vehicle?.device_imei ||selectedTrip?.device?.imei "
+                  nz-button style="margin-bottom: 5px; width:50%;" class="invbtn"
+                  nzType="primary" (click)="openItinerary(selectedTrip)">
+            Itinerary
+          </button>
+
+          <button [hidden]="selectedTrip"
+                  nz-button style="margin-bottom: 5px; width:50%;" class="invbtn"
+                  nzType="primary" (click)="uploadImagesPopUp()">
+            Upload
+          </button>
+          <button [hidden]="selectedTrip?.isCancelled"
+                  nz-button style="margin-bottom: 5px; width:50%;" class="invbtn"
+                  nzType="primary" (click)="uploadImagesPopUpV2()">
+            Upload
+          </button>
+        </div>
+      </div>
+      <div *ngIf="innerWidth >= 500">
+        <div style="text-align: center;" class="bold">Trip Number  {{selectedTrip?.trip_no}}({{selectedTrip?.status}})</div>
+        <div nz-row nzJustify="space-around">
+          <div nz-col class="center" [nzSpan]="8">
+            <span class="bold">Vehicle :</span> {{selectedTrip?.vehicle_no}}
+          </div>
+          <div nz-col class="center" [nzSpan]="8">
+            <span class="bold">Driver Name : </span>{{selectedTrip?.driver?.name || selectedTrip?.vehicle?.driver_name || 'NA'}}
+          </div>
+          <div nz-col class="center" [nzSpan]="8">
+            <span class="bold">Driver Contact :</span> {{selectedTrip?.driver?.prim_contact_no || selectedTrip?.vehicle?.driver_contact_no || 'NA'}}
+          </div>
+        </div>
+        <div nz-row nzJustify="space-around">
+          <div nz-col class="center" [nzSpan]="8">
+            <span class="bold">Route Name :</span> {{selectedTrip?.route_name}}
+          </div>
+          <div nz-col class="center" [nzSpan]="8">
+            <span class="bold">Branch Name :</span>  {{selectedTrip?.branch?.name || 'NA'}}
+          </div>
+          <div nz-col class="center" [nzSpan]="8">
+            <span class="bold"> Status :</span> {{selectedTrip?.status}}
+          </div>
+        </div>
+        <div nz-row nzJustify="space-around">
+          <div nz-col class="center" [nzSpan]="8" *ngIf="selectedTrip?.category != 'Empty' && (selectedTrip.ewayBill_expiry || selectedTrip.ewayBillExpiry)">
+            <span class="bold">Tentative E-way Expiry :</span>  {{selectedTrip?.ewayBill_expiry | date: 'medium'}}
+          </div>
+          <div nz-col class="center" [nzSpan]="8">
+            <span class="bold">Last Update Time :</span>  {{selectedTrip?.last_modified_at | date: 'medium'}}
+          </div>
+          <div nz-col class="center" [nzSpan]="8">
+            &nbsp;&nbsp;&nbsp;
+          </div>
+        </div>
+      </div>
+      <div nz-row nzJustify="end" style="margin-top: 5px" *ngIf="innerWidth > 500">
+
+        <div nz-col [hidden]="selectedTrip?.isCancelled || selectedTrip?.status === 'Trip ended'"
+                nz-button style="margin-bottom: 5px;"
+                class="my-btn bg-primary" (click)="openStatuspoup()">{{aStatusChange[aStatusChange.indexOf(selectedTrip?.status)+1]}}
+      </div>
+
+        <div nz-col *ngIf="roles['Trip GPS Details']['Trip Analytics'] && selectedTrip?.start_date && selectedTrip?.vehicle?.device_imei || selectedTrip?.device?.imei"
+                nz-button style="margin-bottom: 5px;"
+                class="my-btn bg-primary" (click)="openAnalytics(selectedTrip)">Analytics</div>
+
+        <div nz-col *ngIf="roles['Trip GPS Details']['Trip Playback'] && selectedTrip?.tripBase === 'Sim Based' ? true: selectedTrip?.start_date && selectedTrip?.vehicle?.device_imei || selectedTrip?.device?.imei"
+                nz-button style="margin-bottom: 5px;"
+                class="my-btn bg-primary" (click)="openPlayBack(selectedTrip)">Playback</div>
+
+        <div nz-col *ngIf="roles['Trip GPS Details']['Trip Itinerary'] && selectedTrip?.start_date &&  selectedTrip?.vehicle?.device_imei ||selectedTrip?.device?.imei "
+                nz-button style="margin-bottom: 5px;"
+                class="my-btn bg-primary" (click)="openItinerary(selectedTrip)">
+          Itinerary
+      </div>
+
+      <div nz-col [hidden]="selectedTrip"
+            nz-button style="margin-bottom: 5px;"
+            class="my-btn bg-primary" (click)="uploadImagesPopUp()">
+          Upload
+      </div>
+        <div nz-col [hidden]="selectedTrip?.isCancelled"
+                nz-button style="margin-bottom: 5px;"
+                class="my-btn bg-primary" (click)="uploadImagesPopUpV2()">
+          Upload
+      </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+  <nz-modal style="z-index: 50" [(nzVisible)]="visible" nzTitle="Update Trip" (nzOnCancel)="handleCancel()">
+    <ng-container *nzModalContent>
+      <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6" *ngIf="selectedTrip?.status === 'Trip not started'">
+        <nz-form-label style="text-align: left" nzFor="remark">Trip Start Remark:</nz-form-label>
+        <nz-form-control>
+          <input nz-input style="width: 95%" [(ngModel)]="tripRemark" [ngModelOptions]="{ standalone: true }"
+            placeholder="Enter Remark " autocomplete="off" />
+        </nz-form-control>
+      </div>
+      <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6" *ngIf="selectedTrip?.status === 'Trip not started'">
+        <nz-form-label style="text-align: left" nzFor="date">Trip Start date: <span class="red-mark">*</span>
+        </nz-form-label>
+        <nz-form-control>
+          <nz-date-picker style="width:100px;" nzFormat="dd-MM-yyyy" [nzSize]="'small'" [(ngModel)]="date">
+          </nz-date-picker>
+          <nz-time-picker [(ngModel)]="time" nzFormat="HH:mm"></nz-time-picker>
+        </nz-form-control>
+      </div>
+      <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6" *ngIf="selectedTrip?.status === 'Trip started'">
+        <nz-form-label style="text-align: left" nzFor="remark">Trip End Remark: <span class="red-mark"
+            *ngIf="configs.trips.tripEndRmkReq">*</span></nz-form-label>
+        <nz-form-control>
+          <input nz-input style="width: 95%" [(ngModel)]="tripRemark" [ngModelOptions]="{ standalone: true }"
+            placeholder="Enter Remark " autocomplete="off" />
+        </nz-form-control>
+      </div>
+      <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6" *ngIf="selectedTrip?.status === 'Trip started'">
+        <nz-form-label style="text-align: left" nzFor="date">Trip End date: <span class="red-mark">*</span>
+        </nz-form-label>
+        <nz-form-control>
+          <nz-date-picker style="width:100px;" nzFormat="dd-MM-yyyy" [nzSize]="'small'" [(ngModel)]="date">
+          </nz-date-picker>
+          <nz-time-picker [(ngModel)]="time" nzFormat="HH:mm"></nz-time-picker>
+        </nz-form-control>
+      </div>
+    </ng-container>
+    <ng-container *nzModalFooter>
+      <button nz-button nzType="default" (click)="handleCancel()">Close</button>
+      <button nz-button nzType="primary" (click)="handleOk()"
+        [disabled]="configs?.trips?.tripEndRmkReq && !tripRemark && selectedTrip?.status === 'Trip started'">UPDATE
+        TRIP</button>
+    </ng-container>
+  </nz-modal>

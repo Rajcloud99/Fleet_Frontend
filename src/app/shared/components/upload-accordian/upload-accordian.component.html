@@ -1,0 +1,37 @@
+<!--<Accordion [defaultActiveKey]="activeKey[0]" [activeKey]="activeKey" (onChange)="onChange($event)">-->
+  <div
+    *ngFor="let item of accordions; let i = index">
+<!--    [key]= activeKey[i]-->
+<!--    [header]="item.title"-->
+<!--    [disabled]="item.inactive"-->
+<!--  >-->
+    <div className="my-list">
+      <div *ngFor="let content of item.child">
+        <span style='margin-right:16px;font-size:10px;' class="example-spacer">{{ content.name }}</span>
+        <img  *ngIf=content.url src={{content.url}} style="width:90px; margin-right:16px;"/>
+        <button *ngIf=allowUpload class="btn btn-primary" style='margin-right:16px' (click)="handleCamera(content)">  <fa-icon [icon]="faCamera" style="font-size: 20px"></fa-icon> </button>
+        <button *ngIf=content.scan class="btn btn-primary" style='margin-right:16px' (click)="handleBarCode(content)"> <i class="fa-solid fa-barcode-read"> Barcode </i> </button>
+        <span *ngIf=content.scan  style='margin-right:16px;font-size:10px;' class="example-spacer">{{ content.scanVal }}</span>
+        <button *ngIf=content.enableSave class="btn btn-primary" style='margin-right:16px' (click)="saveDocs(content)">  Save </button>
+      </div>
+    </div>
+  </div>
+<!--</Accordion>-->
+<ng-template #vehicle>
+  <div style='font-size:20px; font-weight: bold;' > Vehicle </div>
+</ng-template>
+<ng-template #gps>
+  <div style='font-size:20px; font-weight: bold;'> GPS Device</div>
+</ng-template>
+<ng-template #driver>
+  <div style='font-size:20px; font-weight: bold;'>Driver</div>
+</ng-template>
+<ng-template #tags>
+  <div style='font-size:20px; font-weight: bold;'>Tags</div>
+</ng-template>
+<ng-template #material>
+  <div style='font-size:20px; font-weight: bold;'>Material</div>
+</ng-template>
+<ng-template #others>
+  <div style='font-size:20px; font-weight: bold;'>Others</div>
+</ng-template>

@@ -1,0 +1,209 @@
+<div class="insight">
+    <div class="insight-head"></div>
+    <div class="insight-description">
+        <form nz-form style="padding-left: 5%;">
+            <div nz-row>
+                <nz-form-item nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+                    <nz-form-label [nzSpan]="20">Alert Type: <span class="red-mark">*</span></nz-form-label>
+                    <nz-form-control nzHasFeedback nzErrorTip="Alert Type is required" [nzSpan]="20">
+                        <nz-select
+                            nzPlaceHolder="Select Alert Type"
+                            required
+                            [disabled]="getId"
+                            name="alertType"
+                            [(ngModel)]="alertType"
+                            (ngModelChange)="determineAction(alertType)"
+                            nzAllowClear>
+                            <nz-option 
+                                *ngFor="let aType of aAlertTypes"
+                                nzLabel="{{aType.name}}"
+                                [nzValue]="aType.scope">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+                    <nz-form-label [nzSpan]="20">Vehicle <span class="red-mark">*</span> </nz-form-label>
+                    <nz-form-control nzHasFeedback nzErrorTip="Vehicle is required." [nzSpan]="20">
+                        <nz-select 
+                            nzPlaceHolder="Search By Vehicle Number......"
+                            nzAllowClear
+                            name="selTruck"
+                            [disabled]="getId"
+                            [(ngModel)]="selTruck"
+                            nzShowSearch
+                            required>
+                            <nz-option
+                                *ngFor="let veh of vehDataCopy"
+                                nzLabel="{{veh?.vehicle_reg_no}}"
+                                [nzValue]="veh">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item *ngIf="showOverSpeed" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+                    <nz-form-label [nzSpan]="20">Speed(km/h) <span class="red-mark">*</span></nz-form-label>
+                    <nz-form-control nzHasFeedback nzErrorTip="Speed is required." [nzSpan]="20">
+                        <nz-input-number
+                            [(ngModel)]="over_speed" 
+                            name="over_speed"
+                            [nzMin]="0" 
+                            [nzStep]="1" 
+                            required
+                            nzPlaceHolder="Ex.- 50">
+                        </nz-input-number>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item *ngIf="showOverSpeed" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+                    <nz-form-label [nzSpan]="20">Name</nz-form-label>
+                    <nz-form-control [nzSpan]="20">
+                        <input 
+                            nz-input 
+                            [(ngModel)]="over_speed_name"
+                            name="over_speed_name"
+                            placeholder="Enter name here ...">
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item *ngIf="showOverSpeed" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+                    <nz-form-label [nzSpan]="20">Description</nz-form-label>
+                    <nz-form-control [nzSpan]="20">
+                        <input 
+                        nz-input 
+                        [(ngModel)]="over_speed_description"
+                        name="over_speed_description"
+                        placeholder="Enter description here ...">
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+                    <nz-form-label [nzSpan]="20">Mobile</nz-form-label>
+                    <nz-form-control nzErrorTip="Please enter 10 digit numbers" [nzSpan]="20">
+                        <div style="display: flex;">
+                            <input name="mobile" nz-input type="text" minlength="10"  style="max-width:90%;margin-right:2%;" [(ngModel)]="mob" placeholder="EX. 9999999999">
+                            <button nzType="primary" nz-button (click)="mobChange(mob,true);">
+                                <i nz-icon nzType="plus" style="font-size: 15px;"></i>
+                            </button>
+                        </div>
+                        <span class="btn-lst" *ngFor=" let nMob of mobLst">{{nMob}} <a (click)="mobChange(nMob,false)"> x </a></span>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+                    <nz-form-label [nzSpan]="20">E-mail</nz-form-label>
+                    <nz-form-control [nzSpan]="20">
+                        <div style="display: flex;">
+                            <input 
+                                nz-input
+                                type="email"
+                                name="email"    
+                                style="max-width:90%;margin-right:2%;"
+                                [(ngModel)]="mulEmail"
+                                placeholder="Ex. abc@mail.com">
+                            <button nzType="primary" nz-button (click)="emailChange(mulEmail,true);">
+                                <i nz-icon nzType="plus" style="font-size: 15px;"></i>
+                            </button>
+                        </div>
+                        <span class="btn-lst" *ngFor="let sEmail of emailLst">{{sEmail}} <a (click)="emailChange(sEmail,false)"> x </a></span>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item *ngIf="showHalt" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+                    <nz-form-label [nzSpan]="20">Duration</nz-form-label>
+                    <nz-form-control [nzSpan]="20">
+                        <nz-time-picker nzPlaceHolder="Select Duration"  [(ngModel)]="hTime"  name="hTime" nzFormat="HH:mm">
+                        </nz-time-picker>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item  *ngIf="showGeoList" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+                    <nz-form-label [nzSpan]="20">Choose Geofence <span class="red-mark">*</span></nz-form-label>
+                    <nz-form-control nzHasFeedback nzErrorTip="Geofence is required" [nzSpan]="20">
+                        <nz-select
+                            nzPlaceHolder="Select Geofence"
+                            [(ngModel)]="sGeozone"
+                            required
+                            name="sGeozone"
+                            nzAllowClear
+                            nzShowSearch>
+                            <nz-option
+                                *ngFor="let geofence of geofenceData"
+                                nzLabel="{{geofence.name}}"
+                                [nzValue]="geofence"
+                                ></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item *ngIf="showGeoList" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+                    <nz-form-label [nzSpan]="20">Status</nz-form-label>
+                    <nz-form-control [nzSpan]="20">
+                        <label nz-checkbox name="entry" [(ngModel)]="entry">In</label>&nbsp;&nbsp;
+                        <label nz-checkbox name="exit" [(ngModel)]="exit">Out</label>     
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item  *ngIf="showGeoList" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+                    <nz-form-label [nzSpan]="20">Category</nz-form-label>
+                    <nz-form-control [nzSpan]="20">
+                        <nz-select
+                            nzPlaceHolder="Select Category"
+                            [(ngModel)]="category"
+                            name="category"
+                            (ngModelChange)="changeCategory(category)"
+                            nzAllowClear
+                            nzShowSearch>
+                            <nz-option
+                                *ngFor="let cat of aCategory"
+                                nzLabel="{{cat.name}}"
+                                [nzValue]="cat.scope"
+                                ></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item  *ngIf="showGeoList" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+                    <nz-form-label [nzSpan]="20">Destination</nz-form-label>
+                    <nz-form-control [nzSpan]="20">
+                        <nz-select
+                            nzPlaceHolder="Select Destination"
+                            [(ngModel)]="sDestination"
+                            name="sDestination"
+                            nzAllowClear
+                            nzShowSearch>
+                            <nz-option
+                                *ngFor="let geofence of geofenceData"
+                                nzLabel="{{geofence.name}}"
+                                [nzValue]="geofence.gid"
+                                ></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </form>
+        <!-- default alert here ........-->
+        <button  *ngIf="showGeoList && innerWidth > 500" nz-button style="margin-left: 3%;margin-bottom: 3%;" nzType="primary" (click)="addNew()">Add New Row</button>
+        <button  *ngIf="showGeoList && innerWidth > 500" nz-button style="margin-left: 3%;margin-bottom: 3%;" nzType="primary" nzDanger (click)="defaultTimes.pop();">Remove</button>
+        <nz-table *ngIf="showGeoList && innerWidth > 500" [nzData]="defaultTimes">
+            <thead>
+                <th>#</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Message</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let dTime of defaultTimes;">
+                    <td nzAlign="center">
+                        <label nz-checkbox [(ngModel)]="dTime.selected"></label>
+                    </td>
+                    <td nzAlign="center">
+                        <nz-time-picker name="sTime" [(ngModel)]="sTime"  nzFormat="HH:mm">
+                        </nz-time-picker>
+                    </td>
+                    <td nzAlign="center">
+                        <nz-time-picker  name="eTime" [(ngModel)]="eTime" nzFormat="HH:mm">
+                        </nz-time-picker>
+                    </td>
+                    <td nzAlign="center">
+                        <input nz-input type="text" name="msg" [(ngModel)]="dTime.msg" />
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+        <div style="padding-left:3%;padding-top: 5%;">
+            <button nz-button nzType="primary" (click)="createA()">Submit</button>
+        </div>
+    </div>
+</div>

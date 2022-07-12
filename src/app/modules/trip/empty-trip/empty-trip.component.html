@@ -1,0 +1,95 @@
+<div class="main-div" style="display: flex" >
+  <div class="insight">
+
+    <div class="insight-head">
+      <div class="insight-title">
+        Trip Details
+      </div>
+    </div>
+    <div class="insight-description">
+      <div class="overlay" *ngIf= "loadingObservable | async"></div>
+
+      <form [formGroup]="emptyTripForm" (ngSubmit)="onSubmit()">
+        <div>
+          <div class="flex-container">
+            <div class="flex-containMaterial Detailser">
+
+              <div class="form-group col-md-3 mb-3">
+                <label style="text-align: left;"  required nzFor="mobile">Trip # / Route / Status: {{selectedTrip.trip_no}}/ {{selectedTrip.route_name}}/ {{selectedTrip.status}}</label><br>
+                <div class="col-md-3 mb-3"></div>
+              </div>
+
+              <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+                <nz-form-label style="text-align: left">Vehicle no.</nz-form-label>
+                <nz-form-control>
+                  <nz-select style="min-width: 210px" [nzDropdownMatchSelectWidth]="false" nzPlaceHolder="Search Vehicle no."
+                             nzShowSearch nzAllowClear (nzOnSearch)="onvehicleSearch($event)" nzServerSearch formControlName="vehicle_no" >
+                    <nz-option *ngFor="let vehicle of receivedAllVehicles"
+                               nzLabel="{{ vehicle?.vehicle_reg_no }} ({{ vehicle.status }})" [nzValue]="vehicle.vehicle_reg_no">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </div>
+
+              <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+                <nz-form-label style="text-align: left">Driver</nz-form-label>
+                <nz-form-control>
+                  <nz-select style="min-width: 210px" [nzDropdownMatchSelectWidth]="false" nzPlaceHolder="Search Driver"
+                             nzShowSearch nzAllowClear (nzOnSearch)="ondriverSearch($event)" nzServerSearch formControlName="driver" >
+                    <nz-option *ngFor="let driver of receivedAllDrivers"
+                               nzLabel="{{ driver?.name }}" [nzValue]="driver">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </div>
+
+              <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+                <nz-form-label style="text-align: left">Trip Start Date:<span class="red-mark">*</span></nz-form-label>
+                <nz-form-control>
+              <span>
+                <nz-date-picker [nzDisabledDate]="disabledStartDate" [(ngModel)] = 'tripStartDate' min = "2022-04-15" formControlName = 'tripStartDate' style="min-width: 100px" nzFormat="dd-MM-yyyy" [nzSize]="'small'"
+                                (nzOnOpenChange)="handleStartOpenChange($event)">
+                </nz-date-picker>
+                <nz-time-picker formControlName="time" nzFormat="HH:mm">
+                </nz-time-picker>
+              </span>
+                </nz-form-control>
+              </div>
+
+              <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+                <nz-form-label style="text-align: left">Trip End Date:<span class="red-mark">*</span></nz-form-label>
+                <nz-form-control>
+              <span>
+                <nz-date-picker [nzDisabledDate]="disabledEndDate" formControlName = 'tripEndDate'  [(ngModel)] = 'tripEndDate' style="min-width: 100px" nzFormat="dd-MM-yyyy" [nzSize]="'small'"
+                                (nzOnOpenChange)="handleEndOpenChange($event)" >
+                </nz-date-picker>
+                <nz-time-picker formControlName="time" nzFormat="HH:mm">
+                </nz-time-picker>
+              </span>
+                </nz-form-control>
+              </div>
+
+
+              <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+                <nz-form-label style="text-align: left">Route :<span class="red-mark">*</span></nz-form-label>
+                <nz-form-control>
+                  <nz-select style="min-width: 210px" nzPlaceHolder="Route Search..."
+                             nzShowSearch nzAllowClear (nzOnSearch)="getRoute($event)" nzServerSearch formControlName="route_name" >
+                    <nz-option *ngFor="let item of aRoute" nzLabel="{{item.name}}" [nzValue]="item">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+
+
+      </form>
+
+    </div>
+  </div>
+</div>

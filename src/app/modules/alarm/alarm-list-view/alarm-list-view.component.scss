@@ -1,0 +1,21 @@
+.aggregate {
+  padding: 6px;
+}
+
+#myDIV {
+    height: 100%;
+    overflow-y: auto;
+}
+
+@media screen and (max-width: 500px) {
+    #myDIV {
+      height:100%;
+    }
+    nz-select, nz-date-picker, input {
+      width: 100%;
+    }
+}
+
+.SelectHighlight {
+    background-color: #afafad;
+}

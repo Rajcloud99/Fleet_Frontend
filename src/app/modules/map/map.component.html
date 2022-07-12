@@ -1,0 +1,74 @@
+<div class="insight">
+    <div class="insight-head">
+        <!-- <div class="insight-title">
+            Map View
+        </div> -->
+        <!-- <div style="display:flex;">
+            <div *ngIf="innerWidth < 500" class="mbbtn" style="margin-right: 30vw;">
+                <app-back-button></app-back-button>
+            </div>
+            <div style="font-weight: bold;">Map View</div>
+        </div> -->
+    </div>
+    <div class="insight-description">
+        <agm-map 
+        [style.height]="innerWidth <=500 ? '80vh' :'65vh'"
+        [latitude]="marker.lat" 
+        [longitude]="marker.lng" 
+        [zoom]="zoom"
+        [streetViewControl]="false"
+        [mapTypeControl]="true"
+        [fullscreenControl]="false"
+        [gestureHandling]="'greedy'"
+        [fitBounds]="true"
+        >
+        <agm-marker-cluster>
+            <agm-marker *ngFor="let marker of markers; let i = index;" [latitude]="marker.lat" [longitude]="marker.lng" [agmFitBounds]="true" [iconUrl]="marker.icon">
+                <agm-info-window [isOpen]="marker.isOpen">
+                    <div><h6>{{vehData[i]?.vehicle?.vehicle_reg_no}}</h6></div>
+                    <div><b>Address:</b> {{vehData[i]?.vehicle?.gpsData?.address || 'NA'}}</div>
+                    <div><b>Last location update:</b> {{vehData[i]?.vehicle?.gpsData?.datetime | date: 'dd-MM-yyyy h:mm a'}}</div>
+                    <div><b>Speed: {{vehData[i]?.vehicle?.gpsData?.speed+'km/h' || 'NA'}}</b></div>
+                    <div *ngIf="roles['Map View']['Live Tracking']"><a href="javascript:void(0);"  (click)="gotoLiveTrack(vehData[i]?.vehicle)">Live Track</a></div>
+                </agm-info-window>
+            </agm-marker>
+        </agm-marker-cluster>
+        <ng-container>
+            <button nz-button (click)="visible ? visible = false : visible = true ">
+                <!-- <i nz-icon nzType="to-top" nzTheme="outline"></i> -->
+            </button>
+            <nz-drawer
+                *ngIf="false"
+                [nzClosable]="false"
+                [nzVisible]="true"
+                [nzPlacement]="'bottom'"
+                (nzOnClose)="onClose()">
+                <ng-container *nzDrawerContent>
+                    <div nz-row [nzGutter]="12"  style="position: sticky;">
+                        <div nz-col class="gutter-row" [nzSpan]="8"><b>Running :</b>({{vehData?.count?.running}})</div>
+                        <div nz-col class="gutter-row" [nzSpan]="8"><b>Stopped :</b>({{vehData?.count?.stopped}})</div>
+                        <div nz-col class="gutter-row" [nzSpan]="8"><b>Offline :</b>({{vehData?.count?.offline}})</div>
+                    </div>
+                    <div nz-row  [nzGutter]="12">
+                        <div nz-col class="gutter-row"  [nzSpan]="8">
+                            <div *ngFor="let veh of vehData;">
+                                <span style="color: 'green'" *ngIf="veh?.status === 'running'">{{veh?.vehicle?.vehicle_reg_no || 'NA'}}</span>
+                            </div>
+                        </div>
+                        <div nz-col class="gutter-row"  [nzSpan]="8">
+                            <div *ngFor="let veh of vehData;">
+                                <span style="color: 'red'" *ngIf="veh?.status === 'stopped'">{{veh?.vehicle?.vehicle_reg_no || 'NA'}}</span>
+                            </div>
+                        </div>
+                        <div nz-col class="gutter-row"  [nzSpan]="8">
+                            <div *ngFor="let veh of vehData;">
+                                <span style="color: 'grey'" *ngIf="veh?.status === 'offline'">{{veh?.vehicle?.vehicle_reg_no || 'NA'}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </nz-drawer>
+        </ng-container>
+    </agm-map>
+    </div>
+</div>

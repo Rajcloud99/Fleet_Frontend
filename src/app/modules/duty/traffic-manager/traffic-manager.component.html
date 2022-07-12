@@ -1,0 +1,121 @@
+<div *ngIf="innerWidth < 500" class="insight">
+  <div class="insight-head">
+
+
+      <div class="">
+            <div class="">
+                <nz-select style="width: 200px" [nzDropdownMatchSelectWidth]="false" nzPlaceHolder="Search Traffic Manager"
+                  nzShowSearch (nzOnSearch)="searchUsers($event)" (ngModelChange)="onselectDropdown($event)"
+                           [(ngModel)]="searchUser" nzServerSearch>
+                  <nz-option *ngFor="let user of receivedAllUsers"
+                       nzLabel="{{ user?.full_name}}" [nzValue]="user">
+                  </nz-option>
+                </nz-select>
+<!--              <button style="width: 50%;" type="primary" nz-button (click)="searchTManager();">Search</button>-->
+
+            </div>
+      </div>
+
+  </div>
+
+  <div class="insight-head"  *ngFor="let d of tMangListing; index as i" >
+    <div class="my-card insight-description">
+      <div class="mbbtn" nz-tooltip nzTooltipTitle="Delete"(click)="deleteManager(i)" nz-tooltip nzTooltipTitle="Disable">
+        <fa-icon [icon]="faTrash" style="color: red !important; align-items: flex-end"></fa-icon>
+      </div>
+      <div class="my-card-header ">
+<!--        <b> S.No : </b> {{i+1}}<br>-->
+        <b>Traffic Manager : </b> {{d.name}}<br>
+        <b>Assigned BY : </b>{{d.assignBy}}<br>
+        <b>Added At : </b>{{d.date| date: 'dd-MMM-yyyy'}}
+      </div></div>
+  </div>
+
+</div>
+
+<div *ngIf="innerWidth > 500">
+  <div class="">
+    <nz-select style="width: 200px" [nzDropdownMatchSelectWidth]="false" nzPlaceHolder="Search Traffic Manager"
+               nzShowSearch (nzOnSearch)="searchUsers($event)" (ngModelChange)="onselectDropdown($event)"
+               [(ngModel)]="searchUser" nzServerSearch>
+      <nz-option *ngFor="let user of receivedAllUsers"
+                 nzLabel="{{ user?.full_name}}" [nzValue]="user">
+      </nz-option>
+    </nz-select>
+    <!--              <button style="width: 50%;" type="primary" nz-button (click)="searchTManager();">Search</button>-->
+
+  </div>
+  <div (scroll)="getTmangDataOnScroll()">
+    <nz-table
+      (scroll)="getTmangDataOnScroll()"
+      #nzTable
+      nzBordered
+      [nzShowPagination]="false"
+      [nzData]="[tMangListing]"
+      nzSize="small"
+      [nzScroll]="{ x: '600px', y: '360px' }"
+      style="overflow-x: auto"
+    >
+      <thead>
+      <tr style="background-color: #3e51b5 !important;">
+        <th nzWidth="80px"  nzAlign="center">Traffic Manager </th>
+        <th nzWidth="80px"  nzAlign="center">Assigned By</th>
+        <th nzWidth="80px"  nzAlign="center">Added AT</th>
+        <th nzWidth="80px"  nzAlign="center">Delete</th>
+      </tr>
+      </thead>
+      <tbody >
+      <tr
+        style="cursor: pointer"
+        *ngFor="let item of tMangListing; let i = index;"
+      >
+        <td nzAlign="center">{{ item?.name }}</td>
+        <td nzAlign="center">{{ (item?.assignBy) || "NA" }}</td>
+        <td nzAlign="center">{{  (item?.date| date: 'dd-MMM-yyyy')  || "NA" }}</td>
+        <td> <fa-icon [icon]="faTrash" (click)="deleteManager(i)" style="color: red !important; align-items: flex-end"></fa-icon></td>
+      </tr>
+      </tbody> </nz-table
+    ><br /><br />
+    <!--        <pre>{{selectedGroupRowId}}</pre>-->
+
+  </div>
+
+
+
+<!--  <div >-->
+<!--    <div>-->
+<!--      -->
+<!--      <form [formGroup]="tManagerForm" (ngSubmit)="onSubmit()">-->
+<!--        <div class="">-->
+<!--          <div class="">-->
+<!--            <nz-select style="width: 200px" [nzDropdownMatchSelectWidth]="false" nzPlaceHolder="Search Traffic Manager"-->
+<!--                       formControlName="user" nzShowSearch (nzOnSearch)="searchUsers($event)" nzServerSearch>-->
+<!--              <nz-option *ngFor="let user of receivedAllUsers"-->
+<!--                         nzLabel="{{ user?.full_name}}" [nzValue]="user._id">-->
+<!--              </nz-option>-->
+<!--            </nz-select>-->
+<!--            &lt;!&ndash;              <button style="width: 50%;" type="primary" nz-button (click)="searchTManager();">Search</button>&ndash;&gt;-->
+
+<!--          </div>-->
+<!--        </div>-->
+<!--      </form>-->
+<!--    </div>-->
+
+<!--    </div>-->
+
+
+<!--  <div class="insight-head"  *ngFor="let d of InputData.tr_mgr; index as i" >-->
+<!--    <div class="my-card insight-description">-->
+<!--      <div class="mbbtn" nz-tooltip nzTooltipTitle="Delete"(click) ="delete(d.user, i)" nz-tooltip nzTooltipTitle="Disable">-->
+<!--        <fa-icon [icon]="faTrash" style="color: red !important; align-items: flex-end"></fa-icon>-->
+<!--      </div>-->
+<!--      <div class="my-card-header ">-->
+<!--        &lt;!&ndash;        <b> S.No : </b> {{i+1}}<br>&ndash;&gt;-->
+<!--        <b>Traffic Manager : </b> {{d.name}}<br>-->
+<!--        <b>Assigned BY : </b>{{d.assignBy}}<br>-->
+<!--        <b>Added At : </b>{{d.date| date: 'dd-MMM-yyyy'}}-->
+<!--      </div></div>-->
+<!--  </div>-->
+
+</div>
+

@@ -1,0 +1,174 @@
+<div class="insight">
+  <div class="insight-head" *ngIf="innerWidth > 500" > 
+    <div class="insight-tools">
+      <div class="tool">
+
+        <div class="mbbtn" *ngIf="innerWidth <= 500"  (click)="isMobFilterVisible = true;">
+          <fa-icon [icon]="faFilter"></fa-icon>
+        </div>
+        <div class="mbbtn"  nz-tooltip nzTooltipTitle="Add Material Group"
+             (click)="gotoAddMaterialGroup()">
+          <fa-icon [icon]="faPlusSquare" ></fa-icon>
+        </div>
+        <div class="mbbtn"  nz-tooltip nzTooltipTitle="Edit" (click)="navigateToGroup()">
+          <fa-icon [icon]="faEdit" ></fa-icon>
+        </div>
+        <div class="mbbtn" nz-tooltip nzTooltipTitle="Delete"(click) ="deleteGroup()" nz-tooltip nzTooltipTitle="Disable">
+          <fa-icon [icon]="faTrash" style="color: red !important;"></fa-icon>
+        </div>
+
+<!--        <button *ngIf="innerWidth < 500" class="my-btn bg-primary" (click)="isMobFilterVisible = true;">-->
+<!--          <fa-icon [icon]="faFilter" style="font-size: 15px;"></fa-icon>-->
+<!--        </button>-->
+<!--        <button class="my-btn bg-primary" nz-tooltip nzTooltipTitle="Add Material Group"-->
+<!--                (click)="gotoAddMaterialGroup()">-->
+<!--          <fa-icon [icon]="faPlusSquare" style="font-size: 15px;"></fa-icon>-->
+<!--        </button>-->
+<!--        <button class="my-btn bg-primary" nz-tooltip nzTooltipTitle="Edit" (click)="navigateToGroup()">-->
+<!--          <fa-icon [icon]="faEdit" style="font-size: 15px"></fa-icon>-->
+<!--        </button>-->
+<!--        <button  (click) ="deleteGroup()" class="my-btn btn-danger" nz-tooltip nzTooltipTitle="Delete">-->
+<!--          <fa-icon [icon]="faTrash" style="font-size: 15px"></fa-icon>-->
+<!--        </button>-->
+      </div>
+    </div>
+  </div>
+  <div *ngIf="innerWidth > 500" class="insight-description">
+    <!--      <nz-spin [nzSize]="'large'" [ngClass]="{'loader': loadingObservable | async}" nzSimple [nzSpinning]="loadingObservable | async"></nz-spin>-->
+
+
+    <div class="filters-row">
+      <div class="my-row">
+        <!-- branch name or code -->
+        <div class="my-card">
+          <div class="my-card-header">
+            <input nz-input  [(ngModel)]="filterObj && filterObj.name" placeholder="Material Group Name" id="search" />
+          </div>
+        </div>
+        <div class="my-card">
+          <div class="my-card-header">
+            <input nz-input  [(ngModel)]="filterObj && filterObj.code" placeholder="Code" id="searchSACType" />
+          </div>
+        </div>
+        <div class="my-card">
+          <div class="my-card-header">
+            <button class="my-btn bg-primary" (click)="searchGroup()">
+              <fa-icon [icon]="faSearch" style="font-size: 15px"></fa-icon>
+            </button>
+          </div>
+        </div>
+        <div class="my-card">
+          <div class="my-card-header">
+            <button class="my-btn bg-primary" (click)="reset()">
+              <fa-icon [icon]="faTimes" style="font-size: 19px"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--      <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">-->
+
+    <div (scroll)="getGroupOnScroll()">
+      <nz-table
+        (scroll)="getGroupOnScroll()"
+        #nzTable
+        nzBordered
+        [nzShowPagination]="false"
+        [nzData]="receivedGroupData ? receivedGroupData : ''"
+        nzSize="small"
+        [nzScroll]="{ x: '600px', y: '360px' }"
+        style="overflow-x: auto"
+      >
+        <thead>
+        <tr style="background-color: #3e51b5 !important;">
+          <th nzWidth="80px"  nzAlign="center">Name </th>
+          <th nzWidth="80px"  nzAlign="center">Code</th>
+          <!--            <th nzWidth="150px" nzAlign="center">GST Percent</th>-->
+          <!--            <th nzWidth="120px" nzAlign="center">Material Name </th>-->
+        </tr>
+        </thead>
+        <tbody >
+        <tr
+          style="cursor: pointer"
+          *ngFor="let item of receivedGroupData"
+          (click)="selectGroupItem(item)"
+          [ngClass]="{SelectHighlight :  selectedGroupRowId && (item?._id === selectedGroupRowId)}"
+        >
+          <td nzAlign="center">{{ ( item?.name ) }}</td>
+          <td nzAlign="center">{{ item?.code }}</td>
+          <!--            <td nzAlign="center">{{ item?.gstPercent}}</td>-->
+          <!--            <td nzAlign="center">{{ item?.material}}</td>-->
+        </tr>
+        </tbody> </nz-table
+      ><br /><br />
+      <!--        <pre>{{selectedGroupRowId}}</pre>-->
+
+    </div>
+    <!--      </cdk-virtual-scroll-viewport>-->
+  </div>
+
+
+</div>
+
+
+<div id="myDIVCard" (scroll)="getGroupOnScroll()">
+
+  <div *ngIf="innerWidth <= 500" class="">
+    <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedGroupData ? receivedGroupData : ''"
+              nzSize="small"  [nzScroll]="{ y: '425px' }" style="overflow-x: auto">
+
+      <div
+        class="head shadow-d1 aggregate"
+        *ngFor="let d of receivedGroupData"
+        (click)="selectGroupItem(d)"  [ngClass]="{SelectHighlight :  selectedGroupRowId && (d?._id === selectedGroupRowId)}">
+
+        <div class="align">
+          <div class="grey"><b>Material Group:</b> </div>
+          <div class="ml-1">{{d?.name}}</div>
+        </div>
+
+
+        <div class="align">
+          <div class="grey"><b>Code:</b> {{ d?.code || 'NA'  }}</div>
+
+        </div>
+
+
+        <div class="align">
+          <div class="grey"><b>Unit:</b> {{ d?.unit || 'NA'  }}</div>
+
+        </div>
+
+
+        <div class="align">
+          <div class="grey"><b>Description:</b> {{ d?.description || 'NA'  }}</div>
+
+        </div>
+
+
+      </div>
+    </nz-table>
+  </div>
+
+</div>
+
+<div *ngIf="isMobFilterVisible" class="flt">
+  <div class="flt_heading">Filters</div>
+  <div>
+    <div class="flex-cont">
+      <label> Material Type </label>
+      <input nz-input [(ngModel)]="filterObj && filterObj.name" placeholder="Search Material Type">
+    </div>
+    <div class="flex-cont">
+      <label> Code </label>
+      <input nz-input [(ngModel)]="filterObj && filterObj.code" placeholder="Search Material Code">
+    </div>
+  </div>
+
+  <div style="margin-top: 17px;">
+    <button style="width: 50%;" type="primary" nz-button (click)="searchGroup(); isMobFilterVisible = false;">Search</button>
+    <button style="width: 50%;" type="primary" nz-button (click)="reset(); isMobFilterVisible = false;">Reset</button>
+  </div>
+</div>
+

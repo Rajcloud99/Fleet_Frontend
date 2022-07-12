@@ -1,0 +1,77 @@
+<div style="height: 65vh">
+    <div class="my-row">
+        <div class="my-card">
+            <div class="my-card-header">
+                <input type="text" nz-input [(ngModel)]="grNumber" placeholder="Enter gr no." />
+            </div>
+        </div>
+        <div class="my-card">
+            <div class="my-card-header">
+                <nz-date-picker [(ngModel)]="from" nzPlaceHolder="From Date"></nz-date-picker>
+            </div>
+        </div>
+        <div>
+            <div>
+                <nz-date-picker  [(ngModel)]="to" nzPlaceHolder="To Date"></nz-date-picker>
+            </div>
+        </div>
+        <div class="my-card">
+            <div class="my-card-header">
+                <button nz-button nzType="primary" (click)="search()"><i nz-icon nzType="search"></i></button>
+            </div>
+        </div>
+    </div>
+    <nz-spin [nzSize]="'large'" [ngClass]="{'loader': loadingObservable | async}" nzSimple [nzSpinning]="loadingObservable | async"></nz-spin>
+    <nz-table
+        
+        nzBordered
+        [nzShowPagination]="false"
+        nzSize="small"
+        [nzScroll]="{ x: '1220px', y: '300px' }"
+        style="overflow-x: auto;"
+    >
+    <thead>
+        <tr>
+            <th nzAlign="center" >
+                <input type="checkbox" [checked]="checkedAll" (change)="selectAllRow(checkedAll = !checkedAll);" >
+            </th>
+            <th nzAlign="center">GR NO</th>
+            <th nzAlign="center">GR DATE</th>
+            <th nzAlign="center">BILLING ROUTE</th>
+            <th nzAlign="center">CUSTOMER</th>
+            <th nzAlign="center">CONSIGNER</th>
+            <th nzAlign="center">CONSIGNEE</th>
+            <th nzAlign="center">BILLING PARTY</th>
+            <th nzAlign="center">MATERIAL CODE</th>
+            <th nzAlign="center">MATERIAL NAMES</th>
+            <th nzAlign="center">RATE</th>
+            <th nzAlign="center">FREIGHT</th>
+            <th nzAlign="center">TOTAL FRIEGHT</th>
+            <th nzAlign="center">TOTAL AMOUNT</th>
+            <th nzAlign="center">BRANCH</th>
+            <th nzAlign="center">ENTRY BY</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of receivedData"
+            style="cursor: pointer">
+            <td nzAlign="center"><label nz-checkbox [(ngModel)]="item.checked" (ngModelChange)="selectItem(item,item.checked)" ></label></td>
+            <td nzAlign="center">{{item?.grNumber}}</td>
+            <td nzAlign="center">{{item?.grDate}}</td>
+            <td nzAlign="center">{{item?.acknowledge?.source+" to "+item?.acknowledge?.destination}}</td>
+            <td nzAlign="center">{{item?.customer?.name}}</td>
+            <td nzAlign="center">{{item?.consignor?.name}}</td>
+            <td nzAlign="center">{{item?.consignee?.name}}</td>
+            <td nzAlign="center">{{item?.billingParty?.name}}</td>
+            <td nzAlign="center">{{item?.invoices[0].material.groupCode}}</td>
+            <td nzAlign="center">{{item?.invoices[0].material.groupName}}</td>
+            <td nzAlign="center">{{item?.invoices[0].rate}}</td>
+            <td nzAlign="center">{{item?.basicFreight}}</td>
+            <td nzAlign="center">{{item?.totalFreight}}</td>
+            <td nzAlign="center">{{item?.totalAmount}}</td>
+            <td nzAlign="center">{{item?.branch?.name}}</td>
+            <td nzAlign="center">{{item?.created_by_full_name}}</td>
+        </tr>
+    </tbody>
+    </nz-table>
+</div>

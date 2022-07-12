@@ -1,0 +1,22 @@
+.hide {
+  visibility: hidden;
+}
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.flex-container > div {
+  width: auto;
+  margin: 15px;
+}
+.buttonAdd{
+  width: auto;
+  margin: 15px;
+}
+
+@media screen and (max-width: 1300px) {
+  .main-div {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}

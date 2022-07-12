@@ -1,0 +1,260 @@
+<div class="insight">
+    
+    <div class="insight-description">
+      <!-- table view start -->
+      <div id="myDIV">
+        <div *ngIf="innerWidth < 500" class="aggregate">
+          <div class="head shadow-d1" *ngFor="let d of receivedData" (click)="goToDetailView(d)">
+            <div class="align">
+              <div class="grey">Trip No.</div>
+              <div class="ml-1">{{d?.trip_no}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Vehicle No.</div>
+              <div class="ml-1">{{d?.vehicle_no}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Driver:</div>
+              <div class="ml-1">{{d?.driver?.name}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Driver No:</div>
+              <div class="ml-1">{{d?.driver?.prim_contact_no}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Branch </div>
+              <div class="ml-1">{{d?.branch?.name}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Trip Start </div>
+              <div class="ml-1">{{d?.statuses | filterstringgetdate:'Trip started'| date: 'dd-MM-yyyy hh:mm'}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Trip End </div>
+              <div class="ml-1">{{d?.statuses | filterstringgetdate:'Trip ended'| date:'dd-MM-yyyy hh:mm'}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Route:</div>
+              <div class="ml-1">{{d?.route_name || d?.rName|| 'NA'}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Intermittent Point:</div>
+              <div class="ml-1" *ngFor="let item of d?.imd">{{item.c}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Ownership Type:</div>
+              <div class="ml-1">{{d?.ownershipType}}</div>
+            </div>
+            <div class="align" *ngIf="d?.vendor">
+              <div class="grey">Vendor Name</div>
+              <div class="ml-1">{{d?.vendor?.name}}</div>
+            </div>
+            <div class="align" *ngIf="d?.vendor">
+              <div class="grey">Vendor No:</div>
+              <div class="ml-1">{{d?.vendor?.prim_contact_no}}</div>
+            </div>
+            <div class="align" *ngIf="d?.vendorDeal && d?.vendorDeal?.loading_slip">
+              <div class="grey">Hire Slip No:</div>
+              <div class="ml-1">{{d?.vendorDeal?.loading_slip}}</div>
+            </div>
+            <div class="align" *ngIf="d?.gr && d?.gr[0] && d?.gr[0]?.customer">
+              <div class="grey">Customer: </div>
+              <div class="ml-1">{{d?.gr[0]?.customer?.name}}</div>
+            </div>
+            <div class="align" *ngIf="d?.gr && d?.gr[0] && d?.gr[0]?.consignor">
+              <div class="grey">Consignor: </div>
+              <div class="ml-1">{{d?.gr[0]?.consignor?.name}}</div>
+            </div>
+            <div class="align" *ngIf="d?.gr && d?.gr[0] && d?.gr[0]?.consignee">
+              <div class="grey">Consignee: </div>
+              <div class="ml-1">{{d?.gr[0]?.consignee?.name}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Trip Status: </div>
+              <div class="ml-1">{{d?.status}}</div>
+            </div>
+            <div *ngIf="d && d?.advanceBudget.length" style="font-weight: bold;">Advance Summary</div>
+            <div *ngFor="let adv of d?.advanceBudget">
+              <div class="align">
+                <div class="grey">{{adv?.advanceType}}: </div>
+                <div class="ml-1">{{adv?.amount}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="innerWidth <= 500 && preparegrArr && preparegrArr.length" style="font-weight: bold;">{{(preparegrArr && preparegrArr[0] && preparegrArr[0].tMemo)?'TRIP MEMO':(preparegrArr && preparegrArr[0])?'ALL GR':'' }}</div>
+        <div *ngIf="innerWidth <= 500" style="margin-top: 10px;">
+          <div *ngIf="preparegrArr && preparegrArr[0] && !preparegrArr[0].tMemo " class="aggregate">
+            <div
+                class="head shadow-d1"
+                *ngFor="let data of preparegrArr; let i = index"
+                (click)="navigateToDetails(i)">
+                <div class="align">
+                  <div class="grey">GR No.</div>
+                  <div class="ml-1">{{data?.grNumber ||'NA'}}</div>
+                </div>
+              <div class="align">
+                <div class="grey">GR Date.</div>
+                <div class="ml-1">{{(data?.grDate| date:'dd-MMM-yyyy') ||'NA'}}</div>
+              </div>
+                <div class="align">
+                  <div class="grey">Customer</div>
+                  <div class="ml-1">{{data?.customer?.name || 'NA'}}</div>
+                </div>
+                <div class="align">
+                  <div class="grey">Consignor</div>
+                  <div class="ml-1">{{data?.consignor?.name || 'NA'}}</div>
+                </div>
+                <div class="align">
+                  <div class="grey">Consignee</div>
+                  <div class="ml-1">{{data?.consignee?.name || 'NA'}}</div>
+                </div>
+                <div class="align">
+                  <div class="grey">Status</div>
+                  <div class="ml-1">{{data?.status}}</div>
+                </div>
+            </div>
+          </div>
+<!--          for trip memo-->
+          <div *ngIf="preparegrArr && preparegrArr[0] && preparegrArr[0].tMemo " class="aggregate">
+            <div
+              class="head shadow-d1"
+              *ngFor="let data of preparegrArr; let i = index"
+              (click)="navigateToDetailTM(i)">
+              <div class="align">
+                <div class="grey">Trip Memo No :</div>
+                <div class="ml-1">{{data?.tMemo.tMNo || 'NA'}}</div>
+              </div>
+              <div class="align">
+                <div class="grey">Trip Memo Date:</div>
+                <div class="ml-1">{{(data?.tMemo.date| date:'dd-MMM-yyyy')|| 'NA'}}</div>
+              </div>
+              <div class="align">
+                <div class="grey">Customer :</div>
+                <div class="ml-1">{{data?.customer?.name ||'NA'}}</div>
+              </div>
+              <div class="align">
+                <div class="grey">Billing Party :</div>
+                <div class="ml-1">{{data?.billingParty?.name ||'NA'}}</div>
+              </div>
+              <div class="align">
+                <div class="grey">Gr No :</div>
+                <div class="ml-1">{{data?.grNumber ||'NA'}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <nz-table
+          *ngIf="innerWidth >= 500"
+          #nzTable
+          nzBordered
+          [nzShowPagination]="false"
+          [nzData]="receivedData ? receivedData : ''"
+          nzSize="small"
+          [nzScroll]="{ x: '1500px', y: '300px' }"
+          style="overflow-x: auto"
+        >
+          <thead>
+            <tr style="background-color: #3e51b5 !important;">
+              <th nzWidth="80px"  nzAlign="center">Trip No.</th>
+              <th nzWidth="120px" nzAlign="center">Gr No.</th>
+              <th nzWidth="100px" nzAlign="center">Vehicle No.</th>
+              <th nzWidth="100px" nzAlign="center">Trip Start</th>
+              <th nzWidth="100px" nzAlign="center">Trip End</th>
+              <th nzWidth="80px"  nzAlign="center">Ownership</th>
+              <th nzWidth="120px" nzAlign="center">Customer</th>
+              <th nzWidth="120px" nzAlign="center">Consignor</th>
+              <th nzWidth="120px" nzAlign="center">Consignee</th>
+              <th nzWidth="120px" nzAlign="center">Trip Status</th>
+              <th nzWidth="120px" nzAlign="center">Driver Name</th>
+              <th nzWidth="100px" nzAlign="center">Vendor</th>
+              <th nzWidth="80px"  nzAlign="center">Hire Slip</th>
+              <th nzWidth="80px"  nzAlign="center">No of Docs</th>
+            </tr>
+          </thead>
+          <tbody >
+            <tr
+              style="cursor: pointer"
+              *ngFor="let item of receivedData"
+              (click)="selectItem(item)"
+              [ngClass]="{SelectHighlight :  selectedRowId && (item?._id === selectedRowId)}"
+            >
+              <td nzAlign="center">{{ item?.trip_no}}</td>
+              <td nzAlign="center">{{ item?.gr|arrayofstring:'grNumber'}}</td>
+              <td nzAlign="center">{{ item?.vehicle_no }}</td>
+              <td nzAlign="center">{{ item?.statuses | filterstringgetdate:'Trip started'| date: 'dd-MMM-yyyy'}}</td>
+              <td nzAlign="center">{{ item?.statuses | filterstringgetdate:'Trip ended'| date:'dd-MMM-yyyy'}}</td>
+              <td nzAlign="center">{{ item?.ownershipType}}</td>
+              <td nzAlign="center">{{ item?.gr[0]?.customer?.name}}</td>
+              <td nzAlign="center">{{ item?.gr[0]?.consignor?.name}}</td>
+              <td nzAlign="center">{{ item?.gr[0]?.consignee?.name}}</td>
+              <td nzAlign="center">{{ item?.status}}</td>
+              <td nzAlign="center">{{ item?.driver?.name}}</td>
+              <td nzAlign="center">{{ item?.vendor?.name}}</td>
+              <td nzAlign="center">{{ item?.vendorDeal?.loading_slip}}</td>
+              <td nzAlign="center">{{ item?.noOfDocs}}</td>
+            </tr>
+          </tbody> </nz-table
+        ><br />
+        <div  [hidden]="selectedTrip?.isCancelled || selectedTrip?.status === 'Trip ended'">
+          <button class="btn btn-primary" (click)="openStatuspoup()">{{aStatusChange[aStatusChange.indexOf(selectedTrip?.status)+1]}}</button>
+        </div>
+          <button style="margin-top: 5px; font-size: 16px; text-align: center"  [hidden]="selectedTrip?.ownershipType != 'Market'" class="btn btn-primary" nz-button nzType="primary" (click)="VendorDealPopup()">
+            Vendor Deal
+          </button>
+        <!-- table view end -->
+      </div>
+  </div>
+  <nz-modal style="z-index: 50" [(nzVisible)]="visible" nzTitle="Update Trip" (nzOnCancel)="handleCancel()">
+    <ng-container *nzModalContent>
+      <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6" *ngIf="selectedTrip?.status === 'Trip not started'">
+        <nz-form-label style="text-align: left" nzFor="remark">Trip Start Remark:</nz-form-label>
+        <nz-form-control>
+          <input nz-input style="width: 95%" [(ngModel)]="tripRemark" [ngModelOptions]="{ standalone: true }"
+            placeholder="Enter Remark " autocomplete="off" />
+        </nz-form-control>
+      </div>
+      <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6" *ngIf="selectedTrip?.status === 'Trip not started'">
+        <nz-form-label style="text-align: left" nzFor="date">Trip Start date: <span class="red-mark">*</span>
+        </nz-form-label>
+        <nz-form-control>
+          <nz-date-picker  style="width:100px;" nzFormat="dd-MM-yyyy" [nzSize]="'small'"
+                [(ngModel)]="date">
+              </nz-date-picker>
+              <nz-time-picker [(ngModel)]="time" nzFormat="HH:mm"></nz-time-picker>
+        </nz-form-control>
+      </div>
+      <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6" *ngIf="selectedTrip?.status === 'Trip started'">
+        <nz-form-label style="text-align: left" nzFor="remark">Trip End Remark: <span class="red-mark" *ngIf="configs.trips.tripEndRmkReq">*</span></nz-form-label>
+        <nz-form-control>
+          <input nz-input style="width: 95%" [(ngModel)]="tripRemark" [ngModelOptions]="{ standalone: true }"
+            placeholder="Enter Remark " autocomplete="off" />
+        </nz-form-control>
+      </div>
+      <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6" *ngIf="selectedTrip?.status === 'Trip started'">
+        <nz-form-label style="text-align: left" nzFor="date">Trip End date: <span class="red-mark">*</span>
+        </nz-form-label>
+        <nz-form-control>
+          <nz-date-picker  style="width:100px;" nzFormat="dd-MM-yyyy" [nzSize]="'small'"
+                [(ngModel)]="date">
+              </nz-date-picker>
+              <nz-time-picker [(ngModel)]="time" nzFormat="HH:mm"></nz-time-picker>
+        </nz-form-control>
+      </div>
+    </ng-container>
+    <ng-container *nzModalFooter>
+      <button nz-button nzType="default" (click)="handleCancel()">Close</button>
+      <button nz-button nzType="primary" (click)="handleOk()" [disabled]="configs.trips.tripEndRmkReq && !tripRemark && selectedTrip?.status === 'Trip started'">UPDATE TRIP</button>
+    </ng-container>
+  </nz-modal>
+  <!--
+  <nz-modal style="z-index: 50" [(nzVisible)]="showUpload" nzTitle="Upload Images" (nzOnCancel)="handleUplaodCancel()">
+    <ng-container *nzModalContent>
+     <upload-accordion> Upload accordian </upload-accordion>
+    </ng-container>
+    <ng-container *nzModalFooter>
+      <button nz-button nzType="default" (click)="handleUplaodCancel()">Close</button>
+    </ng-container>
+  </nz-modal>
+  -->
+ </div>

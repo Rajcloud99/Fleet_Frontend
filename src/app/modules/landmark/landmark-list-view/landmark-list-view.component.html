@@ -1,0 +1,137 @@
+<div class="insight">
+  <div class="insight-head" *ngIf="innerWidth > 500">
+    <div class="insight-tools">
+      <div class="tool" *ngIf="innerWidth>500">
+        <button  class="my-btn bg-primary"  nz-tooltip nzTooltipTitle="Add LandMark" (click)="navigateToAdd()">
+          <fa-icon [icon]="faPlusSquare" style="font-size: 15px;"></fa-icon>
+        </button>
+        <button *ngIf="selectedData?._id" class="my-btn bg-primary"  nz-tooltip nzTooltipTitle="Edit LandMark" (click)="navigateToEdit()">
+          <fa-icon [icon]="faEdit" style="font-size: 15px;"></fa-icon>
+        </button>
+        <button *ngIf="selectedData?._id" class="my-btn bg-primary"  nz-tooltip nzTooltipTitle=" View LandMark" (click)="navigateToDetails()">
+          <fa-icon [icon]="faEye" style="font-size: 15px;"></fa-icon>
+        </button>
+        <button *ngIf="selectedData?._id" class="my-btn bg-primary"  (click)="deletelandMark(selectedData)">
+          <fa-icon [icon]="faTrash" style="font-size: 15px;color: red !important;"></fa-icon>
+        </button>
+      </div>
+
+      <!--&lt;!&ndash;      ///  for mobile view-->
+      <div class="tool" *ngIf="innerWidth<500">
+        <div class="mbbtn "  nz-tooltip nzTooltipTitle="Add LandMark" (click)="navigateToAdd()">
+          <fa-icon [icon]="faPlusSquare" ></fa-icon>
+        </div>
+        <div *ngIf="selectedData?._id " class="mbbtn "  nz-tooltip nzTooltipTitle="Edit LandMark" (click)="navigateToEdit()">
+          <fa-icon [icon]="faEdit" ></fa-icon>
+        </div>
+        <div *ngIf="selectedData?._id" class="mbbtn "  nz-tooltip nzTooltipTitle="View LandMark" (click)="navigateToDetails()">
+          <fa-icon [icon]="faEye" ></fa-icon>
+        </div>
+        <div *ngIf="selectedData?._id" class="mbbtn "  nz-tooltip nzTooltipTitle="Delete LandMark" (click)="deletelandMark(selectedData)">
+          <fa-icon [icon]="faTrash" style="color: red !important;" ></fa-icon>
+        </div>
+        <div *ngIf="innerWidth < 500" class="mbbtn " nz-tooltip nz-button nzTooltipTitle="Show Filters"
+             type="button" (click)="isMobFilterVisible=isMobFilterVisible?false:true;">
+          <fa-icon [icon]="faFilter"></fa-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="insight-description">
+    <div *ngIf="isMobFilterVisible && innerWidth <= 500">
+      <div>
+
+
+        <div class="flex-cont">
+          <label></label>
+          <input type="text" style="width: 100% " nz-input [(ngModel)]="filterObj && filterObj.name" placeholder="Enter Landmark Name" />
+        </div>
+      </div>
+
+      <div style="margin-top: 5%; margin-bottom:10%">
+        <button style="width: 50%;color:white;" type="button" class="bg-primary" nz-button
+                (click)="search();isMobFilterVisible = false;">Search</button>
+        <button style="width: 50%;color:white;" type="button" class="bg-primary" nz-button
+                (click)="reset();isMobFilterVisible = false;">Reset</button>
+      </div>
+
+    </div>
+    <!-- filters -->
+    <div class="filters-row" *ngIf="innerWidth > 500">
+      <div class="my-row">
+
+
+        <div class="my-card">
+          <div class="my-card-header">
+            <input type="text" nz-input [(ngModel)]="filterObj && filterObj.name" placeholder="Enter Landmark Name" />
+          </div>
+        </div>
+
+        <div class="my-card">
+          <div class="my-card-header">
+            <button nz-button nzType="primary" (click)="search()"><i nz-icon nzType="search"></i></button>
+          </div>
+        </div>
+        <div class="my-card">
+          <div class="my-card-header ">
+            <button nz-button nzType="primary" (click)=" reset()">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="myDIV" *ngIf="innerWidth > 500">
+      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
+                nzSize="small"  [nzScroll]="{ x: '1000px', y: '600px' }" style="overflow-x: auto">
+        <thead>
+        <tr>
+          <th nzWidth="50px" nzAlign="center">S.No. </th>
+          <th nzWidth="200px" nzAlign="center">Name</th>
+          <th nzWidth="200px" nzAlign="center">address</th>
+          <th nzWidth="150px" nzAlign="center">Latitude</th>
+          <th nzWidth="150px" nzAlign="center">Longitude</th>
+          <th nzWidth="150px" nzAlign="center">Created at</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr style="cursor: pointer" *ngFor="let item of receivedData; let i=index;" (click)="selectItem(item)"
+            [ngClass]="{SelectHighlight :  selectedRowId && (item?._id === selectedRowId)}">
+          <td nzAlign="center">{{i+1}}</td>
+          <td nzAlign="center">{{ item?.name|| 'NA'}}
+          <td nzAlign="center">{{ item?.address || 'NA'}}
+          <td nzAlign="center">{{ item?.location?.latitude || 'NA'}}
+          <td nzAlign="center">{{ item?.location?.longitude || 'NA'}}
+          <td nzAlign="center">{{ item?.created_at | date: 'dd-MMM-yyyy' || 'NA'}}</td>
+        </tr>
+        </tbody>
+      </nz-table>
+      <br/><br/>
+    </div>
+    <div *ngIf="innerWidth <= 500" class="aggregate">
+      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
+                nzSize="small"  [nzScroll]="{ y: screenHeight +'px' }" style="overflow-x: auto">
+        <div
+          class="head shadow-d1"
+          *ngFor="let d of receivedData"
+          (click)="selectItem(d)"  [ngClass]="{SelectHighlight :  selectedRowId && (d?._id === selectedRowId)}">
+          <div class="align">
+            <div class="grey"><span class="bold">Name :</span> {{ d?.name || 'NA'  }}</div>
+          </div>
+          <div class="align">
+            <div class="grey"><span class="bold">latitude :</span> {{d?.location?.latitude || 'NA' }}</div>
+          </div>
+          <div class="align">
+            <div class="grey"><span class="bold">Longitude :</span> {{ d?.location?.longitude || 'NA'  }}</div>
+          </div>
+          <div class="align">
+            <div class="grey"><span class="bold">Address :</span> {{ d?.address || 'NA'}}</div>
+          </div>
+          <div class="align">
+            <div class="grey"><span class="bold">Created At :</span> {{( d?.created_at | date: 'dd-MMM-yyyy') || 'NA'}}</div>
+          </div>
+        </div>
+      </nz-table>
+    </div>
+
+  </div>
+</div>

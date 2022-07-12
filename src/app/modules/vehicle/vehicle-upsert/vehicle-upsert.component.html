@@ -1,0 +1,179 @@
+<div class="insight">
+  <div class="insight-head">
+   
+  </div>
+  <div class="insight-description">
+    <form nz-form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div>
+        <div nz-row>
+          <div *ngIf="this.getId" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzFor="status">Vehicle Status</nz-form-label>
+            <nz-form-control>
+              <input nz-input style="width: 95%" readonly [attr.disabled]="true" formControlName="status" id="Status"/>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzFor="Registration Number">Vehicle Number<span
+              class="red-mark">*</span></nz-form-label>
+            <nz-form-control  [nzErrorTip]="VehicleErrorTpl">
+              <input [readOnly]="this.mode==2" nz-input style="width: 95%" formControlName="vehicle_reg_no" id="vehicle_reg_no"placeholder="Enter Vehicle No." autocomplete="off" />
+              <ng-template #VehicleErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  Please Enter Vehicel No!
+                </ng-container>
+                <ng-container *ngIf="f.vehicle_reg_no.errors?.minlength">
+                  Vehicle No must be 9 character!
+                </ng-container>
+                <ng-container *ngIf="!f.vehicle_reg_no.errors?.minlength && !f.vehicle_reg_no.errors?.maxlength">
+                  Vehicle No. format is not valid!
+                </ng-container>
+                <ng-container *ngIf="f.vehicle_reg_no.errors?.maxlength">
+                  max 11 characters allowed for Vehicle No!
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </div>
+          <div *ngIf="InputData != 'modal' " nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzFor="device imei">Device IMEI</nz-form-label>
+            <nz-form-control>
+              <input nz-input style="width: 95%"  formControlName="device_imei" id="device_imei" autocomplete="off" placeholder="Enter Device IMEI No."/>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left; " nzFor="type">Ownership Type<span class="red-mark">*</span>
+            </nz-form-label>
+            <nz-form-control nzErrorTip="Please Select Ownership Type">
+              <nz-select  style="width: 95%"  formControlName="ownershipType" nzPlaceHolder="Select Ownership type" nzShowSearch>
+                <nz-option *ngFor="let type of ownershiptype" nzLabel="{{type}}"
+                           [nzValue]="type">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </div>
+<!--          // when ownership type is Sold then  sold date & Sold Amount required-->
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" *ngIf="f?.ownershipType?.value=='Sold'">
+            <nz-form-label style="text-align: left;" nzFor="Sold date">Sold Date<span class="red-mark">*</span></nz-form-label>
+            <nz-form-control>
+              <nz-date-picker  style="width: 95%" formControlName="sd"  autocomplete="off" placeholder="Enter Sold Date"></nz-date-picker>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" *ngIf="f?.ownershipType?.value=='Sold'">
+            <nz-form-label style="text-align: left;" nzFor="Sold Amount">Sold Amount<span class="red-mark">*</span></nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="sa" style="width: 95%"   autocomplete="off" placeholder="Enter Sold amount"/>
+            </nz-form-control>
+          </div>
+
+          <!--vender -->
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" *ngIf="f?.ownershipType?.value=='Market'">
+            <nz-form-label style="text-align: left;" nzErrorTip="Please Enter Vendor " nzFor="vender">Vendor Name<span
+              class="red-mark">*</span></nz-form-label>
+            <nz-form-control>
+              <nz-select [nzDropdownMatchSelectWidth]="false"  style="width: 95%"  formControlName="vendor"
+                         nzPlaceHolder="Search Vendor"
+                         nzShowSearch (nzOnSearch)="onSearchvender($event)" nzServerSearch nzAllowClear>
+                <nz-option *ngFor="let vendor of vendorgetdata"
+                           nzLabel="{{ vendor?.name}}" [nzValue]="vendor._id">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+
+          </div>
+
+          <div *ngIf="InputData != 'modal' || !masterConfigs?.regVehicle?.segmentRequired" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <!--    segment-->
+            <nz-form-label style="text-align: left;" nzFor="type">Segment<span *ngIf="!masterConfigs?.regVehicle?.segmentRequired" class="red-mark">*</span></nz-form-label>
+            <nz-form-control nzErrorTip="Please Select Segment">
+              <nz-select [required]="!masterConfigs?.regVehicle?.segmentRequired"  style="width: 95%" formControlName="segment_type" nzPlaceHolder="Select Segment"nzShowSearch>
+                <nz-option *ngFor="let type of aSegmentType" nzLabel="{{type}}"
+                           [nzValue]="type">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left; " nzFor="type">Vehicle Category<span class="red-mark">*</span>
+            </nz-form-label>
+            <nz-form-control nzErrorTip="Please Select Vehicle  Category">
+              <nz-select  style="width: 95%"  formControlName="category" nzPlaceHolder="Select Category" nzShowSearch>
+                <nz-option *ngFor="let type of aCategory" nzLabel="{{type}}"
+                           [nzValue]="type">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </div>
+
+          <div *ngIf="InputData != 'modal' || !masterConfigs?.regVehicle?.typeRequired" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzErrorTip="Select Type " nzFor="vehicle type">Vehicle Type<span *ngIf="!masterConfigs?.regVehicle?.typeRequired"
+              class="red-mark">*</span></nz-form-label>
+            <nz-form-control nzErrorTip="Please Select Vehicle  type">
+              <nz-select [required]="!masterConfigs?.regVehicle?.typeRequired" [nzDropdownMatchSelectWidth]="false"  style="width: 95%"  formControlName="veh_type"
+                         nzPlaceHolder="Select Type"
+                         nzShowSearch (nzOnSearch)="onSearchvehicletype()" nzServerSearch nzAllowClear>
+                <nz-option *ngFor="let type of vehicletypedata"
+                           nzLabel="{{ type?.name}}" [nzValue]="type">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </div>
+
+          <div *ngIf="InputData != 'modal' || !masterConfigs?.regVehicle?.groupRequired" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzErrorTip="Select Group" nzFor="vender">Vehicle Group<span *ngIf="!masterConfigs?.regVehicle?.groupRequired"
+              class="red-mark">*</span></nz-form-label>
+            <nz-form-control nzErrorTip="Please Select Vehicle group">
+              <nz-select [required]="!masterConfigs?.regVehicle?.groupRequired" [nzDropdownMatchSelectWidth]="false"  style="width: 95%"  formControlName="group"
+                         nzPlaceHolder="Select Group"
+                         nzShowSearch (nzOnSearch)="onSearchvehiclegroup()" nzServerSearch nzAllowClear>
+                <nz-option *ngFor="let group of vehiclegroupdata"
+                           nzLabel="{{ group?.name}}" [nzValue]="group._id">
+                </nz-option>
+
+              </nz-select>
+            </nz-form-control>
+
+          </div>
+          <div *ngIf="this.getId" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label nzErrorTip="Select account" nzFor="account">Vehicle Account <span class="red-mark">*</span>
+            </nz-form-label>
+            <nz-form-control nzErrorTip="Please Select Account">
+              <nz-select [nzDisabled]="true" [nzDropdownMatchSelectWidth]="false" formControlName="account" nzPlaceHolder="Select Account"
+                         style="width: 95%"
+                         nzShowSearch (nzOnSearch)="onSearchaccount($event)" nzServerSearch nzAllowClear>
+                <nz-option *ngFor="let account of vehicleaccountdata" nzLabel="{{account?.name}}"
+                           [nzValue]="account">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </div>
+          <div *ngIf="InputData != 'modal' " nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzFor="Chasis Number">Chasis Number</nz-form-label>
+            <nz-form-control>
+              <input nz-input  style="width: 95%" formControlName="chassis_no" id="chassis_no" autocomplete="off" placeholder="Enter Chasis Number"/>
+            </nz-form-control>
+          </div>
+          <div *ngIf="InputData != 'modal' " nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzFor="Engine Number">Engine Number</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="engine_no"  style="width: 95%" id="engine_no" autocomplete="off" placeholder="Enter Engine Number"/>
+            </nz-form-control>
+          </div>
+          <div *ngIf="InputData != 'modal' " nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzFor="RC Book No"> RC Book No</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="rc_book_no" id="rc_book_no"  style="width: 95%" autocomplete="off" placeholder="Enter RC Book No."/>
+            </nz-form-control>
+          </div>
+        </div>
+      </div>
+      <div  *ngIf="InputData != 'modal' " [ngClass]="{ 'pull-right':this.innerWidth > 500 }">
+        <nz-form-item>
+          <nz-form-control>
+            <button  class=" invbtn" style="margin-top: 15px; width:140px; margin-right: 5px" nz-button  nzType="primary" type="submit">SUBMIT</button>
+            <button  nzDanger class="invbtnback" style="margin-top: 15px ;width: 140px" (click)="backToListView();">BACK </button>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </form>
+
+  </div>
+</div>

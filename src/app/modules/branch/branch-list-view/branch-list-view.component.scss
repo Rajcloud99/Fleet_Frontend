@@ -1,0 +1,37 @@
+.SelectHighlight {
+    background-color: antiquewhite;
+}
+.grey {
+    color: black;
+    font-weight: bold;
+}
+.aggregate {
+    padding: 6px;
+}
+
+.head {
+    padding: 12px;
+    margin-top: 5px;
+    border-radius: 7px;
+    position: relative;
+}
+
+#myDIV {
+    overflow-y: auto;
+}
+
+.shadow-d1{
+    box-shadow: 0 1px 6px 1.5px rgba(32,33,36,.28) !important;
+  }
+
+  .align {
+    display: flex;
+}
+@media screen and (max-width: 500px) {
+    #myDIV {
+      height: 500px;
+    }
+    nz-select, nz-date-picker, input {
+        width: 100%;
+    }
+  }

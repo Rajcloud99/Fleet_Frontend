@@ -1,0 +1,139 @@
+<div class="insight">
+    <div class="insight-head">
+        <div class="insight-title">
+            <!-- <div *ngIf="innerWidth < 500" class="mbbtn">
+                <app-back-button *ngIf="innerWidth <= 500"></app-back-button>
+            </div> -->
+            <span>Playback</span>
+        </div>
+        <div class="insight-tools">
+            <div class="tool">
+                <div *ngIf="playBackData" class="mbbtn" ><span style="margin-right:3vw;" class="smallFont">Alerts</span>
+                    <nz-switch (ngModelChange)="showAlerts=showAlerts?false:true; drawAlerts();" [ngModel]="showAlerts" nzCheckedChildren="Show" nzUnCheckedChildren="Hide"></nz-switch>
+                </div>
+
+                <div *ngIf="innerWidth < 500 && playBackData" class="mbbtn" (click)="listView()">
+                    <fa-icon [icon]="faList" style="font-size: 15px;"></fa-icon>
+                </div>
+                <div *ngIf="innerWidth >= 500" style="margin-right: 5vw;" (click)="listView()" class="my-btn bg-primary" nz-tooltip nzTooltipTitle="List View" nz-button>
+                    <fa-icon [icon]="faList" style="font-size: 15px;"></fa-icon>
+                </div>
+                <div *ngIf="innerWidth >= 500" style="margin-right: 5vw;" (click)="downloadCsv(playBackData)" class="my-btn bg-primary" nz-tooltip nzTooltipTitle="Download CSV" nz-button>
+                    <fa-icon [icon]="faFileDownload" style="font-size: 15px;"></fa-icon>
+                </div>
+                <div *ngIf="innerWidth < 500" class="mbbtn" nz-tooltip nzTooltipTitle="Download CSV"
+                    (click)="downloadCsv(playBackData)">
+                    <fa-icon [icon]="faFileDownload" style="font-size: 15px;"></fa-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="insight-description">
+        <a #donwload target="_blank"></a>
+        <div>
+            <agm-map [latitude]="reCenter.lat" [longitude]="reCenter.lng" [zoom]="zoom" [streetViewControl]="false"
+                [mapTypeControl]="true" [fullscreenControl]="false" [gestureHandling]="'greedy'" [fitBounds]="true">
+                <agm-marker *ngFor="let marker of markers" [latitude]="marker.lat" [longitude]="marker.lng"
+                    [iconUrl]="marker.icon" [agmFitBounds]="true">
+                    <agm-info-window [isOpen]="isOpen">
+                        <div class="smallFont" *ngIf="marker?.start_time"><span class="infoLabel">Start:</span>
+                            {{selectedTripData.tripBase === 'Sim Based'  ? marker?.start_time : marker?.start_time | date: 'medium'}}</div>
+                        <div class="smallFont" *ngIf="marker?.end_time"><span class="infoLabel">End:</span>
+                            {{selectedTripData.tripBase === 'Sim Based'  ? marker?.end_time : marker?.end_time| date: 'medium'}}</div>
+                        <div class="smallFont" *ngIf="marker?.duration"><span
+                                class="infoLabel">Duration:</span>{{marker?.duration}}</div>
+                        <div class="smallFont" *ngIf="marker?.address"><span
+                                class="infoLabel">Address:</span>{{marker?.address}}</div>
+                        <div class="smallFont" *ngIf="marker?.landmark"><span
+                                class="infoLabel">Landmark:</span>{{marker?.landmark}}</div>
+                        <div class="smallFont" *ngIf="marker?.lat && marker?.lng"><span
+                                class="infoLabel">Lat-Lng:</span>{{marker?.lat}},{{marker?.lng}}</div>
+                        <div class="smallFont" *ngIf="marker?.idleDuration"><span class="infoLabel">Idle
+                                Duration:</span>{{marker?.idleDuration}}</div>
+                    </agm-info-window>
+                </agm-marker>
+
+                <div *ngIf="showAlerts">
+                    <agm-marker *ngFor="let alertMarker of alertsMarkers;" [latitude]="alertMarker.lat"
+                        [longitude]="alertMarker.lng" [iconUrl]="bellIcon" [agmFitBounds]="true">
+                        <agm-info-window [isOpen]="isOpen">
+                            <div>Alert Type: {{alertMarker.code}}</div>
+                            <div>Time: {{alertMarker.time | date: 'medium'}}</div>
+                        </agm-info-window>
+                    </agm-marker>
+                </div>
+
+                <div>
+                    <agm-marker [latitude]="marker.lat" [longitude]="marker.lng" [iconUrl]="truckIcon">
+                    </agm-marker>
+                </div>
+
+                <ng-container *ngIf="showRoute">
+                    <agm-polyline [strokeColor]="polyLine.color">
+                        <agm-polyline-point *ngFor="let point of polyLine.latLng" [latitude]="point.lat"
+                            [longitude]="point.lng">
+                        </agm-polyline-point>
+                    </agm-polyline>
+                </ng-container>
+
+                <!-- <ng-container *ngIf="!showRoute">
+                    <agm-polyline [strokeColor]="polyLine.color">
+                        <agm-icon-sequence [fillColor]="'red'" [fixedRotation]="false" [path]="'FORWARD_OPEN_ARROW'"></agm-icon-sequence>
+                        <agm-polyline-point *ngFor="let point of polyLine.latLng" [latitude]="point.lat"
+                            [longitude]="point.lng">
+                        </agm-polyline-point>
+                    </agm-polyline>
+                </ng-container> -->
+            </agm-map>
+
+
+            <div class="buttons">
+                <div class="mbbtn" *ngIf="!showPause" (click)="playRoute();">
+                    <fa-icon [icon]="faPlay"></fa-icon>
+                </div>
+                <div class="mbbtn" *ngIf="showPause" (click)="pauseRoute();">
+                    <fa-icon [icon]="faPause"></fa-icon>
+                </div>
+                <div class="mbbtn" (click)="showRoute = !showRoute">
+                    <fa-icon [icon]="faArrowsAltH"></fa-icon>
+                </div>
+                <div class="mbbtn" (click)="resetRoute()">
+                    <fa-icon [icon]="faRedoAlt"></fa-icon>
+                </div>
+                <!-- <div class="mbbtn" (click)="drawAlerts();showAlerts=true;">
+                    <fa-icon [icon]="faBell"></fa-icon>
+                </div> -->
+            </div>
+            <!-- <label style="margin: 2px;" nz-checkbox [(ngModel)]="showAlerts" class
+                (ngModelChange)="drawAlerts()">Draw Alerts</label> -->
+        </div>
+        <div class="">
+
+            <nz-row nzAlign="middle">
+                <div nzAlign="middle" class="slider" nzSpan="5">
+                    Slow
+                </div>
+
+                <nz-col nzAlign="middle" nzSpan="14">
+                    <nz-slider (ngModelChange)="speedChange()" [nzMin]="10" [nzMax]="100" [nzStep]="10"
+                        [(ngModel)]="speed">
+                    </nz-slider>
+                </nz-col>
+
+                <div nzAlign="middle" class="slider" nzSpan="5">
+                    Fast
+                </div>
+
+            </nz-row>
+
+            <div class="row slider" style="margin: 1px;">
+                <div style="font-weight: bold; margin: 2px;">{{selectedTripData?.vehicle_no}}</div>
+                <div style="font-weight: bold; margin: 2px;">Total Distance:{{vehData?.tot_dist || 0}}Km</div>
+                <div style="margin: 2px;">Speed: {{marker.vehSpeed}}Km/hr</div>
+                <div style="margin: 2px;">Distance: {{marker.distance}}Km</div>
+                <div style="margin: 2px;">Date: {{marker.dateTime | date: "dd-MMM-yyyy 'at' h:mma"}}</div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+<div class="insight">
+  <div class="insight-head">
+
+  </div>
+  <div class="insight-description">
+    <form nz-form [formGroup]="landmarkForm" (ngSubmit)="onSubmit()">
+
+        <div nz-row style="padding-top: 5px">
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" style="padding-bottom: 5px">
+            <nz-form-control >
+              <input [readonly]="Preview" nz-input style="width: 95%" formControlName="name" id="name" placeholder="Enter Landmark Name " autocomplete="off" />
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6"  style="padding-bottom: 5px">
+            <nz-form-control>
+              <input [readonly]="Preview" nz-input style="width: 95%"  formControlName="address" id="address" autocomplete="off" placeholder=" Enter Address"/>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6"  style="padding-bottom: 5px">
+            <nz-form-control>
+              <input [readonly]="Preview" nz-input  type="number" style="width: 95%" formControlName="latitude"  autocomplete="off" placeholder="Enter latitude"/>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6"  style="padding-bottom: 5px">
+            <nz-form-control>
+              <input [readonly]="Preview" nz-input  type="number"  style="width: 95%" formControlName="longitude"  autocomplete="off" placeholder="Enter longitude"/>
+            </nz-form-control>
+          </div>
+        </div></form>
+
+          <br>
+          <div style="padding-bottom: 1px" class="bold">MAP</div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6"  style="padding-bottom: 5px" *ngIf="!Preview">
+            <nz-form-control>
+              <input nz-input [readonly]="Preview" type="text" style="width: 95%" [(ngModel)]="oFilter.location" #address appAddrSearch autocomplete="off"  [ngModelOptions]="{ standalone: true }"  (calDist) ="searchLocation()" placeholder="Search Location"/>
+            </nz-form-control>
+          </div>
+          <div   class="pull-right"  *ngIf="!Preview">
+            <nz-form-item>
+              <nz-form-control>
+                <button [disabled]="Preview" class=" invbtn" style="margin-top: 15px; width:140px; margin-right: 5px" nz-button  nzType="primary" (click)="onSubmit()">Submit</button>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+    <div
+      class="col-md-12 card m-b-5"
+      style="border-top: 1px solid #e6e6e6; padding: 1px 0 0 0"
+    >
+      <div style="border-bottom: 5px solid #e6e6e6; padding: 1px 0 0 0">
+        <agm-map [latitude]="marker.lat" [longitude]="marker.lng"  [zoom]="zoom" [streetViewControl]="false" [keyboardShortcuts]="false"
+                 [fullscreenControl]="false" [gestureHandling]="'greedy'">
+
+          <agm-marker *ngFor="let m of markers; let i = index;" [latitude]="m.lat" [longitude]="m.lng" [markerDraggable]="true" (dragEnd)="markerDragEnd($event)"
+          >
+          </agm-marker>
+
+        </agm-map>
+
+      </div>
+    </div>
+  </div>
+</div>

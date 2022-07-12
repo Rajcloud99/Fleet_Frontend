@@ -1,0 +1,31 @@
+
+// .ant-form-item {
+//   display: flex !important;
+// }  
+    
+  @media screen and (max-width: 581px) {
+    form {
+      margin-left: 0;
+      margin-right: 0;
+      width: 100%;
+    }
+    .ant-col-offset-10 {
+      margin-left: 0 !important;
+      display: flex;
+      justify-content: center;
+    }
+  }
+  
+  .flex-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+.flex-container > div {
+    width: auto;
+    margin: 15px;
+}
+.buttonAdd{
+    width: auto;
+    margin: 15px;
+}
+  

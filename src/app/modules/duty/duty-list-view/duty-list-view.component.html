@@ -1,0 +1,202 @@
+<div class="insight">
+  <div class="insight-head" *ngIf="innerWidth > 500">
+    <div class="insight-tools">
+      <div class="tool">
+
+        <div class="mbbtn" *ngIf="innerWidth <= 500"  (click)="isMobFilterVisible = true;">
+          <fa-icon [icon]="faFilter"></fa-icon>
+        </div>
+        <div class="mbbtn"  nz-tooltip nzTooltipTitle="Add Trip"
+             (click)="addTrip()">
+
+          <fa-icon [icon]="faPlusSquare" ></fa-icon>
+        </div>
+        <div class="mbbtn"  nz-tooltip nzTooltipTitle="Add Duty"
+             (click)="addDuty()">
+          <fa-icon [icon]="faPlusCircle" ></fa-icon>
+        </div>
+        <div class="mbbtn"  nz-tooltip nzTooltipTitle="Edit" (click)="navigateToDuty()">
+          <fa-icon [icon]="faEdit" ></fa-icon>
+        </div>
+        <div class="mbbtn"  nz-tooltip nzTooltipTitle="Assign" (click)="gotoTrafficManager()">
+          <fa-icon [icon]="faUser" ></fa-icon>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div *ngIf="innerWidth > 500" class="insight-description">
+
+    <div class="filters-row">
+      <div class="my-row">
+        <!-- branch name or code -->
+        <div class="my-card">
+            <div class="my-card-header ">
+<!--              <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">-->
+<!--                <nz-form-label style="text-align: left">Account</nz-form-label>-->
+                <nz-form-control>
+                  <nz-select style="width: 95%" nzPlaceHolder="Customer name" nzShowSearch nzAllowClear
+                             (nzOnSearch)="onSearchCustomer($event)" nzServerSearch [ngModelOptions]="{standalone:true}"
+                             [(ngModel)]="customer">
+                    <nz-option *ngFor="let customer of receivedAllCustomers" nzLabel="{{customer?.name}}"
+                               [nzValue]="customer">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+<!--              </div>-->
+            </div>
+        </div>
+
+        <div class="my-card">
+          <div class="my-card-header">
+            <button class="my-btn bg-primary" (click)="searchDuty()">
+              <fa-icon [icon]="faSearch" style="font-size: 15px"></fa-icon>
+            </button>
+          </div>
+        </div>
+        <div class="my-card">
+          <div class="my-card-header">
+            <button class="my-btn bg-primary" (click)="reset()">
+              <fa-icon [icon]="faTimes" style="font-size: 19px"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div (scroll)="getDataOnScroll()">
+      <nz-table
+        (scroll)="getDataOnScroll()"
+        #nzTable
+        nzBordered
+        [nzShowPagination]="false"
+        [nzData]="receivedDutyData ? receivedDutyData : ''"
+        nzSize="small"
+        [nzScroll]="{ x: '600px', y: '360px' }"
+        style="overflow-x: auto"
+      >
+        <thead>
+        <tr style="background-color: #3e51b5 !important;">
+          <th nzWidth="80px"  nzAlign="center">Duty  No. </th>
+          <th nzWidth="80px"  nzAlign="center">Duty Assigned</th>
+          <th nzWidth="80px"  nzAlign="center">Customer</th>
+          <th nzWidth="80px"  nzAlign="center">Duty Start Date</th>
+          <th nzWidth="80px"  nzAlign="center">Duty End Date</th>
+          <th nzWidth="80px"  nzAlign="center">route</th>
+          <th nzWidth="80px"  nzAlign="center">Material</th>
+          <th nzWidth="80px"  nzAlign="center">Phone</th>
+          <th nzWidth="80px"  nzAlign="center">Person</th>
+        </tr>
+        </thead>
+        <tbody >
+        <tr
+          style="cursor: pointer"
+          *ngFor="let item of receivedDutyData"
+          (click)="selectBookingItem(item)"
+          [ngClass]="{SelectHighlight :  selectedDutyRowId && (item?._id === selectedDutyRowId)}"
+        >
+          <td nzAlign="center">{{ ( item?.booking_no )  || "NA"}}</td>
+          <td nzAlign="center">{{ (item?.booking_date| date: 'dd-MMM-yyyy') || "NA" }}</td>
+          <td nzAlign="center">{{ item?.customer?.name }}</td>
+          <td nzAlign="center">{{ (item?.serve_start| date: 'dd-MMM-yyyy')  || "NA" }}</td>
+          <td nzAlign="center">{{  (item?.serve_end| date: 'dd-MMM-yyyy')  || "NA" }}</td>
+          <td nzAlign="center">{{ item?.route && item?.route[0] && item?.route[0].name || 'NA' }}</td>
+          <td nzAlign="center">{{ item?.material_type?.name }}</td>
+          <td nzAlign="center">{{  item?.tr_mgr &&  item?.tr_mgr[0] && item?.tr_mgr[0].contact_no || 'NA'   }}</td>
+          <td nzAlign="center">{{  item?.tr_mgr && item?.tr_mgr[0] && item?.tr_mgr[0].name || 'NA' }}</td>
+        </tr>
+        </tbody> </nz-table
+      ><br /><br />
+      <!--        <pre>{{selectedGroupRowId}}</pre>-->
+
+    </div>
+    <!--      </cdk-virtual-scroll-viewport>-->
+  </div>
+
+
+</div>
+
+
+<div id="myDIVCard" (scroll)="getDataOnScroll()">
+
+  <div *ngIf="innerWidth <= 500" class="">
+    <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedDutyData ? receivedDutyData : ''"
+              nzSize="small"  [nzScroll]="{ y: '425px' }" style="overflow-x: auto">
+
+      <div
+        class="head shadow-d1 aggregate"
+        *ngFor="let d of receivedDutyData"
+        (click)="selectBookingItem(d)"  [ngClass]="{SelectHighlight :  selectedDutyRowId && (d?._id === selectedDutyRowId)}">
+
+        <div class="align">
+          <div class="grey"  style="font-size: 13px;  padding-left: 5px;padding-top: 5px;"><b>Duty Assigned:</b> </div>
+          <div class="ml-1"  style="font-size: 13px; padding-top: 5px; ">{{d?.booking_date| date: 'dd-MMM-yyyy'}}</div>
+        </div>
+
+        <div class="align">
+          <div class="grey"  style="font-size: 13px;  padding-left: 5px;"><b>Customer :</b> {{ d?.customer && d?.customer.name || 'NA'  }}</div>
+        </div>
+
+        <div class="align">
+          <div class="grey" style="font-size: 13px;  padding-left: 5px;"><b>Remarks :</b> {{ d?.remark || 'NA'  }}</div>
+
+        </div>
+
+        <div class="align">
+          <div class="grey" style="font-size: 13px;  padding-left: 5px;"><b>Duty Start Date:</b> </div>
+          <div class="ml-1" style="font-size: 13px">{{d?.serve_start| date: 'dd-MMM-yyyy'}}</div>
+        </div>
+
+        <div class="align">
+          <div class="grey" style="font-size: 13px;  padding-left: 5px;"><b>Duty End Date:</b> </div>
+          <div class="ml-1" style="font-size: 13px">{{d?.serve_end| date: 'dd-MMM-yyyy'}}</div>
+        </div>
+
+        <div class="align">
+          <div class="grey" style="font-size: 13px;  padding-left: 5px;"><b>Person :</b> {{ d?.tr_mgr[0] && d?.tr_mgr[0].name || 'NA'  }}</div>
+
+        </div>
+
+        <div class="align">
+          <div class="grey" style="font-size: 13px;  padding-left: 5px;"><b>Phone :</b> {{ d?.tr_mgr[0] && d?.tr_mgr[0].contact_no || 'NA'  }}</div>
+
+        </div>
+
+        <div class="align">
+          <div class="grey" style="font-size: 13px;  padding-left: 5px;;  padding-bottom: 5px;"><b>Route :</b> {{ d?.route && d?.route[0] && d?.route[0].name || 'NA'  }}</div>
+        </div>
+
+        <!--        <div class="align">-->
+        <!--          <div class="grey" style="font-size: 13px;  padding-left: 5px;;  padding-bottom: 5px;"><b>Status :</b> {{ d?.served && d?.served.servedWeight && 'InProgress' || 'NA'  }}</div>-->
+        <!--        </div>-->
+
+      </div>
+    </nz-table>
+  </div>
+
+</div>
+
+<div *ngIf="isMobFilterVisible" class="flt" >
+  <div class="flt_heading">Filters</div>
+  <div>
+
+    <div nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+      <nz-form-label style="text-align: left">Account</nz-form-label>
+      <nz-form-control>
+        <nz-select style="width: 95%" nzPlaceHolder="Search by customer name" nzShowSearch nzAllowClear
+                   (nzOnSearch)="onSearchCustomer($event)" nzServerSearch [ngModelOptions]="{standalone:true}"
+                   [(ngModel)]="customer">
+          <nz-option *ngFor="let customer of receivedAllCustomers" nzLabel="{{customer?.name}}"
+                     [nzValue]="customer">
+          </nz-option>
+        </nz-select>
+      </nz-form-control>
+    </div>
+  </div>
+
+  <div style="margin-top: 17px;">
+    <button style="width: 50%;" type="primary" nz-button (click)="searchDuty(); isMobFilterVisible = false;">Search</button>
+    <button style="width: 50%;" type="primary" nz-button (click)="reset(); isMobFilterVisible = false;">Reset</button>
+  </div>
+</div>
+

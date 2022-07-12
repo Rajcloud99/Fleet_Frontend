@@ -1,0 +1,152 @@
+<div class="insight">
+    <div class="insight-head" *ngIf="innerWidth > 500"> 
+      <div class="insight-tools">
+        <div class="tool">
+          <div *ngIf="innerWidth <= 500" class="mbbtn"   (click)="isMobFilterVisible = true;">
+            <fa-icon [icon]="faFilter"></fa-icon>
+          </div>
+          <div class="mbbtn"  nz-tooltip nzTooltipTitle="Add Branch"
+            (click)="navigateToAddPage()">
+            <fa-icon [icon]="faPlusSquare" ></fa-icon>
+          </div>
+          <div class="mbbtn"  nz-tooltip nzTooltipTitle="Edit Branch" (click)="navigateTo()">
+              <fa-icon [icon]="faEdit" ></fa-icon>
+          </div>
+          <div class="mbbtn" nz-button nz-popconfirm nzPopconfirmTitle="Are you sure?" nzOkText="ok"
+            nzCancelText="cancel" (nzOnConfirm)="delete()" nz-tooltip nzTooltipTitle="Disable">
+            <fa-icon [icon]="faTrash" style="color: red !important;"></fa-icon>
+          </div>
+          <div class="mbbtn"  nz-tooltip nzTooltipTitle="Download" (click)="downloadReport()">
+            <fa-icon [icon]="faDownload" ></fa-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="insight-description">
+      <a #donwload target="_blank"></a>
+      <!-- <nz-spin [nzSize]="'large'" [ngClass]="{'loader': loadingObservable | async}" nzSimple [nzSpinning]="loadingObservable | async"></nz-spin> -->
+      <!-- <div class="overlay" *ngIf= "loadingObservable | async"></div> -->
+      <!-- filters -->
+
+      <div *ngIf="innerWidth >= 500" class="filters-row">
+        <div class="my-row">
+          <!-- branch name or code -->
+          <div class="my-card">
+            <div class="my-card-header">
+              <nz-select [nzDropdownMatchSelectWidth]="false" nzPlaceHolder="Search Branch with name or code"
+                [(ngModel)]="filterObj && filterObj.name" nzShowSearch (nzOnSearch)="onSearch($event)" nzServerSearch>
+                <nz-option *ngFor="let branch of receivedAllBranches"
+                  nzLabel="{{ branch?.name}}" [nzValue]="branch.name">
+                </nz-option>
+              </nz-select>
+            </div>
+          </div>
+          <div class="my-card">
+            <div class="my-card-header">
+              <button class="my-btn bg-primary" (click)="search()">
+                <fa-icon [icon]="faSearch" style="font-size: 15px"></fa-icon>
+              </button>
+            </div>
+          </div>
+          <div class="my-card">
+            <div class="my-card-header">
+              <button class="my-btn bg-primary" (click)="reset()">
+                <fa-icon [icon]="faTimes" style="font-size: 19px"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <app-table-card
+        *ngIf="receivedData"
+        [data]="receivedData"
+        [order]="orderKeys"
+        [showInCard]="showCardKeys"
+        [fObj]="filterObj"
+        (sendData)="goToDetailView($event)"
+      >
+      </app-table-card> -->
+
+      <!-- table view start -->
+      <div id="myDIV" (scroll)="getDataOnScroll()">
+        <div *ngIf="innerWidth < 500" class="aggregate">
+          <div class="head shadow-d1"  *ngFor="let d of receivedData"
+                (click)="selectItem(d)" [ngClass]="{SelectHighlight :  selectedRowId && (d?._id === selectedRowId)}">
+            <div class="align">
+              <div class="grey">Name</div>
+              <div class="ml-1">{{d?.name}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Branch Code</div>
+              <div class="ml-1">{{d?.code}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Contact No:</div>
+              <div class="ml-1">{{d?.prim_contact_no}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Email</div>
+              <div class="ml-1">{{d?.prim_email}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Branch Type</div>
+              <div class="ml-1">{{d?.type}}</div>
+            </div>
+          </div>
+        </div>
+        <nz-table
+        *ngIf="innerWidth >= 500"
+        (scroll)="getDataOnScroll()"
+          #nzTable
+          nzBordered
+          [nzShowPagination]="false"
+          [nzData]="receivedData ? receivedData : ''"
+          nzSize="small"
+          [nzScroll]="{ x: '600px', y: '350px' }"
+          style="overflow-x: auto"
+        >
+          <thead>
+            <tr style="background-color: #3e51b5 !important;">
+              <th nzWidth="120px" nzAlign="center">Name </th>
+              <th nzWidth="80px"  nzAlign="center">Branch Code</th>
+              <th nzWidth="80px"  nzAlign="center">Contact No</th>
+              <th nzWidth="150px" nzAlign="center">Email</th>
+              <th nzWidth="120px" nzAlign="center">Branch Type</th>
+            </tr>
+          </thead>
+          <tbody >
+            <tr
+              style="cursor: pointer"
+              *ngFor="let item of receivedData"
+              (click)="selectItem(item)"
+              [ngClass]="{SelectHighlight :  selectedRowId && (item?._id === selectedRowId)}"
+            >
+              <td nzAlign="center">{{ item?.name }}</td>
+              <td nzAlign="center">{{ item?.code }}</td>
+              <td nzAlign="center">{{ item?.prim_contact_no}}</td>
+              <td nzAlign="center">{{ item?.prim_email}}</td>
+              <td nzAlign="center">{{ item?.type }}</td>
+            </tr>
+          </tbody> </nz-table
+        ><br /><br />
+      </div>
+  </div>
+  <div *ngIf="isMobFilterVisible">
+    <div>
+      <div class="flex-cont">
+        <label></label>
+        <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 230px" nzPlaceHolder="Search Branch with name or code"
+                [(ngModel)]="filterObj && filterObj.name" nzShowSearch (nzOnSearch)="onSearch($event)" nzServerSearch>
+          <nz-option *ngFor="let branch of receivedAllBranches"
+            nzLabel="{{ branch?.name}}" [nzValue]="branch.name">
+          </nz-option>
+        </nz-select>
+      </div>
+    </div>
+    <div style="margin-top: 5%; margin-bottom:10%">
+      <button style="width: 50%;color: white;" type="button" class="bg-primary" nz-button (click)="search(); isMobFilterVisible = false;">Search</button>
+      <button style="width: 50%;color: white;" type="button" class="bg-primary" nz-button (click)="reset(); isMobFilterVisible = false;">Reset</button>
+    </div>
+  </div>
+

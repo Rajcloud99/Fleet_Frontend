@@ -1,0 +1,64 @@
+<div class="insight">
+  <div class="insight-head">
+    <div class="insight-title">
+      Vehicle Detail
+    </div>
+    <div class="insight-tools">
+      <div class="tool">
+        <button class="my-btn bg-primary" nz-tooltip nzTooltipTitle="Edit Details" (click)="goToUpsert()">
+          <fa-icon [icon]="faEdit" style="font-size: 15px;"></fa-icon>
+        </button>
+        <button nz-popconfirm nzPopconfirmTitle="Are you sure?" nzOkText="ok" nzCancelText="cancel"
+                (nzOnConfirm)="delete()"
+                class="my-btn btn-danger" nz-tooltip nzTooltipTitle="Delete">
+          <fa-icon [icon]="faTrash" style="font-size: 15px"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="insight-description">
+    <!-- app card component -->
+    <!--    <app-table-card *ngIf="receivedData" [data]="receivedData" [order]="orderKeys" [showInCard]="showCardKeys"-->
+    <!--    >-->
+    <!--    </app-table-card>-->
+    <div>
+      <nz-table
+        #nzTable
+        nzBordered
+        [nzShowPagination]="false"
+        [nzData]="receivedData ? receivedData : ''"
+        nzSize="small"
+        [nzScroll]="{ x: '600px', y: '420px' }"
+        style="overflow-x: auto"
+      >
+        <thead>
+        <tr style="background-color: #3e51b5 !important;">
+          <th nzWidth="120px" nzAlign="center">vehicle No</th>
+          <th nzWidth="80px" nzAlign="center">Device IMEI</th>
+          <th nzWidth="80px" nzAlign="center">Ownership Type</th>
+          <th nzWidth="150px" nzAlign="center">Vender</th>
+          <th nzWidth="120px" nzAlign="center">Vehicle Type</th>
+          <th nzWidth="120px" nzAlign="center">Segment</th>
+          <!--          <th nzWidth="120px" nzAlign="center">Account</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+          style="cursor: pointer"
+          *ngFor="let item of receivedData"
+          (click)="selectItem(item)"
+          [ngClass]="{SelectHighlight :  selectedRowId && (item?._id === selectedRowId?._id)}">
+          <td nzAlign="center">{{ item?.vehicle_reg_no }}</td>
+          <td nzAlign="center">{{ item?.device_imei }}</td>
+          <td nzAlign="center">{{ item?.ownershipType}}</td>
+          <td nzAlign="center">{{ item?.vendor_name}}</td>
+          <td nzAlign="center">{{ item?.veh_type_name }}</td>
+          <td nzAlign="center">{{ item?.segment_type }}</td>
+          <!--          <td nzAlign="center">{{ item?.type }}</td>-->
+        </tr>
+        </tbody>
+      </nz-table>
+      <br/><br/>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<div class="insight">
+     
+    <div class="insight-description">
+        <div class="days" nz-row nzJustify="space-between" nz-style="margin-top:10px;">
+            <div nz-col class="center" [nzSpan]="4">
+                <button nz-button nzShape="round" (click)="fillDateTime(0)">Today</button>
+            </div>
+            <div nz-col class="center" [nzSpan]="6">
+                <button nz-button nzShape="round" (click)="fillDateTime(-1)">Yesterday</button>
+            </div>
+            <div nz-col class="center" [nzSpan]="7">
+                <button nz-button nzShape="round" (click)="fillDateTime(-7)">Last 7 days</button>
+            </div>
+            <div nz-col class="center" [nzSpan]="7">
+                <button nz-button nzShape="round" (click)="fillDateTime(-15)">Last 15 days</button>
+            </div>
+        </div>
+        <div class="calendar" nz-row nzJustify="space-around" nzAlign="middle" style="margin-top:10px;">
+            <div nz-col  [nzSpan]="10" style="text-align:center;">
+                <div>
+                    <nz-date-picker  nzFormat="dd-MM-yyyy" [nzDisabledDate]="disabledDate" (ngModelChange)="onDateChange('startDate');" [nzPlaceHolder]="'Start Date'" [nzSize]="'small'" [(ngModel)]="start_date">
+                    </nz-date-picker>
+                </div>
+                <div>
+                    <nz-date-picker style="margin-top:2px;" [nzDisabledDate]="disabledDate" (ngModelChange)="onDateChange('endDate');"  nzFormat="dd-MM-yyyy" [nzPlaceHolder]="'End Date'" [nzSize]="'small'" [(ngModel)]="end_date">
+                    </nz-date-picker>
+                </div>
+            </div>
+            <div nz-col  [nzSpan]="8" style="text-align:center;">
+                <div>
+                    <nz-time-picker  [nzPlaceHolder]="'Start Time'" [nzSize]="'small'" [(ngModel)]="start_time" nzFormat="HH:mm"></nz-time-picker>
+                </div>
+                <div>
+                    <nz-time-picker style="margin-top:2px;" [nzPlaceHolder]="'End Time'" [nzSize]="'small'" [(ngModel)]="end_time" nzFormat="HH:mm"></nz-time-picker>
+                </div>
+            </div>
+            <div nz-col  [nzSpan]="6"  style="text-align:center;">
+                <button nz-button nzType="primary" nzShape="round" (click)="play()">Play</button>
+            </div>
+        </div>
+        <div class="bottom" style="margin-left: 3vw;margin-top: 10px;">
+            <div class="input-box">
+                <input type="text" nz-input style="width:95%;" placeholder="Enter Vehicle No." nzAllowClear (input)="searchVehicle($event)" />
+            </div>
+            <div class="vehicles">
+                <nz-radio-group  [(ngModel)]="selectedVehicle">
+                    <label nz-radio [nzValue]="veh" *ngFor="let veh of vehDataCopy;"> {{veh.vehicle_reg_no}}</label>
+                </nz-radio-group>
+            </div>
+        </div>
+    </div>
+</div>

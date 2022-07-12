@@ -1,0 +1,86 @@
+.grey {
+    color: black;
+}
+.aggregate {
+    padding: 3px;
+}
+
+.docList{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+ .imgBox{
+  border:1px solid black;
+  width: 150px;
+  height: 20%;
+  margin: 3px;
+  display: block;
+  text-align: center;
+}
+ .imgBox img{ 
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  text-align: center;
+  padding: 1px;
+}
+
+.space{
+  display: flex;
+  justify-content: space-between;
+}
+
+.imgPreviewBox{
+  border:1px solid black;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  text-align: center;
+}
+
+.imgPreviewBox img{ 
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  text-align: center;
+  padding: 1px;
+}
+
+.head {
+    padding: 3px;
+    margin-top: 4px;
+    border-radius: 5px;
+    position: relative;
+}
+
+#myDIV {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.SelectHighlight {
+    background-color: #afafad;
+}
+
+.shadow-d1{
+    box-shadow: 0 1px 6px 1.5px rgba(32,33,36,.28) !important;
+  }
+
+  .align {
+    display: flex;
+}
+@media screen and (max-width: 500px) {
+    #myDIV {
+      height: 100%;
+      overflow-y: auto;
+    }
+    nz-select, nz-date-picker, input {
+        width: 100%;
+    }
+  }
+.SelectHighlight {
+  background-color: antiquewhite !important;
+}

@@ -1,0 +1,41 @@
+agm-map {
+    height: 65vh;
+    width: 100%;
+}
+
+.smallFont{
+    font-size:smaller;
+}
+
+.infoLabel{
+    font-weight: bold;
+    color: blue;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.buttons{
+position:absolute;
+top: 60vh;
+width:100vw;
+}
+
+.footer{
+    position:absolute;
+    bottom: 0;
+    width:95vw;
+    background-color: #dadedd;
+    }
+
+.mbbtn fa-icon{
+    color: rgb(82, 4, 125) !important;
+    font-size: 15px;
+  }
+
+.slider{
+    padding-left: 5vw; 
+    font-size:small;
+    padding-right: 5vw;
+}

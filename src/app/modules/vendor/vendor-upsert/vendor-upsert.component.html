@@ -1,0 +1,208 @@
+<div class="insight">
+  <div class="insight-head">
+    
+  </div>
+  <div class="insight-description">
+    <form nz-form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div>
+        <div nz-row>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzFor="Name">Vendor name<span class="red-mark">*</span></nz-form-label>
+            <nz-form-control>
+              <input nz-input   style="width: 95%"  formControlName="name" placeholder="Enter Vendor name "autocomplete="off"/>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left; " nzFor="type">Ownership Type<span class="red-mark">*</span>
+            </nz-form-label>
+            <nz-form-control nzErrorTip="Please Select Ownership Type">
+              <nz-select  style="width: 95%"  formControlName="ownershipType" nzPlaceHolder="Select Ownership type" nzShowSearch>
+                <nz-option *ngFor="let type of ownershiptype" nzLabel="{{type}}"
+                           [nzValue]="type">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left; " nzFor="type">Category<span class="red-mark">*</span>
+            </nz-form-label>
+            <nz-form-control nzErrorTip="Please Select  Category">
+              <nz-select  style="width: 95%"  formControlName="category" nzPlaceHolder="Select Category" nzShowSearch>
+                <nz-option *ngFor="let type of aCategory" nzLabel="{{type}}"
+                           [nzValue]="type">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzFor="area">area<span class="red-mark">*</span></nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="line1" style="width: 95%"   autocomplete="off" placeholder="Enter local area"/>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzFor="City">City<span class="red-mark">*</span></nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="city" style="width: 95%"   autocomplete="off" placeholder="Enter City"/>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzFor="state_name">State Name <span class="red-mark">*</span></nz-form-label>
+            <nz-form-control nzErrorTip="Please Select State">
+              <nz-select  style="width: 95%"  formControlName="state" (ngModelChange)="fillState($event)" nzPlaceHolder="Please Choose State"  nzShowSearch>
+                <nz-option *ngFor="let item of states" nzLabel="{{item?.state}}"  [nzValue]="item?.state">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </div>
+
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzFor="stateCd">State Code <span class="red-mark">*</span></nz-form-label>
+            <nz-form-control nzErrorTip="Please Input Code">
+              <input nz-input style="width: 95%"  readonly [attr.disabled]="true" formControlName="state_code" />
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label  style="text-align: left;" nzFor="stateCd">Country<span class="red-mark">*</span></nz-form-label>
+            <nz-form-control nzErrorTip="Please country  name">
+              <input nz-input style="width: 95%"  formControlName="country" placeholder="Enter country  name" />
+            </nz-form-control>
+          </div>
+
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzFor="Pan Number">Pan Number<span
+              class="red-mark">*</span></nz-form-label>
+            <nz-form-control  [nzErrorTip]="pan_noErrorTpl">
+              <input nz-input  style="width: 95%"  formControlName="pan_no" style="width: 95%"  placeholder="Enter Pan No." autocomplete="off" />
+              <ng-template #pan_noErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  Please Enter Vehicel No!
+                </ng-container>
+                <ng-container *ngIf="f.pan_no.errors?.minlength">
+                  Pan No must be 10 character!
+                </ng-container>
+                <ng-container *ngIf="!f.pan_no.errors?.maxlength && !f.pan_no.errors?.minlength && f.pan_no.errors?.pattern">
+                  Pan No.format is not valid!
+                </ng-container>
+                <ng-container *ngIf="f.pan_no.errors?.maxlength">
+                  max 10 characters allowed
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzFor=" Contact Person">Contact Person<span class="red-mark">*</span></nz-form-label>
+            <nz-form-control>
+              <input nz-input  style="width: 95%" formControlName="contact_person_name"  autocomplete="off" placeholder="Enter person  Name"/>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;"  nzFor="gstIn">GSTIN</nz-form-label>
+            <nz-form-control nzHasFeedback [nzErrorTip]="gstErrorTpl" >
+              <input nz-input  style="width: 95%"  formControlName="gstn" id="gstIn" autocomplete="off" placeholder="Enter 15 Digit GSTIN No."/>
+              <span nzTitle="Invalid GSTIN No" nzPlacement="topLeft" nzTrigger="click" nz-tooltip>
+          </span>
+              <ng-template #gstErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('maxlength')">
+                  max 15 characters allowed
+                </ng-container>
+                <ng-container *ngIf="control.hasError('minlength')">
+                  GSTIN No must be 15 character!
+                </ng-container>
+                <ng-container *ngIf="!control.hasError('minlength') && !control.hasError('maxlength') && control.hasError('pattern')">
+                  GSTIN Pattern not match
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzFor=" PAN Holder Name">PAN Holder Name<span class="red-mark">*</span></nz-form-label>
+            <nz-form-control>
+              <input nz-input style="width: 95%"  formControlName="phn"  autocomplete="off" placeholder="Enter PAN Holder Name"/>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label  style="text-align: left;" nzFor="prim_contact_no">Mobile No. <span class="red-mark">*</span></nz-form-label>
+            <nz-form-control [nzErrorTip]="mobileErrorTpl">
+              <input nz-input  style="width: 95%"  autocomplete="off" formControlName="prim_contact_no" placeholder="Enter 10 Digit Mobile No."/>
+              <span nzTitle="Invalid Mobile No" nzTrigger="click" nz-tooltip>
+              </span>
+              <ng-template #mobileErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  Please input 10 DIGIT Mobile no!
+                </ng-container>
+                <ng-container *ngIf="f.prim_contact_no.errors?.minlength">
+                  Mobile No must be 10 digit!
+                </ng-container>
+                <ng-container *ngIf="f.prim_contact_no.errors?.maxlength">
+                  max 10 Digit allowed
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzFor="address type">Address Proof Type<span class="red-mark">*</span></nz-form-label>
+            <nz-form-control nzErrorTip="Please Enter valid Address type">
+              <input nz-input style="width: 95%"  formControlName="address_proof_type" placeholder="Enter Address Type"/>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzFor="address Proof">Address Proof No <span class="red-mark">*</span></nz-form-label>
+            <nz-form-control nzErrorTip="Please Enter valid Address Proof">
+              <input nz-input name="address"  style="width: 95%"  formControlName="address_proof_no" placeholder="Enter Address Proof No"/>
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+            <nz-form-label style="text-align: left;" nzFor="no of vehicle">No Of Vehicle <span class="red-mark">*</span></nz-form-label>
+            <nz-form-control nzErrorTip="Please Enter no of vehicle">
+              <input nz-input  style="width: 95%" name="address" formControlName="noOfVehilce" placeholder="Enter no Of Vehicle"/>
+            </nz-form-control>
+          </div>
+<!--          <div>-->
+<!--            <nz-form-label style="text-align: left;"  nzErrorTip="Select account" nzFor="account">Vendor Account <span class="red-mark">*</span>-->
+<!--            </nz-form-label>-->
+<!--            <nz-form-control nzErrorTip="Please Select Account">-->
+<!--              <nz-select [nzDropdownMatchSelectWidth]="false" formControlName="account" nzPlaceHolder="Select Account"-->
+<!--                         style="width: 190px"-->
+<!--                         nzShowSearch (nzOnSearch)="onSearchaccount($event)" nzServerSearch nzAllowClear>-->
+<!--                <nz-option *ngFor="let account of vendorAccountdata" nzLabel="{{account?.name}}"-->
+<!--                           [nzValue]="account">-->
+<!--                </nz-option>-->
+<!--              </nz-select>-->
+<!--            </nz-form-control>-->
+<!--          </div>-->
+<!--          //////////////////// multiple Account testing-->
+<!--          <div *ngif="this.configs?.master?.showAccount">-->
+<!--            <div *ngFor="let obj in this.configs?.client_allowed">-->
+<!--          <div *ngif="this.configs?.master?.showAccount && (obj.clientId === this.localdata?.selectedClient || f?.ownershipType?.value == 'Associate')" ng-repeat="let obj in this.configs?.client_allowed">-->
+<!--            <nz-form-label style="text-align: left;"  nzErrorTip="Select account" nzFor="account">Vendor Account <span class="red-mark">*</span>-->
+<!--            </nz-form-label>-->
+<!--            <nz-form-control nzErrorTip="Please Select Account">-->
+<!--              <nz-select [nzDropdownMatchSelectWidth]="false" formControlName="account" nzPlaceHolder="Select Account"-->
+<!--                         style="width: 190px"-->
+<!--                         nzShowSearch (nzOnSearch)="onSearchaccount($event)" nzServerSearch nzAllowClear>-->
+<!--                <nz-option *ngFor="let account of vendorAccountdata" nzLabel="{{account?.name}}"-->
+<!--                           [nzValue]="account">-->
+<!--                </nz-option>-->
+<!--              </nz-select>-->
+<!--            </nz-form-control>-->
+<!--          </div>-->
+<!--            </div></div>-->
+
+
+        </div>
+
+
+      </div>
+      <div  [ngClass]="{ 'pull-right':this.innerWidth > 500 }">
+        <nz-form-item>
+          <nz-form-control>
+            <button  class=" invbtn" style="margin-top: 15px; width:140px; margin-right: 5px" nz-button type="submit" nzType="primary">SUBMIT</button>
+            <button  nzDanger class="invbtnback" style="margin-top: 15px ;width: 140px" (click)="backToListView();">BACK </button>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </form>
+
+  </div>
+</div>

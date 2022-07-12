@@ -1,0 +1,90 @@
+<!-- <mat-toolbar class="example-header mat-elevation-z12" color="primary">
+  <button mat-icon-button  (click) = "sidenav.toggle()"><mat-icon>menu</mat-icon></button>
+  <h1>Welcome to LMS App</h1>
+  <span class="example-spacer"></span>
+  <button mat-icon-button  [matMenuTriggerFor]="menu">
+    <mat-icon>settings</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+      <mat-icon>home</mat-icon>
+      Home
+
+    </button>
+    <button mat-menu-item>
+      <mat-icon>settings</mat-icon>
+      Settings
+    </button>
+    <button mat-menu-item (click) ="logout()">
+      <mat-icon>logout</mat-icon>
+      Logout
+    </button>
+  </mat-menu>
+</mat-toolbar> -->
+<!-- code for sidenav and table responsivenss check -->
+<!-- <mat-sidenav-container class="example-container">
+  <mat-sidenav #sidenav mode ="side" class="example-sidenav mat-elevation-z10" [opened] = "!isScreenSmall" [mode]="isScreenSmall ? 'over':'side' "   fixedInViewport='Non-fixed' fixedTopGap="64px">
+    <mat-list>
+      <mat-list-item *ngFor="let nav of fillerNav">{{nav}}</mat-list-item>
+    </mat-list>
+  </mat-sidenav>
+  <mat-sidenav-content >
+    <form action="">
+      <mat-form-field class="example-full-width">
+        <mat-label>Favorite food</mat-label>
+        <input matInput placeholder="Ex. Pizza" value="Sushi">
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Favorite food</mat-label>
+        <input matInput placeholder="Ex. Pizza" value="Sushi">
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Favorite food</mat-label>
+        <input matInput placeholder="Ex. Pizza" value="Sushi">
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="dropdown">
+        <mat-label>Favorite food</mat-label>
+        <mat-select [(ngModel)]="selectedValue" name="food">
+          <mat-option *ngFor="let food of foods" [value]="food.value">
+            {{food.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <p> Selected food: {{selectedValue}} </p>
+    </form>
+    <table  *ngIf="!isScreenSmall" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <ng-container *ngFor = "let column of displayedColumns" >
+        <ng-container [matColumnDef]="column" >
+        <th mat-header-cell color="primary" *matHeaderCellDef> {{column}} </th>
+        <td mat-cell *matCellDef="let element"> {{element[column] || 'NA'}} </td>
+      </ng-container>
+      </ng-container>    
+      <tr mat-header-row  *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row appearance="outline" *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <div *ngIf="isScreenSmall" >
+    <div class="card" mat-raised-card *ngFor = "let element of dataSource">
+      <div class="card-content" mat-card-content *ngFor="let column of displayedColumns">
+        <b>{{column}}</b>: {{element[column] || 'NA'}}
+      </div>
+      <br>
+    </div>
+  </div>
+  </mat-sidenav-content>
+</mat-sidenav-container> -->
+<!-- <nz-layout class="h-100">
+
+
+  <app-header [(drawerCollapsed)]="isCollapsed"></app-header>
+
+<nz-layout>
+  <nz-sider  [(nzCollapsed)]="isCollapsed" [nzBreakpoint]="'sm'" [nzCollapsedWidth]="0">
+    <app-sidebar></app-sidebar>
+  </nz-sider>
+  <nz-content>
+    <app-main></app-main>
+  </nz-content>
+</nz-layout>
+<app-footer></app-footer>
+</nz-layout> -->
+<body style="height:80vh"></body>

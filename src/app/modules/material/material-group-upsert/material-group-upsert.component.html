@@ -1,0 +1,63 @@
+<!--<p>material-group-upsert works!</p>-->
+<div class="insight">
+
+  <div class="insight-head">
+    <div class="insight-title">
+      Material Group Details
+    </div>
+  </div>
+  <div class="insight-description">
+    <nz-spin [ngClass]="{'loader': loadingObservable | async}" nzSimple [nzSpinning]="loadingObservable | async"></nz-spin>
+    <div class="overlay" *ngIf= "loadingObservable | async"></div>
+
+<!--    <form [formGroup]="materialGroupForm" (ngSubmit)="onSubmitGroup()">-->
+    <form [formGroup]="materialGroupForm" (ngSubmit)="onSubmitGroup()">
+
+    <div class="row">
+
+<!--        <div class="form-group col-md-3 mb-3">-->
+<!--          <label style="text-align: left;" nzFor="type">Material Group Name<span class="red-mark">*</span></label>-->
+<!--          <nz-select style="width: 245px" formControlName="category" required nzShowSearch>-->
+<!--            <nz-option *ngFor="let type of categoryList" nzLabel="{{type.name}}"-->
+<!--                       [nzValue]="type.value">-->
+<!--            </nz-option>-->
+<!--          </nz-select>-->
+<!--        </div>-->
+
+        <div class="form-group col-md-3 mb-3">
+          <label style="text-align: left;" nzFor="code">Material Group Name: <span class="red-mark">*</span></label>
+          <input nz-input formControlName="name" id="name" required />
+        </div>
+
+        <div class="form-group col-md-3 mb-3">
+          <label style="text-align: left;" nzFor="code">Material Group Code: <span class="red-mark">*</span></label>
+          <input nz-input formControlName="code" id="code" required />
+        </div>
+
+        <div class="form-group col-md-3 mb-3">
+          <label style="text-align: left;" nzFor="type">Unit</label>
+          <nz-select style="width: 245px" formControlName="unit" required nzShowSearch>
+            <nz-option *ngFor="let type of unitList" nzLabel="{{type}}"
+                       [nzValue]="type">
+            </nz-option>
+          </nz-select>
+        </div>
+
+        <div class="form-group col-md-3 mb-3">
+          <label style="text-align: left;"  required nzFor="mobile">Description</label>
+          <input nz-input formControlName="description" id="description" />
+        </div>
+
+      </div>
+      <div class="register-area">
+        <nz-form-control>
+          <!--          <button nz-button nzType ="primary" type="submit"  >{{'Submit'}}</button>-->
+          <button nz-button nzType="primary" type="submit" [disabled]="materialGroupForm?.invalid" >{{'Submit'}}</button>
+
+        </nz-form-control>
+      </div>
+    </form>
+<!--        <pre>{{materialGroupForm.value | json}}</pre>-->
+    <!--    <pre>{{materialGroupForm.valid}}</pre>-->
+  </div>
+</div>

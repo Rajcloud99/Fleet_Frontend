@@ -1,0 +1,140 @@
+<div class="insight">
+    <div class="insight-head" *ngIf="innerWidth > 500">
+      <div class="insight-tools">
+        <div class="tool">
+
+          <div class="mbbtn"  nz-tooltip nzTooltipTitle="Add Route"
+               (click)="navigateToAdd()">
+            <fa-icon [icon]="faPlusSquare" ></fa-icon>
+          </div>
+          <div class="mbbtn"  nz-tooltip nzTooltipTitle="Edit Route" (click)="navigateToEdit()">
+            <fa-icon [icon]="faEdit" ></fa-icon>
+          </div>
+          <!-- <a #donwload target="_blank"></a>
+          <div class="mbbtn"  nz-tooltip nzTooltipTitle="Download" (click)="downloadReport()">
+            <fa-icon [icon]="faDownload" ></fa-icon>
+          </div> -->
+
+        <!-- <div class="mbbtn" nz-button nz-popconfirm nzPopconfirmTitle="Are you sure?" nzOkText="ok"
+               nzCancelText="cancel" (nzOnConfirm)="showDeleteConfirm(this.selectedItem.name)" nz-tooltip nzTooltipTitle="Delete">
+            <fa-icon [icon]="faTrash" style="color: red !important;"></fa-icon>
+          </div> -->
+
+        <div class="mbbtn" *ngIf="innerWidth <= 500" (click)="isMobFilterVisible=isMobFilterVisible?false:true;">
+          <fa-icon [icon]="faFilter"></fa-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="insight-description">
+    <div *ngIf="isMobFilterVisible || innerWidth > 500">
+      <div nz-row style="margin-top:2%;">
+        <div style="margin-right: 3%;margin-bottom:2%" nz-col nzXs="24" nzSm="10" nzMd="8" nzLg="5">
+          <label></label>
+          <nz-select [ngModelOptions]="{standalone: true}" [nzDropdownMatchSelectWidth]="false" style="width: 100%"
+            nzPlaceHolder="Search Route" [(ngModel)]="filterObj && filterObj.name" nzShowSearch
+            (nzOnSearch)="onChangeSearch($event)" nzServerSearch nzAllowClear>
+            <nz-option *ngFor="let route of receivedData" nzLabel="{{route?.name}}" [nzValue]="route.name">
+            </nz-option>
+          </nz-select>
+        </div>
+
+        <div style="margin-right: 3%;margin-bottom:2%" nz-col nzXs="24" nzSm="10" nzMd="8" nzLg="5">
+          <label></label>
+          <nz-date-picker [(ngModel)]="filterObj && filterObj.from" style="width: 100%" nzPlaceHolder="Start Date">
+          </nz-date-picker>
+        </div>
+
+        <!-- to date -->
+
+        <div style="margin-right: 3%;margin-bottom:2%" nz-col nzXs="24" nzSm="10" nzMd="8" nzLg="5">
+          <label></label>
+          <nz-date-picker [(ngModel)]="filterObj && filterObj.to" style="width: 100%" nzPlaceHolder="End Date">
+          </nz-date-picker>
+        </div>
+
+        <div style="margin-right: 3%;margin-bottom:2%" nz-col nzXs="24" nzSm="10" nzMd="8" nzLg="5"
+          *ngIf="innerWidth>500">
+          <button style="margin-right: 3%;width: 40%;" nz-button nzType="primary" (click)="search()"><i nz-icon
+              nzType="search"></i></button>
+          <button style="width: 40%;" nz-button nzType="primary" (click)=" reset()">Reset</button>
+        </div>
+      </div>
+      <div *ngIf="isMobFilterVisible && innerWidth<500" style="margin-top: 2%; margin-bottom:5%">
+        <button style="width: 50%;color:white;" type="button" class="bg-primary" nz-button
+          (click)="search();isMobFilterVisible = false;">Search</button>
+        <button style="width: 50%;color:white;" type="button" class="bg-primary" nz-button
+          (click)="reset();isMobFilterVisible = false;">Reset</button>
+      </div>
+    </div>
+
+    <!-- Card view start *ngIf="innerWidth <= 500" -->
+    <div class="aggregate" *ngIf="innerWidth <500">
+      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
+        nzSize="small" [nzScroll]="{ y: '425px' }" style="overflow-x: auto">
+        <div class="head shadow-d1" *ngFor="let d of receivedData" (click)="selectItem(d)"
+          [ngClass]="{SelectHighlight :  selectedRowId && (d?._id === selectedRowId)}">
+
+          <div class="cardHead">
+            <div>{{ d?.name+' ('+d?.route_distance+' Km)' || 'NA'}}</div>
+          </div>
+
+          <div class="align">
+            <div class="grey"><b>Source :</b> {{ d?.source?.c+','+d?.source?.placeAddress || 'NA'}}</div>
+          </div>
+
+          <div class="align">
+            <div class="grey"><b>Destination :</b> {{d?.destination?.c+','+d?.destination?.placeAddress || 'NA'}}</div>
+          </div>
+
+          <div class="align">
+            <div class="grey"><b>Source City :</b> {{d?.source?.c || 'Na' }}</div>
+          </div>
+
+          <div class="align">
+            <div class="grey"><b>Destination City :</b> {{d?.destination?.c || 'NA'}}</div>
+          </div>
+
+          <div class="align">
+            <div class="grey"><b>Route Distance :</b> {{ d?.route_distance+'Km' || 'NA'}}</div>
+          </div>
+
+        </div>
+      </nz-table>
+    </div>
+
+<!-- table view start *ngIf="innerWidth > 500" -->
+    <div id="myDIV" *ngIf="innerWidth > 500">
+      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
+                nzSize="small"  [nzScroll]="{ x: '2000', y: '350px' }" style="overflow-x: auto">
+        <thead>
+        <tr>
+          <th nzWidth="150px" nzAlign="center">Route</th>
+          <th nzWidth="120px" nzAlign="center">Source</th>
+          <th nzWidth="120px" nzAlign="center">Destination</th>
+          <th nzWidth="100px" nzAlign="center">Source City</th>
+          <th nzWidth="100px" nzAlign="center">Destination City</th>
+          <th nzWidth="80px" nzAlign="center">Distance(Km)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+          style="cursor: pointer"
+          *ngFor="let item of receivedData"
+          (click)="selectItem(item)"
+          [ngClass]="{SelectHighlight :  selectedRowId && (item?._id === selectedRowId)}">
+          <td nzAlign="center">{{ item?.name || "NA"}}</td>
+          <td nzAlign="center">{{ item?.source?.c+','+item?.source?.placeAddress  || "NA"}}</td>
+          <td nzAlign="center">{{ item?.destination?.c+','+item?.destination?.placeAddress || "NA"}}</td>
+          <td nzAlign="center">{{ item?.source?.c || "NA"}}</td>
+          <td nzAlign="center">{{ item?.destination?.c || "NA"}}</td>
+          <td nzAlign="center">{{ item?.route_distance+'Km'  || "NA"}}</td>
+        </tr>
+        </tbody>
+      </nz-table>
+      <br/><br/>
+    </div>
+
+
+  </div>
+</div>

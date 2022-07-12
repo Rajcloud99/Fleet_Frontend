@@ -1,0 +1,109 @@
+<div class="insight">
+    <div class="insight-head" *ngIf="innerWidth > 500">
+        <div class="insight-title pull-right">
+            <span> Running: {{runningCount}}</span>&nbsp; &nbsp;
+            <span> Stopped: {{stoppedCount}}</span>&nbsp; &nbsp;
+            <span> Offline: {{offlineCount}}</span>&nbsp; &nbsp;
+        </div>
+        <div class="insight-tools">
+            <div class="tool" *ngIf="innerWidth<= 500">
+                <div class="mbbtn"   (click)="isMobFilterVisible = !isMobFilterVisible">
+                    <fa-icon [icon]="faFilter"></fa-icon>
+                  </div>
+            </div>
+            <div class="tool" *ngIf="innerWidth <= 500">
+                <div class="mbbtn" (click)="gotoMapView();">
+                    <fa-icon [icon]="faMap"></fa-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="insight-description">
+        <div *ngIf="innerWidth >= 500" class="filters-row">
+            <div class="my-row">
+                <div class="my-card">
+                   <div class="my-card-header">
+                        <input nz-input [(ngModel)]="oFilter.vehicle_no" (input)="applyFilters()" placeholder="Enter Vehicle No." nzAllowClear />
+                   </div>
+                </div>
+                <div class="my-card">
+                    <div class="my-card-header">
+                        <nz-select  [(ngModel)]="oFilter.gps_status" (ngModelChange)="applyFilters()" nzPlaceHolder="Select status" nzAllowClear >
+                            <nz-option nzValue="running" nzLabel="Running"></nz-option>
+                            <nz-option nzValue="stopped" nzLabel="Stopped"></nz-option>
+                            <nz-option nzValue="offline" nzLabel="Offline"></nz-option>
+                        </nz-select>
+                    </div>
+                 </div>
+                 <div class="my-card">
+                    <div class="my-card-header">
+                        <input nz-input [(ngModel)]="oFilter.customer" (input)="applyFilters()" placeholder="Enter Customer Name" nzAllowClear />
+                    </div>
+                 </div>
+            </div>
+        </div>
+        <div style="display: flex;">
+            <div class="aggregate" class="cards-container" style="width:30vw; height:75vh;overflow-y: scroll;">
+                <div class="head shadow-d1" *ngFor="let d of vehDataCopy" (click)="showInMap(d)">
+                    <div *ngIf="roles['Map View']['Live Tracking'] && d?.vehicle?.device_imei" style="margin-left:80%;"><a href="javascript:void(0);" (click)="gotoLiveTrack(d?.vehicle);">Live Track</a></div>
+                    <div class="align">
+                        <div class="grey">Vehicle :</div>
+                        <div class="ml-1">{{d?.vehicle?.vehicle_reg_no || 'NA'}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">Driver :</div>
+                        <div class="ml-1">{{d?.vehicle?.trip?.driver?.name || 'NA'}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">Status :</div>
+                        <div class="ml-1">{{d?.vehicle?.gpsData?.status || 'NA'}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">Customer :</div>
+                        <div class="ml-1">{{d?.vehicle?.gr?.customer?.name || 'NA'}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">KM Covered :</div>
+                        <div class="ml-1">{{d?.distance_travelled || 'NA'}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">KM Remaining :</div>
+                        <div class="ml-1">{{(d?.vehicle?.route?.route_distance - d?.distance_travelled).toFixed(2)}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">Predicted ETA :</div>
+                        <div class="ml-1">{{d?.current_eta | date: 'medium'}}</div>
+                    </div>
+                  <div class="align">
+                    <div class="grey">Position Time:</div>
+                    <div class="ml-1">{{d?.vehicle?.gpsData?.positioning_time  | date: 'medium'}}</div>
+                  </div>
+                  <div class="align">
+                    <div class="grey">Address:</div>
+                    <div class="ml-1">{{d?.vehicle?.gpsData?.address || 'NA'}}</div>
+                  </div>
+                </div>
+            </div>
+            <div *ngIf="innerWidth >=500" style="width: 70vw;">
+                <app-map [mapData]="selectedVehicle"></app-map>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="isMobFilterVisible">
+        <div>
+            <div class="flex-cont">
+                <input nz-input [(ngModel)]="oFilter.vehicle_no" (input)="applyFilters()" placeholder="Enter Vehicle No." nzAllowClear />
+            </div>
+            <div class="flex-cont">
+                <nz-select  [(ngModel)]="oFilter.gps_status" (ngModelChange)="applyFilters()" nzPlaceHolder="Select status" nzAllowClear >
+                    <nz-option nzValue="running" nzLabel="Running"></nz-option>
+                    <nz-option nzValue="stopped" nzLabel="Stopped"></nz-option>
+                    <nz-option nzValue="offline" nzLabel="Offline"></nz-option>
+                </nz-select>
+            </div>
+            <div class="flex-cont">
+                <input nz-input [(ngModel)]="oFilter.customer" (input)="applyFilters()" placeholder="Enter Customer Name" nzAllowClear />
+            </div>
+        </div>
+    </div>
+</div>

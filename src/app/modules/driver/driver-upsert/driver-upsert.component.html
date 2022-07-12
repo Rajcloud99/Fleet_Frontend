@@ -1,0 +1,103 @@
+<div class="insight">
+  <div class="insight-head">
+
+  </div>
+  <div class="insight-description">
+    <form nz-form [formGroup]="driverForm" (ngSubmit)="onSubmit()">
+      <div nz-row>
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Driver Name<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input autocomplete="off" nz-input name="name" id="name" formControlName="name" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Code<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input autocomplete="off" name="employee_code" id="employee_code"
+              formControlName="employee_code" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">License No.<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input autocomplete="off" name="license_no" id="license_no" formControlName="license_no" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Mobile No.<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" [nzErrorTip]="mobileErrorTpl">
+            <input nz-input autocomplete="off" formControlName="prim_contact_no" id="prim_contact_no" />
+            <span nzTitle="Invalid Mobile No" nzTrigger="click" nz-tooltip>
+            </span>
+            <ng-template #mobileErrorTpl let-control>
+              <ng-container *ngIf="control.hasError('required')">
+                Please input mobile no!
+              </ng-container>
+              <ng-container *ngIf="f.prim_contact_no.errors?.minlength">
+                Invalid mobile no!
+              </ng-container>
+              <ng-container *ngIf="f.prim_contact_no.errors?.maxlength">
+                Invalid mobile no!
+              </ng-container>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+
+        <nz-form-item *ngIf="mode === 2" nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Account<span *ngIf="!masterConfigs?.driver?.accNotRequired"
+            class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <nz-select [nzDropdownMatchSelectWidth]="false" formControlName="account" nzPlaceHolder="Select Account"
+              nzShowSearch (nzOnSearch)="onChangeSearch($event)" nzServerSearch autocomplete="off" nzAllowClear
+              [required]="!masterConfigs?.driver?.accNotRequired">
+              <nz-option *ngFor="let account of receivedAccount" nzLabel="{{account?.name}}" [nzValue]="account">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Id Proof Type<span *ngIf="!masterConfigs?.driver?.idProofRequired"
+              class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <nz-select [required]="!masterConfigs?.driver?.idProofRequired" formControlName="id_proof_type"
+              nzShowSearch>
+              <nz-option autocomplete="off" *ngFor="let id_proof_type of idTypeList" nzLabel="{{id_proof_type.name}}"
+                [nzValue]="id_proof_type.value">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Id Number<span *ngIf="!masterConfigs?.driver?.idProofRequired"
+              class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input [required]="!masterConfigs?.driver?.idProofRequired" nz-input autocomplete="off"
+              name="id_proof_value" id="id_proof_value" formControlName="id_proof_value" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- <div>
+            <nz-form-label nzFor="idProofUpload">Uplod Id Proof <span class="red-mark"></span></nz-form-label>
+            <nz-form-control nzErrorTip="Please Select Id Proof Type">
+              <input style="width: 190px;" type="file" #fileInput (change)="onFileSelect(fileInput)" />
+            </nz-form-control>
+          </div> -->
+      </div>
+      <nz-form-item style="padding-top: 5%;">
+        <nz-form-control [nzSpan]="20">
+          <button nz-button nzType="primary" type="submit" [disabled]="driverForm?.invalid">{{getId ? 'Update
+            Driver' : 'Add Driver'}}</button>&nbsp;&nbsp;&nbsp;&nbsp;
+          <button nz-button nzType="primary" (click)="backToListView();">Back</button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,66 @@
+<!--<p>material-group-upsert works!</p>-->
+<div class="insight">
+  <div class="insight-head">
+    
+  </div>
+  <div class="insight-description">
+    <!--    <nz-spin [ngClass]="{'loader': loadingObservable | async}" nzSimple [nzSpinning]="loadingObservable | async"></nz-spin>-->
+    <!-- <div class="overlay" *ngIf= "loadingObservable | async"></div> -->
+
+    <!--    <form [formGroup]="materialGroupForm" (ngSubmit)="onSubmitGroup()">-->
+    <form nz-form [formGroup]="materialGroupForm" (ngSubmit)="onSubmitGroup()">
+      <div nz-row>
+        <!--        <div class="form-group col-md-3 mb-3">-->
+        <!--          <label style="text-align: left;" nzFor="type">Material Group Name<span class="red-mark">*</span></label>-->
+        <!--          <nz-select style="width: 245px" formControlName="category" required nzShowSearch>-->
+        <!--            <nz-option *ngFor="let type of categoryList" nzLabel="{{type.name}}"-->
+        <!--                       [nzValue]="type.value">-->
+        <!--            </nz-option>-->
+        <!--          </nz-select>-->
+        <!--        </div>-->
+
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Material Group Name<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="name" id="name" required />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Material Group Code<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="code" id="code" required />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Unit<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <nz-select formControlName="unit" required nzShowSearch>
+              <nz-option *ngFor="let type of unitList" nzLabel="{{type}}" [nzValue]="type">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Description</nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="description" id="description" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <nz-form-item style="padding-top: 5%;">
+        <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+          <button nz-button nzType="primary" type="submit"
+            [disabled]="materialGroupForm?.invalid">{{'Submit'}}</button>&nbsp;&nbsp;&nbsp;&nbsp;
+          <button nz-button nzType="primary" (click)="backToHome();">Cancel</button>
+        </nz-form-control>
+      </nz-form-item>
+
+    </form>
+    <!--        <pre>{{materialGroupForm.value | json}}</pre>-->
+    <!--    <pre>{{materialGroupForm.valid}}</pre>-->
+  </div>
+</div>

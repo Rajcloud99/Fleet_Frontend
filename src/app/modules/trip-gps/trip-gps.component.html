@@ -1,0 +1,320 @@
+<div class="insight" [ngStyle]="{'height':pageNo === 1 ?'80vh':'90vh'}">
+  <div class="insight-head" *ngIf="innerWidth < 500">
+    <div *ngIf="innerWidth > 500" class="mbbtn">
+      >
+    </div>
+    <div style="padding-left: 5%;" class="insight-title">
+      
+    </div>
+    <div *ngIf="skipDuty && innerWidth <= 500" class="mbbtn "  nz-tooltip nzTooltipTitle="Skip Duty" (click)="gotoSkipDuty()" style="padding-right: 15px">
+      <fa-icon [icon]="faForward" ></fa-icon>
+    </div>
+    <div class="insight-tools">
+      <div class="tool"></div>
+    </div>
+  </div>
+
+  <div class="insight-description">
+    <div *ngIf="innerWidth >=500">
+      <ng-container *ngIf="pageNo === 1 || pageNo === 2">
+        <nz-select style="width: 20%;margin: 10px 0;" nzPlaceHolder="Search by customer name" nzShowSearch nzAllowClear
+          (nzOnSearch)="onSearchCustomer($event)" nzServerSearch (ngModelChange)="gotoNext(pageNo,$event)"
+          [ngModelOptions]="{standalone:true}" [(ngModel)]="customer">
+          <nz-option *ngFor="let customer of receivedAllCustomers" nzLabel="{{customer?.name}}" [nzValue]="customer">
+          </nz-option>
+        </nz-select>
+      </ng-container>
+      <ng-container *ngIf="pageNo === 2">
+        <nz-table
+          *ngIf="innerWidth >= 500"
+          #nzTable
+          nzBordered
+          [nzShowPagination]="false"
+          [nzData]="receivedAllBookings ? receivedAllBookings : ''"
+          nzSize="small"
+          [nzScroll]="{ x: '700px', y: '420px' }"
+        >
+          <thead>
+            <tr style="background-color: #3e51b5 !important;">
+              <th nzWidth="100px" nzAlign="center">Duty Assigned :</th>
+              <th nzWidth="80px"  nzAlign="center">Account :</th>
+              <th nzWidth="80px"  nzAlign="center">Remarks :</th>
+              <th nzWidth="100px" nzAlign="center">Duty Start Date :</th>
+              <th nzWidth="100px" nzAlign="center">Duty End Date :</th>
+              <th nzWidth="80px" nzAlign="center">Person :</th>
+              <th nzWidth="80px" nzAlign="center">Phone :</th>
+            </tr>
+          </thead>
+          <tbody >
+            <tr
+              style="cursor: pointer"
+              *ngFor="let item of receivedAllBookings"
+              (click)="selectItem(item)"
+              [ngClass]="{SelectHighlight :  selectedRowId && (item?._id === selectedRowId)}"
+            >
+              <td nzAlign="center">{{ item?.booking_date | date: 'medium'}}</td>
+              <td nzAlign="center">{{ item?.customer?.name }}</td>
+              <td nzAlign="center">{{ item?.remark || 'NA'}}</td>
+              <td nzAlign="center">{{ item?.serve_start | date: 'medium' || 'NA'}}</td>
+              <td nzAlign="center">{{ item?.serve_end | date: 'medium' || 'NA' }}</td>
+              <td nzAlign="center">{{ item?.tr_mgr[0]?.name }}</td>
+              <td nzAlign="center">{{ item?.tr_mgr[0]?.contact_no }}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+        <br /><br />
+        <div *ngIf="innerWidth > 500">
+          <div nz-row [nzGutter]="16" nzJustify="center">
+            <div nz-col class="gutter-row">
+              <button nz-button nzType="primary" nzShape="round" (click)="gotoNext(pageNo,selectedItem)">Duty</button>
+            </div>
+            <div nz-col class="gutter-row">
+              <button nz-button nzType="primary" nzShape="round" (click)="gotoSkipDuty();">Skip Duty</button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="innerWidth < 500" class="aggregate">
+          <div class="head shadow-d1" *ngFor="let d of receivedAllBookings" (click)="gotoNext(pageNo,d)"
+            style="margin-top:5px;">
+            <div class="align">
+              <div class="grey">Duty Assigned :</div>
+              <div class="ml-1">{{d?.booking_date | date: 'medium'}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Account :</div>
+              <div class="ml-1">{{d?.customer?.name}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Remarks :</div>
+              <div class="ml-1">{{d?.remark}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Duty Start Date :</div>
+              <div class="ml-1">{{d?.serve_start | date: 'medium'}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Duty End Date :</div>
+              <div class="ml-1">{{d?.serve_end | date: 'medium'}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Person :</div>
+              <div class="ml-1">{{d?.tr_mgr[0]?.name}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Phone :</div>
+              <div class="ml-1">{{d?.tr_mgr[0]?.contact_no}}</div>
+            </div>
+          </div>
+        </div>
+
+      </ng-container>
+    </div>
+    <div *ngIf="innerWidth < 500">
+      <ng-container *ngIf="pageNo === 1">
+        <nz-select style="width: 95%" nzPlaceHolder="Search by customer name" nzShowSearch nzAllowClear
+          (nzOnSearch)="onSearchCustomer($event)" nzServerSearch (ngModelChange)="gotoNext(pageNo,$event)"
+          [ngModelOptions]="{standalone:true}" [(ngModel)]="customer">
+          <nz-option *ngFor="let customer of receivedAllCustomers" nzLabel="{{customer?.name}}" [nzValue]="customer">
+          </nz-option>
+        </nz-select>
+      </ng-container>
+      <ng-container *ngIf="pageNo === 2">
+        <div *ngIf="innerWidth < 500" class="aggregate">
+          <div class="head shadow-d1" *ngFor="let d of receivedAllBookings" (click)="gotoNext(pageNo,d)"
+            style="margin-top:5px;">
+            <div class="align">
+              <div class="grey">Duty Assigned :</div>
+              <div class="ml-1">{{d?.booking_date | date: 'medium'}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Account :</div>
+              <div class="ml-1">{{d?.customer?.name}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Remarks :</div>
+              <div class="ml-1">{{d?.remark}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Duty Start Date :</div>
+              <div class="ml-1">{{d?.serve_start | date: 'medium'}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Duty End Date :</div>
+              <div class="ml-1">{{d?.serve_end | date: 'medium'}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Person :</div>
+              <div class="ml-1">{{d?.tr_mgr[0]?.name}}</div>
+            </div>
+            <div class="align">
+              <div class="grey">Phone :</div>
+              <div class="ml-1">{{d?.tr_mgr[0]?.contact_no}}</div>
+            </div>
+          </div>
+        </div>
+
+      </ng-container>
+    </div>
+    <ng-container *ngIf="pageNo === 3">
+      <div style="padding-left: 5%;"><b>Customer :</b> {{customer.name}}</div>
+      <form nz-form style="padding-left: 5%;">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5">Trip Base:</nz-form-label>
+          <nz-form-control [nzSpan]="12" nzErrorTip="Input is required">
+            <nz-select [ngModelOptions]="{standalone: true}" style="width: 85%;" nzPlaceHolder="Select Trip Base" nzShowSearch nzAllowClear nzServerSearch [(ngModel)]="tripBase">
+              <nz-option *ngFor="let tripBase of tripBaseType" nzLabel="{{tripBase}}" [nzValue]="tripBase">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5">Vehicle:</nz-form-label>
+          <nz-form-control  [nzSpan]="12" nzErrorTip="Input is required">
+            <nz-select [ngModelOptions]="{standalone: true}" nzPlaceHolder="Search vehicle" [(ngModel)]="veh" style="width: 85%;"
+              nzShowSearch (nzOnSearch)="onSearchvehicle($event)" (ngModelChange)="onChangeVehicle($event)"
+              nzServerSearch nzAllowClear>
+              <nz-option *ngFor="let veh of vehData" nzLabel="{{veh?.vehicle_reg_no}}" [nzValue]="veh">
+              </nz-option>
+            </nz-select> &nbsp;
+            <button nz-button type="button" class="btn-icon" nz-tooltip nzTooltipTitle="Add Vehicle"
+              (click)="addVehicle()">
+              <i nz-icon nzType="plus-circle" style="font-size: 15px" nzTheme="outline"></i>
+            </button>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5">Driver:</nz-form-label>
+          <nz-form-control  [nzSpan]="12" nzErrorTip="Input is required">
+            <nz-select [ngModelOptions]="{standalone: true}" nzPlaceHolder="Search Driver Name" [(ngModel)]="driver" style="width: 85%; margin-top: 5px;"
+            nzShowSearch (nzOnSearch)="onChangeSearch($event, 'name')" nzServerSearch nzAutoClearSearchValue="true"
+            nzAllowClear>
+            <nz-option *ngFor="let driver of receivedDriver" nzLabel="{{driver?.name +' ('+ driver?.employee_code +')'}}"
+              [nzValue]="driver">
+            </nz-option>
+          </nz-select> &nbsp;
+          <button nz-button type="button" class="btn-icon" (click)="addDriver()">
+            <i nz-icon nzType="plus-circle" style="font-size: 15px;" nzTheme="outline"></i>
+          </button>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5">Vendor:</nz-form-label>
+          <nz-form-control  [nzSpan]="12" nzErrorTip="Input is required">
+            <nz-select [ngModelOptions]="{standalone: true}" style="width: 85%;" nzPlaceHolder="Search Vendor" nzShowSearch nzAllowClear
+            (nzOnSearch)="onSearchvender($event)" nzServerSearch [(ngModel)]="vendor">
+            <nz-option *ngFor="let vendor of receivedAllVendors" nzLabel="{{ vendor?.name}}" [nzValue]="vendor">
+            </nz-option>
+          </nz-select> &nbsp;
+          <button nz-button type="button" class="btn-icon" (click)="addVendor()">
+            <i nz-icon nzType="plus-circle" style="font-size: 15px;" nzTheme="outline"></i>
+          </button>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="tripBase === 'GPS Based'">
+          <nz-form-label [nzSpan]="5">Device Imei:</nz-form-label>
+          <nz-form-control [nzSpan]="12" nzErrorTip="Input is required">
+              <nz-select (nzOnSearch)="searchDevice($event)" [ngModelOptions]="{standalone: true}" style="width: 85%;" nzPlaceHolder="Search Device Imei" nzShowSearch nzAllowClear
+                [(ngModel)]="device">
+                <nz-option *ngFor="let device of allDevices" nzLabel="{{device?.imei}}" [nzValue]="device">
+                </nz-option>
+              </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5">Route:</nz-form-label>
+          <nz-form-control  [nzSpan]="12" nzErrorTip="Input is required">
+            <nz-select [ngModelOptions]="{standalone: true}" style="width: 85%;" nzPlaceHolder="Search Route" nzShowSearch nzAllowClear
+            (nzOnSearch)="onSearchRoute($event)" nzServerSearch [(ngModel)]="route">
+            <nz-option *ngFor="let route of receivedAllRoutes" nzLabel="{{route?.name}}" [nzValue]="route">
+            </nz-option>
+          </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="!configs.vehAlloc?.hideTripStartDate">
+          <nz-form-label [nzSpan]="5">Start Date & Time:</nz-form-label>
+          <nz-form-control  [nzSpan]="12" nzErrorTip="Input is required">
+            <nz-date-picker [ngModelOptions]="{standalone: true}" style="width: 70%;  margin-right: 5px;" [nzDisabledDate]="disabledDate"
+            nzFormat="dd-MM-yyyy" [(ngModel)]="trip_start" [ngModelOptions]="{ standalone: true }">
+          </nz-date-picker>
+          <nz-time-picker [ngModelOptions]="{standalone: true}" style="width: 25%" [(ngModel)]="time" [ngModelOptions]="{ standalone: true }"
+            nzFormat="HH:mm">
+          </nz-time-picker>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item style="padding-top: 5%;">
+          <nz-form-control  [nzSpan]="12" nzErrorTip="Input is required">
+            <button nz-button nzType="primary" (click)="allocateTrip()">ALLOCATE</button>
+          </nz-form-control>
+        </nz-form-item>
+
+      </form>
+    </ng-container>
+    <nz-modal style="z-index: 50" [(nzVisible)]="vendorShow" nzTitle="Add vendor" (nzOnCancel)="handleCancel()"
+          (nzOnOk)="handleOk()">
+          <ng-container *nzModalContent>
+            <div nz-col nzXs="24" nzSm="12" nzMd="24" nzLg="24">
+              <nz-form-label style="text-align: left" nzFor="Name">Vendor name<span class="red-mark">*</span>
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input style="width: 95%" [(ngModel)]="name" [ngModelOptions]="{ standalone: true }"
+                  placeholder="Enter Vendor name " autocomplete="off" />
+              </nz-form-control>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="24" nzLg="24">
+              <nz-form-label style="text-align: left" nzFor="prim_contact_no">Mobile No. <span class="red-mark">*</span>
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input style="width: 95%" autocomplete="off" [(ngModel)]="prim_contact_no" minlength="10"
+                  maxlength="10" #mobile_no="ngModel" [ngModelOptions]="{ standalone: true }"
+                  placeholder="Enter 10 Digit Mobile No." />
+                <span *ngIf="mobile_no.errors" style="color: red">
+                  Please enter 10 Digit Mobile No.
+                </span>
+              </nz-form-control>
+            </div>
+          </ng-container>
+    </nz-modal>
+
+    <nz-modal style="z-index: 50" [(nzVisible)]="visible" nzTitle="Add Driver" (nzOnCancel)="handleCancel()"
+          (nzOnOk)="handleDriver()">
+
+          <ng-container *nzModalContent>
+            <div nz-col nzXs="24" nzSm="12" nzMd="24" nzLg="24">
+              <nz-form-label style="text-align: left" nzFor="Name">Driver name<span class="red-mark">*</span>
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input style="width: 95%" [(ngModel)]="name" [ngModelOptions]="{ standalone: true }"
+                  placeholder="Enter Driver Name " autocomplete="off" />
+              </nz-form-control>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="24" nzLg="24">
+              <nz-form-label style="text-align: left" nzFor="Name">Driver Code<span class="red-mark">*</span>
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input style="width: 95%" [(ngModel)]="employee_code" [ngModelOptions]="{ standalone: true }"
+                  placeholder="Enter Driver Code " autocomplete="off" />
+              </nz-form-control>
+            </div>
+            <div nz-col nzXs="24" nzSm="12" nzMd="24" nzLg="24">
+              <nz-form-label style="text-align: left" nzFor="prim_contact_no">Mobile No.<span class="red-mark">*</span>
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input style="width: 95%" autocomplete="off" [(ngModel)]="prim_contact_no" minlength="10"
+                  maxlength="10" #mobile_no="ngModel" [ngModelOptions]="{ standalone: true }"
+                  placeholder="Enter 10 Digit Mobile No." />
+                <span *ngIf="mobile_no.errors" style="color: red">
+                  Please enter 10 Digit Mobile No.
+                </span>
+              </nz-form-control>
+            </div>
+          </ng-container>
+    </nz-modal>
+  </div>
+</div>

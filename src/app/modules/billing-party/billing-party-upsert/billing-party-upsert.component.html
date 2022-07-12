@@ -1,0 +1,135 @@
+<div class="insight">
+  <div class="insight-head">
+    
+  </div>
+  <div class="insight-description">
+    <div>
+      <form nz-form [formGroup]="billingPartyForm" (ngSubmit)="onSubmit()">
+        <div nz-row>
+          <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+            <nz-form-label [nzSpan]="20">Billing Party Name<span class="red-mark">*</span></nz-form-label>
+            <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+              <input (ngModelChange)="fillBillName($event)" nz-input name="name" id="name" formControlName="name" />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+            <nz-form-label [nzSpan]="20">Bill Name<span class="red-mark">*</span></nz-form-label>
+            <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+              <input nz-input name="billName" id="billName" formControlName="billName" />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+            <nz-form-label [nzSpan]="20">Address<span class="red-mark">*</span></nz-form-label>
+            <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+              <input nz-input name="address" id="address" formControlName="address" />
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- <div>
+              <nz-form-label nzFor="address2">Address 2 <span class="red-mark">*</span></nz-form-label>
+              <nz-form-control nzErrorTip="Please Enter Address">
+                <input nz-input name="address2" id="address2" formControlName="address2" />
+              </nz-form-control>
+            </div>
+
+            <div>
+              <nz-form-label nzFor="address3">Address 3 <span class="red-mark">*</span></nz-form-label>
+              <nz-form-control nzErrorTip="Please Enter Address">
+                <input nz-input name="address3" id="address3" formControlName="address3" />
+              </nz-form-control>
+            </div> -->
+
+          <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+            <nz-form-label [nzSpan]="20">GSTIN No.<span class="red-mark">*</span></nz-form-label>
+            <nz-form-control [nzErrorTip]="gstErrorTpl" [nzSpan]="20">
+              <input nz-input formControlName="gstin" id="gstin" minlength="15" />
+              <ng-template #gstErrorTpl let-control>
+                <ng-container *ngIf="control.hasError('required')">
+                  Please input gst no!
+                </ng-container>
+                <ng-container *ngIf="f.gstin.errors?.minlength">
+                  GSTIN must be of 15 character!
+                </ng-container>
+                <ng-container
+                  *ngIf="f.gstin.errors?.pattern && !f.gstin.errors?.minlength && !f.gstin.errors?.maxlength">
+                  GSTIN format is not valid!
+                </ng-container>
+                <ng-container *ngIf="f.gstin.errors?.maxlength">
+                  max 15 characters allowed for gstin!
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+
+
+          <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+            <nz-form-label [nzSpan]="20">State Name<span class="red-mark">*</span></nz-form-label>
+            <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+              <nz-select formControlName="state_name" nzShowSearch>
+                <nz-option *ngFor="let item of aGSTstates" nzLabel="{{item?.state}}" [nzValue]="item?.state">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+            <nz-form-label nzFor="stateCd" [nzSpan]="20">State Code<span class="red-mark">*</span></nz-form-label>
+            <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+              <input nz-input readonly [attr.disabled]="true" formControlName="state_code" id="stateCd" />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+            <nz-form-label nzFor="stateNameCd" [nzSpan]="20">State Name Code<span class="red-mark">*</span>
+            </nz-form-label>
+            <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+              <input nz-input readonly [attr.disabled]="true" formControlName="state_name_code" id="stateNameCd" />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+            <nz-form-label nzFor="businessLocation" [nzSpan]="20">Business Location<span class="red-mark">*</span>
+            </nz-form-label>
+            <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+              <input nz-input name="businessLocation" id="businessLocation" formControlName="businessLocation" />
+            </nz-form-control>
+          </nz-form-item>
+
+
+          <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+            <nz-form-label nzFor="account" [nzSpan]="20">Account<span class="red-mark">*</span></nz-form-label>
+            <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+              <nz-select [nzDropdownMatchSelectWidth]="false" formControlName="account" nzShowSearch
+                (nzOnSearch)="onChangeSearchAc($event,'account')" nzServerSearch nzAllowClear>
+                <nz-option *ngFor="let account of receivedAccount" nzLabel="{{account?.name}}" [nzValue]="account?._id">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+            <nz-form-label nzFor="withHoldAccount" [nzSpan]="20">Account Hold With Bp<span class="red-mark">*</span>
+            </nz-form-label>
+            <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+              <nz-select [nzDropdownMatchSelectWidth]="false" formControlName="withHoldAccount" nzShowSearch
+                (nzOnSearch)="onChangeSearchBp($event,'withHoldAccount')" nzServerSearch nzAllowClear>
+                <nz-option *ngFor="let account of receivedAccountBp" nzLabel="{{account?.name}}"
+                  [nzValue]="account?._id">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <nz-form-item style="padding-top: 5%;">
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <button nz-button nzType="primary" type="submit" [disabled]="billingPartyForm?.invalid">{{getId ? 'Update'
+              : 'Add'}}</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button nz-button nzType="primary" (click)="backToListView();">Back</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div>
+  </div>

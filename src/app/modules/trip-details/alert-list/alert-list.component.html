@@ -1,0 +1,79 @@
+<div class="insight">
+    <div class="insight-head">
+        <div class="insight-title">
+            <div *ngIf="innerWidth < 500" class="mbbtn" style="margin-right: 25vw;">
+                <app-back-button *ngIf="innerWidth <= 500"></app-back-button>
+            </div>
+            <span>Alerts List</span>
+        </div>
+        <div class="insight-tools">
+            <div class="tool"></div>
+        </div>
+    </div>
+    <div class="insight-description">
+        <div>
+            <div *ngIf="innerWidth < 500" class="aggregate">
+                <div class="head shadow-d1" *ngFor="let d of alertData" >
+                    <div class="align">
+                        <div class="grey">Vehicle :</div>
+                        <div class="ml-1">{{d?.reg_no || 'NA'}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">Time :</div>
+                        <div class="ml-1">{{d?.datetime | date:'medium'}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">Event :</div> 
+                        <div class="ml-1">{{d?.code}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">Driver :</div>
+                        <div class="ml-1">{{d?.driver || 'NA'}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">Value :</div>
+                        <div class="ml-1">{{d?.extra || 'NA'}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">Address :</div>
+                        <div class="ml-1">{{d?.location?.address || 'NA'}}</div>
+                    </div>
+                </div>
+            </div>
+        <nz-table
+          *ngIf="innerWidth >= 500"
+          #nzTable
+          nzBordered
+          [nzShowPagination]="false"
+          [nzData]="alertData ? alertData : ''"
+          nzSize="small"
+          [nzScroll]="{ x: '500px', y: '400px' }"
+          style="overflow-x: auto"
+        >
+          <thead>
+            <tr style="background-color: #3e51b5 !important;">
+              <th nzWidth="100px"  nzAlign="center">Vehicle</th>
+              <th nzWidth="100px" nzAlign="center">Time</th>
+              <th nzWidth="80px" nzAlign="center">Event</th>
+              <th nzWidth="80px" nzAlign="center">Driver</th>
+              <th nzWidth="50px" nzAlign="center">Value</th>
+              <th nzWidth="120px"  nzAlign="center">Address</th>
+            </tr>
+          </thead>
+          <tbody >
+            <tr
+              style="cursor: pointer"
+              *ngFor="let item of alertData"
+            >
+              <td nzAlign="center">{{ item?.reg_no || 'NA'}}</td>
+              <td nzAlign="center">{{ item?.datetime | date: 'medium'}}</td>
+              <td nzAlign="center">{{ item?.code}}</td>
+              <td nzAlign="center">{{ item?.driver || 'NA'}}</td>
+              <td nzAlign="center">{{ item?.extra || 'NA'}}</td>
+              <td nzAlign="center">{{ item?.location?.address || 'NA'}}</td>
+            </tr>
+          </tbody>
+        </nz-table><br />
+        </div>
+    </div>
+</div>

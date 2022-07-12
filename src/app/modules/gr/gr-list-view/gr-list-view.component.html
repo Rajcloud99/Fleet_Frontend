@@ -1,0 +1,415 @@
+<div class="insight">
+  <div class="insight-head" *ngIf="innerWidth > 500"> 
+    <div class="insight-tools">
+      <div class="tool" *ngIf="innerWidth>500">
+        <button *ngIf="selectedTrip && !selectedTrip?.grNumber && selectedTrip?.acknowledge " class="my-btn bg-primary" nz-tooltip nzTooltipTitle="Add GR" (click)="navigateToAdd()">
+          <fa-icon [icon]="faPlusSquare" style="font-size: 15px;"></fa-icon>
+        </button>
+        <button *ngIf="selectedTrip?.grNumber" class="my-btn bg-primary"  nz-tooltip nzTooltipTitle="Edit GR" (click)="navigateToEdit()">
+          <fa-icon [icon]="faEdit" style="font-size: 15px;"></fa-icon>
+        </button>
+        <button *ngIf="selectedTrip?.grNumber" class="my-btn bg-primary"  nz-tooltip nzTooltipTitle=" GR Detail" (click)="navigateToDetails()">
+          <fa-icon [icon]="faEye" style="font-size: 15px;"></fa-icon>
+        </button>
+        <button *ngIf="selectedTrip?._id && !selectedTrip?.bill" nz-button class="my-btn btn-danger shd" nz-tooltip nzTooltipTitle="Cancel Gr"
+                (click)="showDeleteConfirm(this.selectedTrip)">
+          <fa-icon [icon]="faBan" style="font-size: 15px"></fa-icon>
+        </button>
+      </div>
+
+<!--&lt;!&ndash;      ///  for mobile view-->
+      <div class="tool" *ngIf="innerWidth<500">
+        <div *ngIf="selectedTrip && !selectedTrip?.grNumber && selectedTrip?.acknowledge " class="mbbtn " nz-tooltip nzTooltipTitle="Add GR" (click)="navigateToAdd()">
+          <fa-icon [icon]="faPlusSquare"></fa-icon>
+        </div>
+        <div *ngIf="selectedTrip?.grNumber" class="mbbtn "  nz-tooltip nzTooltipTitle="Edit GR" (click)="navigateToEdit()">
+          <fa-icon [icon]="faEdit" ></fa-icon>
+        </div>
+        <div *ngIf="selectedTrip?.grNumber" class="mbbtn "  nz-tooltip nzTooltipTitle=" GR Detail" (click)="navigateToDetails()">
+          <fa-icon [icon]="faEye" ></fa-icon>
+        </div>
+        <div *ngIf="selectedTrip?._id && !selectedTrip?.bill" nz-button class="mbbtn" nz-tooltip nzTooltipTitle="Cancel Gr"
+                (click)="showDeleteConfirm(this.selectedTrip)">
+          <fa-icon [icon]="faBan" style="color: red!important;"></fa-icon>
+        </div>
+        <div *ngIf="innerWidth < 500" class="mbbtn " nz-tooltip nz-button nzTooltipTitle="Show Filters"
+                type="button" (click)="isMobFilterVisible=isMobFilterVisible?false:true;">
+          <fa-icon [icon]="faFilter"></fa-icon>
+        </div>
+      </div>
+
+<!--      /////////////////////////end-->
+    </div>
+  </div>
+  <div class="insight-description">
+    <div *ngIf="isMobFilterVisible && innerWidth <= 500">
+      <div>
+        <div class="flex-cont">
+          <label></label>
+          <input type="number" style="width: 100% " nz-input [(ngModel)]="filterObj && filterObj.trip_no" placeholder="Enter Trip No." />
+        </div>
+
+        <div class="flex-cont">
+          <label></label>
+          <input type="text" style="width: 100% " nz-input [(ngModel)]="filterObj && filterObj.grNumber" placeholder="Enter Gr No." />
+        </div>
+        <div class="flex-cont">
+          <label></label>
+          <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 100% " nzPlaceHolder="Search Billing Party"
+                     [(ngModel)]="filterObj && filterObj.billingParty" nzShowSearch (nzOnSearch)="onSearchBillingparty($event, 'name')"
+                     nzServerSearch nzAllowClear>
+            <nz-option *ngFor="let item of billingpartydata" nzLabel="{{ item?.name}}" [nzValue]="item._id">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="flex-cont">
+          <label></label>
+          <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 100% " nzPlaceHolder="Search Customer "
+                     [(ngModel)]="filterObj && filterObj.customer" nzShowSearch (nzOnSearch)="getcustomer($event)"
+                     nzServerSearch nzAllowClear>
+            <nz-option *ngFor="let item of getCustomerdata" nzLabel="{{ item?.name}}" [nzValue]="item._id">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="flex-cont">
+
+          <nz-select  [nzDropdownMatchSelectWidth]="false" style="width: 100% " nzPlaceHolder="Search Vehicle"
+                      [(ngModel)]="filterObj && filterObj.vehicle" nzShowSearch (nzOnSearch)="onSearchvehicle($event)" nzServerSearch nzAllowClear>
+            <nz-option *ngFor="let vehicle of vehicleget"
+                       nzLabel="{{ vehicle?.vehicle_reg_no}}" [nzValue]="vehicle?._id">
+            </nz-option>
+          </nz-select>
+        </div>
+
+        <!-- from date -->
+
+        <div class="flex-cont">
+          <label></label>
+          <nz-date-picker [(ngModel)]="filterObj && filterObj.from" style="width: 100%" nzPlaceHolder="Start Date">
+          </nz-date-picker>
+        </div>
+
+        <!-- to date -->
+
+        <div class="flex-cont">
+          <label></label>
+          <nz-date-picker [(ngModel)]="filterObj && filterObj.to" style="width: 100%" nzPlaceHolder="End Date">
+          </nz-date-picker>
+        </div>
+      </div>
+
+      <div style="margin-top: 5%; margin-bottom:10%">
+        <button style="width: 50%;color:white;" type="button" class="bg-primary" nz-button
+                (click)="search();isMobFilterVisible = false;">Search</button>
+        <button style="width: 50%;color:white;" type="button" class="bg-primary" nz-button
+                (click)="reset();isMobFilterVisible = false;">Reset</button>
+      </div>
+
+    </div>
+    <!-- filters -->
+    <div class="filters-row" *ngIf="innerWidth > 500">
+      <div class="my-row">
+        <!--        vehicle search-->
+        <div class="my-card">
+          <div class="my-card-header">
+            <input type="number" nz-input [(ngModel)]="filterObj && filterObj.trip_no" placeholder="Enter Trip No." />
+          </div>
+        </div>
+        <div class="my-card">
+          <div class="my-card-header">
+            <input type="text" nz-input [(ngModel)]="filterObj && filterObj.grNumber" placeholder="Enter Gr No." />
+          </div>
+        </div>
+        <div class="my-card">
+          <div class="my-card-header">
+            <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 200px" nzPlaceHolder="Search Billing Party"
+                       [(ngModel)]="filterObj && filterObj.billingParty" nzShowSearch (nzOnSearch)="onSearchBillingparty($event, 'name')"
+                       nzServerSearch nzAllowClear>
+              <nz-option *ngFor="let item of billingpartydata" nzLabel="{{ item?.name}}" [nzValue]="item._id">
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="my-card">
+          <div class="my-card-header">
+            <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 200px" nzPlaceHolder="Search Customer "
+                       [(ngModel)]="filterObj && filterObj.customer" nzShowSearch (nzOnSearch)="getcustomer($event)"
+                       nzServerSearch nzAllowClear>
+              <nz-option *ngFor="let item of getCustomerdata" nzLabel="{{ item?.name}}" [nzValue]="item._id">
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <div class="my-card">
+          <div class="my-card-header">
+            <nz-select  [nzDropdownMatchSelectWidth]="false" style="width: 180px" nzPlaceHolder="Search Vehicle"
+                       [(ngModel)]="filterObj && filterObj.vehicle" nzShowSearch (nzOnSearch)="onSearchvehicle($event)" nzServerSearch nzAllowClear>
+              <nz-option *ngFor="let vehicle of vehicleget"
+                         nzLabel="{{ vehicle?.vehicle_reg_no}}" [nzValue]="vehicle?._id">
+              </nz-option>
+            </nz-select>
+          </div></div>
+
+        <!--          vendor search-->
+<!--        <div class="my-card">-->
+<!--          <div class="my-card-header">-->
+<!--            <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 180px" nzPlaceHolder="Search Vendor"-->
+<!--                       [(ngModel)]="filterObj && filterObj.vendor_id" nzShowSearch (nzOnSearch)="onSearchvender($event)" nzServerSearch nzAllowClear>-->
+<!--              <nz-option *ngFor="let vendor of venderget"-->
+<!--                         nzLabel="{{ vendor?.name}}" [nzValue]="vendor._id">-->
+<!--              </nz-option>-->
+<!--            </nz-select>-->
+<!--          </div>-->
+
+<!--        </div>-->
+        <!--        ownership type filter-->
+
+        <div class="my-card">
+          <div class="my-card-header">
+            <nz-date-picker [(ngModel)]="filterObj && filterObj.from" nzPlaceHolder="From Date"></nz-date-picker>
+          </div>
+        </div>
+        <div  class="my-card">
+          <div class="my-card-header">
+            <nz-date-picker  [(ngModel)]="filterObj && filterObj.to" nzPlaceHolder="To Date"></nz-date-picker>
+          </div>
+        </div>
+<!--        <div class="my-card">-->
+<!--          <div class="my-card-header">-->
+<!--            <nz-select nzShowSearch style="width: 140px" nzPlaceHolder="Ownership Type"-->
+<!--                       [(ngModel)]="filterObj && filterObj.trip_query" nzAllowClear>-->
+<!--              <nz-option *ngFor="let st of Ownershipfilter" nzLabel="{{ st.name }}" [nzValue]="st.value">-->
+<!--              </nz-option>-->
+<!--            </nz-select>-->
+<!--          </div>-->
+<!--        </div>-->
+
+        <!--        search-->
+        <div class="my-card">
+          <div class="my-card-header">
+            <button nz-button nzType="primary" (click)="search()"><i nz-icon nzType="search"></i></button>
+          </div>
+        </div>
+        <div class="my-card">
+          <div class="my-card-header ">
+            <button nz-button nzType="primary" (click)=" reset()">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="myDIV" *ngIf="innerWidth > 500">
+      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
+                nzSize="small"  [nzScroll]="{ x: '2000px', y: '350px' }" style="overflow-x: auto">
+        <thead>
+        <tr>
+          <th nzWidth="50px" nzAlign="center">S.No. </th>
+          <th nzWidth="150px" nzAlign="center">trip No.</th>
+          <th nzWidth="150px" nzAlign="center">Vehicle No.</th>
+          <th nzWidth="150px" nzAlign="center">Trip Start Date</th>
+          <th nzWidth="150px" nzAlign="center">Trip End Date</th>
+          <th nzWidth="150px" nzAlign="center">GR No.</th>
+          <th nzWidth="150px" nzAlign="center">GR Date</th>
+          <th nzWidth="150px" nzAlign="center">Route</th>
+<!--          <th nzWidth="150px" nzAlign="center">Billing Route</th>-->
+          <th nzWidth="150px" nzAlign="center">Billing Party</th>
+          <th nzWidth="150px" nzAlign="center">Customer</th>
+          <th nzWidth="150px" nzAlign="center">consignor</th>
+          <th nzWidth="150px" nzAlign="center">consignee</th>
+          <th nzWidth="150px" nzAlign="center">Loading Date</th>
+          <th nzWidth="150px" nzAlign="center">Unloading Date</th>
+          <th nzWidth="150px" nzAlign="center">Material Code</th>
+          <th nzWidth="150px" nzAlign="center">Invoice No.</th>
+          <th nzWidth="150px" nzAlign="center">Invoice Date</th>
+          <th nzWidth="150px" nzAlign="center">Invoice Amt.</th>
+          <th nzWidth="150px" nzAlign="center">Load Ref. No</th>
+          <th nzWidth="150px" nzAlign="center">No Of Docs</th>
+<!--          <th nzWidth="150px" nzAlign="center">Qyt</th>-->
+<!--          <th nzWidth="150px" nzAlign="center">Weight(T)</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">BILLING UNIT</th>-->
+          <th nzWidth="100px" nzAlign="center">KM</th>
+          <th nzWidth="150px" nzAlign="center">Rate</th>
+          <th nzWidth="150px" nzAlign="center">Basic Freight</th>
+          <th nzWidth="150px" nzAlign="center">Total Freight</th>
+          <th nzWidth="150px" nzAlign="center">Total Amount</th>
+<!--          <th nzWidth="100px" nzAlign="center">Tot supply amount</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">MR Received</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">MR Balance Freight</th>-->
+
+
+<!--          <th nzWidth="100px" nzAlign="center">MR Chit Status</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">Reporting Date</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">Payment Basis</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">Payment Type</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">Bill No</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">Bill Date</th>-->
+
+
+<!--          <th nzWidth="100px" nzAlign="center">GR REMARK</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">Ar No</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">Ar Date</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">Branch</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">Incentive</th>-->
+          <th nzWidth="100px" nzAlign="center">EWAY BILLS</th>
+<!--          <th nzWidth="100px" nzAlign="center">Unloaded By</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">POD Remark</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">fpa amt</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">Fpa No</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">HireSlip No</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">HireSlip Total Payable</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">Incidental</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">customer Category</th>-->
+
+          <th nzWidth="100px" nzAlign="center">Ownership</th>
+          <th nzWidth="100px" nzAlign="center">Vehicle Owner Name</th>
+          <th nzWidth="100px" nzAlign="center">Fleet</th>
+          <th nzWidth="100px" nzAlign="center">Segment</th>
+          <th nzWidth="100px" nzAlign="center">Gr Remark</th>
+          <th nzWidth="100px" nzAlign="center">Gr Status</th>
+          <th nzWidth="100px" nzAlign="center">Material Name</th>
+          <th nzWidth="100px" nzAlign="center">Source</th>
+          <th nzWidth="100px" nzAlign="center">Destination</th>
+<!--          <th nzWidth="100px" nzAlign="center">REF1</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">REF2</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">REF3</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">REF4</th>-->
+<!--          <th nzWidth="100px" nzAlign="center">Internal Rate</th>-->
+          <th nzWidth="150px" nzAlign="center">Entry By</th>
+          <th nzWidth="150px" nzAlign="center">Entry At</th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr style="cursor: pointer" *ngFor="let item of receivedData; let i=index;" (click)="selectItem(item)"
+            [ngClass]="{SelectHighlight :  selectedRowId && (item?._id === selectedRowId)}">
+          <td nzAlign="center">{{i+1}}</td>
+          <td nzAlign="center">{{ item?.trip?.trip_no || 'NA'}}
+          <td nzAlign="center">{{ item?.trip?.vehicle?.vehicle_reg_no || 'NA'}}
+          <td nzAlign="center">{{((item?.trip?.statuses|filterstringgetdate:'Trip started')| date:'dd-MMM-yyyy') ||'Na'}}</td>
+          <td nzAlign="center">{{((item?.trip?.statuses|filterstringgetdate:'Trip ended')| date:'dd-MMM-yyyy') ||'Na'}}</td>
+          <td nzAlign="center">{{ item?.grNumber || 'NA'}}</td>
+          <td nzAlign="center">{{ (item?.grDate | date: 'dd-MMM-yyyy') || 'NA'}}</td>
+          <td nzAlign="center">{{ item?.trip?.route_name || 'NA'}}</td>
+<!--          <td nzAlign="center">{{ (item?.acknowledge?.source +' to '+ item?.acknowledge?.destination) || 'NA'}}</td>-->
+          <td nzAlign="center">{{ item?.billingParty?.name || 'NA'}}</td>
+          <td nzAlign="center">{{ item?.customer?.name ||item?.booking?.customer?.name || 'NA'}}</td>
+          <td nzAlign="center">{{ item?.consignor?.name ||item?.booking?.consignor?.name || 'NA'}}</td>
+          <td nzAlign="center">{{ item?.consignee?.name ||item?.booking?.consignee?.name || 'NA'}}</td>
+          <td nzAlign="center">{{((item?.trip?.statuses|filterstringgetdate:'Loading Ended')| date:'dd-MMM-yyyy') ||'Na'}}</td>
+          <td nzAlign="center">{{(item?.pod?.billingUnloadingTime| date:'dd-MMM-yyyy') ||'Na'}}</td>
+          <td nzAlign="center">{{ item?.invoices[0]?.material?.groupCode || 'NA'}}</td>
+          <td nzAlign="center">{{ item?.invoices| arrayofstring:'invoiceNo'}}</td>
+          <td nzAlign="center">{{ (item?.invoices[0]?.invoiceDate | date: 'dd-MMM-yyyy') || 'NA'}}</td>
+          <td nzAlign="center">{{ item?.invoices|arrayofstring:'invoiceAmt'}}</td>
+          <td nzAlign="center">{{ item?.invoices|arrayofstring:'loadRefNumber'}}</td>
+          <td nzAlign="center">{{ item?.noOfDocs || "0"}}</td>
+          <td nzAlign="center">{{ item?.invoices[0]?.routeDistance || 'NA'}}</td>
+          <td nzAlign="center">{{ item?.invoices[0]?.rate || 'NA'}}</td>
+          <td nzAlign="center">{{ item?.basicFreight || 'NA'}}</td>
+          <td nzAlign="center">{{ item?.totalFreight || 'NA'}}</td>
+          <td nzAlign="center">{{ item?.totalAmount || 'NA'}}</td>
+<!--          <td nzAlign="center">{{ item?.supplementaryBill?.totalFreight || 'NA'}}</td>-->
+<!--          <td nzAlign="center">{{ item?.moneyReceipt?.chitPending || 'NA'}}</td>-->
+<!--          <td nzAlign="center">{{(item?.pod?.unloadingArrivalTime | date:'dd-MMM-yyyy') || 'NA'}}</td>-->
+<!--          <td nzAlign="center">{{ item?.payment_basis || item?.booking?.payment_basis || "Na"}}</td>-->
+<!--          <td nzAlign="center">{{ item?.payment_type || item?.booking?.payment_type || 'NA'}}</td>-->
+<!--          <td nzAlign="center">{{ item?.remarks || 'NA'}}</td>-->
+<!--          <td nzAlign="center">{{ item?.pod?.arNo || 'NA'}}</td>-->
+<!--          <td nzAlign="center">{{ (item?.pod?.date | date:'dd-MMM-yyyy') ||'Na'}}</td>-->
+<!--          <td nzAlign="center">{{ item?.branch?.name || 'NA'}}</td>-->
+<!--          <td nzAlign="center">{{ item?.charges?.incentive || 'NA'}}</td>-->
+          <td nzAlign="center">{{item?.eWayBills |arrayofstring :'number'}}</td>
+<!--          <td nzAlign="center">{{((item?.trip.statuses|filterstringgetdate:'Loading Ended')| date:'dd-MMM-yyyy') ||'Na'}}</td>-->
+<!--          <td nzAlign="center">{{ item?.pod?.arRemark || 'NA'}}</td>-->
+<!--          <td nzAlign="center">{{ item?.fpa?.amt || 'NA'}}</td>-->
+<!--          <td nzAlign="center">{{ item?.fpa?.refNo || 'NA'}}</td>-->
+<!--          <td nzAlign="center">{{ item?.trip?.vendorDeal?.loading_slip || 'NA'}}</td>-->
+<!--          <td nzAlign="center">{{ item?.totpayable || 'NA'}}</td>-->
+<!--          <td nzAlign="center">{{ item?.in | arrayofstring:'amt'}}</td>-->
+<!--          <td nzAlign="center">{{item?.customer?.category || item?.booking?.customer?.category || "Na"}}</td>-->
+          <td nzAlign="center">{{ item?.trip?.ownershipType || "Na"}}</td>
+          <td nzAlign="center">{{ item?.trip?.vehicle?.owner_name || 'NA'}}</td>
+          <td nzAlign="center">{{ item?.trip?.vehicle?.owner_group || 'NA'}}</td>
+          <td nzAlign="center">{{ item?.trip?.segment_type || 'NA'}}</td>
+          <td nzAlign="center">{{ item?.remarks || 'NA'}}</td>
+          <td nzAlign="center">{{ item?.status || 'NA'}}</td>
+          <td nzAlign="center">{{ item?.invoices[0]?.material?.groupName || 'NA'}}</td>
+          <td nzAlign="center">{{ item?.acknowledge?.source || 'NA'}}</td>
+          <td nzAlign="center">{{ item?.acknowledge?.destination || 'NA'}}</td>
+<!--          <td nzAlign="center">{{ item?.invoices[0]?.ref1 || 'Na'}}</td>-->
+<!--          <td nzAlign="center">{{ item?.invoices[0]?.ref2 || 'NA'}}</td>-->
+<!--          <td nzAlign="center">{{ item?.invoices[0]?.ref3 || 'NA'}}</td>-->
+<!--          <td nzAlign="center">{{ item?.invoices[0]?.ref4 || 'NA'}}</td>-->
+<!--          <td nzAlign="center">{{ item?.internal_rate || 'NA'}}</td>-->
+          <td nzAlign="center">{{ item?.created_by_full_name || 'NA'}}</td>
+          <td nzAlign="center">{{(item?.created_at | date:'dd-MMM-yyyy') || 'NA'}}</td>
+        </tr>
+        </tbody>
+      </nz-table>
+      <br/><br/>
+    </div>
+    <!--     vendor  table convert in card view-->
+    <div *ngIf="innerWidth <= 500" class="aggregate">
+      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
+                nzSize="small"  [nzScroll]="{ y: '425px' }" style="overflow-x: auto">
+        <div
+          class="head shadow-d1"
+          *ngFor="let d of receivedData"
+          (click)="selectItem(d)"  [ngClass]="{SelectHighlight :  selectedRowId && (d?._id === selectedRowId)}">
+          <div class="align">
+            <div class="grey">Trip No: <span style="text-decoration: underline; color: blue;" (click)="redirectTrip(d)">{{ d?.trip?.trip_no || 'NA'  }}</span></div>
+
+          </div>
+          <div class="align">
+            <div class="grey">Gr Date: {{( d?.grDate | date: 'dd-MMM-yyyy') || 'NA'}}</div>
+
+          </div>
+          <div class="align">
+            <div class="grey">Gr No.: {{ d?.grNumber || 'NA'}}</div>
+
+          </div>
+          <div class="align">
+            <div class="grey">route : {{ d?.trip?.route_name || 'NA'}}</div>
+
+          </div>
+          <div class="align">
+            <div class="grey">Vehicle No: {{ d.vehicle_no || 'NA'}}</div>
+
+          </div>
+<!--          <div class="align">-->
+<!--            <div class="grey">route : {{ d?.trip?.route_name || 'NA'}}</div>-->
+
+<!--               </div>-->
+<!--          <div class="align">-->
+<!--            <div class="grey">Invoice No: {{ d?.invoices| arrayofstring:'invoiceNo'}}</div>-->
+
+<!--          </div>-->
+<!--          <div class="align">-->
+<!--            <div class="grey">Invoice Amt: {{ d?.invoices|arrayofstring:'invoiceAmt'}}</div>-->
+
+<!--          </div>-->
+<!--          <div class="align">-->
+<!--            <div class="grey">Baisc Freight : {{ d?.basicFreight || 'NA'}}</div>-->
+
+<!--          </div>-->
+<!--          <div class="align">-->
+<!--            <div class="grey">Total Freight : {{ d?.totalFreight || 'NA'}}</div>-->
+
+<!--          </div>-->
+<!--          <div class="align">-->
+<!--            <div class="grey">Total Amount : {{ d?.totalAmount || 'NA'}}</div>-->
+
+<!--          </div>-->
+<!--          <div class="align">-->
+<!--            <div class="grey">E-Way Bill: {{ d?.eWayBills |arrayofstring :'number'}}</div>-->
+<!--          </div>-->
+
+        </div>
+      </nz-table>
+    </div>
+
+    <!--    vendor table card view end -->
+
+  </div>
+</div>

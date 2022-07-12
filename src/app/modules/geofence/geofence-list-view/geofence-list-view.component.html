@@ -1,0 +1,126 @@
+<div class="insight">
+  <div class="insight-head" *ngIf="innerWidth > 500">
+    <div class="insight-title">
+    </div>
+    <div class="insight-tools">
+      <div class="tool">
+        <div *ngIf="innerWidth < 500" class="mbbtn" (click)="isMobFilterVisible = true;">
+          <fa-icon [icon]="faFilter"></fa-icon>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <div class="insight-description">
+    <div *ngIf="isMobFilterVisible && innerWidth<=500">
+      <div>
+        <div class="flex-cont">
+          <label></label>
+          <input type="text" nz-input [(ngModel)]="filterObj && filterObj.name" placeholder="Enter Geofence name">
+        </div>
+      </div>
+      <div style="margin-top: 17px;">
+        <button style="width: 50%; color: white;" type="button" class="bg-primary" nz-button
+                (click)="search(); isMobFilterVisible = false;">Search</button>
+        <button style="width: 50%; color: white;" type="button" class="bg-primary" nz-button
+                (click)="reset(); isMobFilterVisible = false;">Reset</button>
+      </div>
+    </div>
+    <div *ngIf="innerWidth >= 500" class="filters-row">
+      <div class="my-row">
+
+        <div class="my-card">
+          <div class="my-card-header">
+            <input nz-input style="min-width: 210px" type="text" [(ngModel)]="filterObj && filterObj.name"
+                   placeholder="Enter geofence name" />
+          </div>
+        </div>
+
+        <div class="my-card">
+          <div class="my-card-header">
+            <button class="my-btn bg-primary" (click)="search()">
+              <fa-icon [icon]="faSearch" style="font-size: 15px"></fa-icon>
+            </button>
+          </div>
+        </div>
+        <div class="my-card">
+          <div class="my-card-header">
+            <button class="my-btn bg-primary" (click)="reset()">
+              <fa-icon [icon]="faTimes" style="font-size: 19px"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- table view start -->
+    <div id="myDIV" (scroll)="getDataOnScroll()">
+      <div *ngIf="innerWidth < 500 && receivedData && receivedData.length" class="aggregate">
+        <div class="head shadow-d1" *ngFor="let d of receivedData let i=index;" (click)="selectItem(d)"
+             [ngClass]="{SelectHighlight :  selectedRowId && (d?.gid === selectedRowId)}" style="background-color:#F2F5E9">
+          <div class="align">
+            <div class="grey"><span class="bold">Name :</span> {{ d?.name || 'NA'  }}</div>
+          </div>
+          <div class="align">
+            <div class="grey"><span class="bold">latitude :</span> {{d?.geozone[0]?.latitude || 'NA' }}</div>
+          </div>
+          <div class="align">
+            <div class="grey"><span class="bold">Longitude :</span> {{ d?.geozone[0]?.longitude || 'NA'  }}</div>
+          </div>
+          <div class="align">
+            <div class="grey"><span class="bold">Created At :</span> {{( d?.datetime | date: 'dd-MMM-yyyy') || 'NA'}}</div>
+          </div>
+        </div>
+      </div>
+      <nz-table *ngIf="innerWidth >= 500" (scroll)="getDataOnScroll()" #nzTable nzBordered [nzShowPagination]="false"
+                [nzData]="receivedData ? receivedData : ''" nzSize="small" [nzScroll]="{ x: '1500px', y: '300px' }"
+                style="overflow-x: auto">
+        <thead>
+        <tr style="background-color: #3e51b5 !important;">
+          <th nzWidth="70px" nzAlign="center">Sl. No.</th>
+          <th nzWidth="80px" nzAlign="center">Name</th>
+          <th nzWidth="120px" nzAlign="center">Latitude</th>
+          <th nzWidth="100px" nzAlign="center">Longitude</th>
+          <th nzWidth="100px" nzAlign="center">Create At</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr style="cursor: pointer" *ngFor="let item of receivedData; let i=index;" (click)="selectItem(item)"
+            [ngClass]="{SelectHighlight :  selectedRowId && (item?.gid === selectedRowId)}">
+          <td nzAlign="center">{{i+1}}</td>
+          <td nzAlign="center">{{ item?.name || "NA"}}</td>
+          <td nzAlign="center">{{ (item?.geozone[0]?.latitude) || "NA"}}</td>
+          <td nzAlign="center">{{ item?.geozone[0]?.longitude || "NA"}}</td>
+          <td nzAlign="center">{{ (item?.datetime | date: 'dd-MMM-yyyy')|| "NA"}}
+          </td>
+        </tr>
+        </tbody>
+      </nz-table><br><br>
+    </div>
+<!--    for geozone edit -->
+    <nz-modal style="z-index: 50" [(nzVisible)]="visible" nzTitle="Edit Geozone" (nzOnCancel)="handleEditCancelView()"
+              (nzOnOk)="handleEditSubmit()">
+
+      <ng-container *nzModalContent>
+        <div nz-col nzXs="24" nzSm="12" nzMd="24" nzLg="24">
+          <nz-form-label style="text-align: left" nzFor="Name">Name<span class="red-mark">*</span>
+          </nz-form-label>
+          <nz-form-control>
+            <input nz-input style="width: 95%" [(ngModel)]="name" [ngModelOptions]="{ standalone: true }"
+                   placeholder="Enter Geozone  Name " autocomplete="off" />
+          </nz-form-control>
+        </div>
+        <div nz-col nzXs="24" nzSm="12" nzMd="24" nzLg="24">
+          <nz-form-label style="text-align: left" nzFor="Name">Description
+          </nz-form-label>
+          <nz-form-control>
+            <textarea type="text" nz-input style="width: 95% ; height: 120px" [(ngModel)]="description" [ngModelOptions]="{ standalone: true }"
+                   placeholder="Enter Description " autocomplete="off" >
+            </textarea>
+          </nz-form-control>
+        </div>
+      </ng-container>
+    </nz-modal>
+  </div>
+</div>

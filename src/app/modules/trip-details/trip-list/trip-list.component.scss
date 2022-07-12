@@ -1,0 +1,46 @@
+.grey {
+  color: black;
+}
+.aggregate {
+  padding: 3px;
+}
+
+
+.head {
+  padding: 3px;
+  margin-top: 4px;
+  border-radius: 5px;
+  position: relative;
+}
+
+#myDIV {
+  height: 400px;
+  overflow-y: auto;
+}
+
+.insight-head {
+  justify-content: space-between;
+}
+.SelectHighlight {
+  background-color: #afafad;
+}
+
+.shadow-d1{
+  box-shadow: 0 1px 6px 1.5px rgba(32,33,36,.28) !important;
+}
+
+.align {
+  display: flex;
+  justify-content: space-between;
+}
+@media screen and (max-width: 500px) {
+  #myDIV {
+    height: 500px;
+  }
+  nz-select, nz-date-picker, input {
+    width: 100%;
+  }
+}
+.SelectHighlight {
+  background-color: antiquewhite !important;
+}

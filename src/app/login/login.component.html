@@ -1,0 +1,101 @@
+<!--//**************new login ui for desktop or laptop ********************-->
+<div class="main" *ngIf="innerWidth > 500">
+    <div class="imgsection">
+      <div>
+      <img  src="assets/umb.png" alt="Snow" style="width:85%; height: 30%; padding-left: 20px ">
+    </div>
+    </div>
+  <div class="loginsection">
+    <div style="padding: 20% 10% 20% 10%">
+      <div class="container">
+        <img src="../../assets/logo.png" alt="Snow" style="width:60%;">
+      </div>
+      <div class="mblogin">
+        <form   nz-form [formGroup]="loginForm" class="login-form1" (ngSubmit)="submitForm()">
+          <nz-form-item>
+            <nz-form-control nzErrorTip="Please input your username!">
+              <nz-input-group nzPrefixIcon="user">
+                <input type="text" nz-input formControlName="userId" placeholder="Username" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-control nzErrorTip="Please input your Password!">
+              <nz-input-group nzPrefixIcon="lock">
+                <input type="password" nz-input formControlName="password" placeholder="Password" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+          <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">SIGN IN</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
+
+<!--//************** old login ui for desktop or laptop ********************-->
+<!--<div id="formWrapper1" *ngIf="innerWidth > 500">-->
+<!--  <div id="form">-->
+
+<!--    <div style="text-align: center; font-weight:bold">-->
+<!--      <h1 class="text-primary text-center brandName"><img src="../../assets/logo.png"></h1>-->
+<!--    </div>-->
+<!--    <form nz-form [formGroup]="loginForm" class="login-form" (ngSubmit)="submitForm()">-->
+<!--      <nz-form-item>-->
+<!--        <nz-form-control nzErrorTip="Please input your username!">-->
+<!--          <nz-input-group nzPrefixIcon="user">-->
+<!--            <input type="text" nz-input formControlName="userId" placeholder="Username" />-->
+<!--          </nz-input-group>-->
+<!--        </nz-form-control>-->
+<!--      </nz-form-item>-->
+<!--      <nz-form-item>-->
+<!--        <nz-form-control nzErrorTip="Please input your Password!">-->
+<!--          <nz-input-group nzPrefixIcon="lock">-->
+<!--            <input type="password" nz-input formControlName="password" placeholder="Password" />-->
+<!--          </nz-input-group>-->
+<!--        </nz-form-control>-->
+<!--      </nz-form-item>-->
+<!--      &lt;!&ndash; <div nz-row class="login-form-margin">-->
+<!--        <div nz-col [nzSpan]="12">-->
+<!--          <label nz-checkbox formControlName="remember">-->
+<!--            <span>Remember me</span>-->
+<!--          </label>-->
+<!--        </div>-->
+<!--        <div nz-col [nzSpan]="12">-->
+<!--          <a class="login-form-forgot">Forgot password</a>-->
+<!--        </div>-->
+<!--      </div> &ndash;&gt;-->
+<!--      <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Log in</button>-->
+<!--      &lt;!&ndash; Or &ndash;&gt;-->
+<!--      &lt;!&ndash; <a>register now!</a> &ndash;&gt;-->
+<!--    </form>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<!--//**************new login ui for mobile ********************-->
+<div  *ngIf="innerWidth <= 500">
+  <div class="container">
+    <img src="assets/umb.png" alt="Snow" style="width:100%;">
+    <div class="sl-text">Make Your <br>Business Easy</div>
+  </div>
+<div class="mblogin">
+      <form   nz-form [formGroup]="loginForm" class="login-form1" (ngSubmit)="submitForm()">
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Please input your username!">
+            <nz-input-group nzPrefixIcon="user">
+              <input type="text" nz-input formControlName="userId" placeholder="Username" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Please input your Password!">
+            <nz-input-group nzPrefixIcon="lock">
+              <input type="password" nz-input formControlName="password" placeholder="Password" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">SIGN IN</button>
+      </form>
+</div>
+    </div>

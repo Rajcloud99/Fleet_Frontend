@@ -1,0 +1,249 @@
+<div class="insight">
+  <div class="insight-head">
+  </div>
+  <div class="insight-description">
+    <form nz-form [formGroup]="InvoiceForm" (ngSubmit)="Submit()">
+      <div>
+        <div  class="flex-container">
+
+          <div  *ngIf="grConfigs?.materialName?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.materialName?.label || 'MATERIAL'}}
+              <span *ngIf="grConfigs?.materialName?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control nzErrorTip="Search Material Name">
+              <nz-select style="width:100%" [nzDisabled]="!grConfigs?.materialName?.editable" [nzDropdownMatchSelectWidth]="false"
+                         nzPlaceHolder="{{grConfigs?.materialName?.label || 'Material'}}" formControlName="material"
+                         nzShowSearch  (nzOnSearch)="onsearchMaterial($event)" (ngModelChange)="getRates(InvoiceForm.value);" nzServerSearch nzAllowClear>
+                <nz-option *ngFor="let materialName of getmaterialdata" nzLabel="{{materialName?.groupName +'('+materialName?.groupCode +')'}}"
+                           [nzValue]="materialName"> </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </div>
+          <div  *ngIf="grConfigs?.materialUnit?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.materialUnit?.label || 'MATERIAL UNIT'}}
+              <span *ngIf="grConfigs?.materialUnit?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control nzErrorTip="Search Material Unit">
+              <nz-select [nzDisabled]="!grConfigs?.materialUnit?.editable" [nzDropdownMatchSelectWidth]="false"
+                         nzPlaceHolder="{{grConfigs?.materialUnit?.label || 'MATERIAL UNIT'}}"formControlName="materialUnit"
+                         style="width:100%" nzShowSearch nzServerSearch
+                         nzAllowClear>
+                <nz-option *ngFor="let unit of materialgetunit" nzLabel="{{ unit}}"
+                           [nzValue]="unit"> </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.invoiceNo?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.invoiceNo?.label || 'INVOICE NO.'}}
+              <span *ngIf="grConfigs?.invoiceNo?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control>
+              <input [readonly]="!grConfigs?.invoiceNo?.editable" nz-input name="invoiceNo"  autocomplete="off"
+                     formControlName="invoiceNo"
+                     placeholder="{{grConfigs?.invoiceNo?.label || 'INVOICE NO.'}}">
+            </nz-form-control>
+          </div>
+
+          <div   *ngIf="grConfigs?.invoiceRate?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;"> {{grConfigs?.invoiceRate?.label || 'INVOICE Rate'}}
+              <span *ngIf="grConfigs?.invoiceRate?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input (change) = formulachanges(); [readonly]="!grConfigs?.invoiceRate?.editable || grConfigs?.invoiceRate?.evalExp" autocomplete="off" name="invoiceRate" type='number' nz-input
+                                     id="invoiceRate" formControlName="invoiceRate"
+                                     placeholder="{{grConfigs?.invoiceRate?.label || 'INVOICE Rate'}}">
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.invoiceAmt?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.invoiceAmt?.label || 'INVOICE AMOUNT'}}
+              <span *ngIf="grConfigs?.invoiceAmt?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input (change) = formulachanges(); [readonly]="!grConfigs?.invoiceAmt?.editable || grConfigs?.invoiceAmt?.evalExp" type='number' autocomplete="off" name="invoiceAmt"  nz-input
+                                     id="invoiceAmt" formControlName="invoiceAmt"
+                                     placeholder="{{grConfigs?.invoiceAmt?.label || 'INVOICE AMOUNT'}}">
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.invoiceDate?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.invoiceDate?.label || 'INVOICE DATE'}}
+              <span *ngIf="grConfigs?.invoiceDate?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control>
+              <nz-date-picker  style="width:100%" id="invoiceDate" [nzDisabled]="!grConfigs.invoiceDate.editable"  autocomplete="off"
+                              nzPlaceHolder="{{grConfigs?.invoiceDate?.label || 'INVOICE DATE'}}"
+                              formControlName="invoiceDate" [nzFormat]="dateFormat">
+              </nz-date-picker>
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.insurVal?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.insurVal?.label || 'Insurance Value'}}
+              <span *ngIf="grConfigs?.insurVal?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input (change) = formulachanges(); [readonly]="!grConfigs?.insurVal?.editable || grConfigs?.insurVal?.evalExp" autocomplete="off"  name="insurVal" nz-input
+                                     id="insurVal" formControlName="insurVal"
+                                     placeholder="{{grConfigs?.insurVal?.label || 'Insurance Value'}}">
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.loadRefNumber?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;"> {{grConfigs?.loadRefNumber?.label || 'LOAD REF. NUMBER'}}
+              <span *ngIf="grConfigs?.loadRefNumber?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control>
+              <input [readonly]="!grConfigs?.loadRefNumber?.editable" nz-input name="loadRefNumber"  autocomplete="off"
+                    formControlName="loadRefNumber"
+                     placeholder="{{grConfigs?.loadRefNumber?.label || 'Load Ref No.'}}">
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.routeDistance?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;"> {{grConfigs?.routeDistance?.label || 'KM'}}
+              <span *ngIf="grConfigs?.routeDistance?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input (change) = formulachanges(); [readonly]="!grConfigs?.routeDistance?.editable || grConfigs?.routeDistance?.evalExp" type='number' autocomplete="off"
+                                     formControlName="routeDistance" id="routeDistance" name="routeDistance" nz-input
+                                     placeholder="{{grConfigs?.routeDistance?.label || 'KM'}}">
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.weightPerUnit?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.weightPerUnit?.label || 'ACTUAL WEIGHT PER UNIT'}}
+              <span *ngIf="grConfigs?.weightPerUnit?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input (change) = formulachanges(); [readonly]="!grConfigs?.weightPerUnit?.editable || grConfigs?.weightPerUnit?.evalExp"  type='number' autocomplete="off" nz-input
+                                     name="weightPerUnit" id="weightPerUnit" formControlName="weightPerUnit"
+                                     placeholder="{{grConfigs?.weightPerUnit?.label || 'ACTUAL WEIGHT PER UNIT'}}">
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.capacity?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.capacity?.label || 'CAPACITY'}}
+              <span *ngIf="grConfigs?.capacity?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control>
+              <nz-select [nzDisabled]="!grConfigs?.capacity?.editable" [nzDropdownMatchSelectWidth]="false" [required]="grConfigs?.capacity?.req"
+                         (ngModelChange)="capacitychanges(InvoiceForm.controls['dummyCapacityObj'].value)"  formControlName="dummyCapacityObj" nzPlaceHolder="{{grConfigs?.capacity?.label || 'CAPACITY'}}"
+                         style="width:100%" nzShowSearch nzServerSearch
+                         nzAllowClear>
+                <nz-option *ngFor="let unit of InvoiceForm.value.aCapacity " nzLabel="{{ unit?.label}}"
+                           [nzValue]="unit"> </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.noOfUnits?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.noOfUnits?.label || 'Actual Unit'}}
+              <span *ngIf="grConfigs?.noOfUnits?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input (change) = formulachanges();  [readonly]="!grConfigs?.noOfUnits?.editable || grConfigs?.noOfUnits?.evalExp" autocomplete="off" type='number'  name="noOfUnits" nz-input
+                                     id="noOfUnits" formControlName="noOfUnits"
+                                     placeholder="{{grConfigs?.noOfUnits?.label || 'Actual Unit'}}">
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.billingWeightPerUnit?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.billingWeightPerUnit?.label || 'BILLING WEIGHT PER UNIT'}}
+              <span *ngIf="grConfigs?.billingWeightPerUnit?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input (change) = formulachanges(); [readonly]="!grConfigs?.billingWeightPerUnit?.editable || grConfigs?.billingWeightPerUnit?.evalExp"  autocomplete="off"
+                                     formControlName="billingWeightPerUnit" id="billingWeightPerUnit" name="billingWeightPerUnit" nz-input
+                                     placeholder="{{grConfigs?.billingWeightPerUnit?.label || 'BILLING WEIGHT PER UNIT'}}">
+            </nz-form-control>
+          </div>
+          <div  *ngIf="grConfigs?.billingNoOfUnits?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.billingNoOfUnits?.label || 'Billing Unit'}}
+              <span *ngIf="grConfigs?.billingNoOfUnits?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input (change) = formulachanges(); [readonly]="!grConfigs?.billingNoOfUnits?.editable || grConfigs?.billingNoOfUnits?.evalExp" type='number'  autocomplete="off" nz-input
+                                     name="billingNoOfUnits" id="name" formControlName="billingNoOfUnits"
+                                     placeholder="{{grConfigs?.billingNoOfUnits?.label || 'Billing Unit'}}">
+            </nz-form-control>
+          </div>
+          <div  *ngIf="grConfigs?.rate?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.rate?.label || 'RATE'}}
+              <span *ngIf="grConfigs?.rate?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input (ngModelChange)="formulachanges();" [readonly]="!grConfigs?.rate?.editable || grConfigs?.rate?.evalExp" type='number' autocomplete="off"
+                                     formControlName="rate" id="rate" name="rate" nz-input
+                                     placeholder="{{grConfigs?.rate?.label || 'RATE'}}">
+            </nz-form-control>
+          </div>
+          <div  *ngIf="grConfigs?.billingRate?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.billingRate?.label || 'Billing Rate'}}
+              <span *ngIf="grConfigs?.billingRate?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input (change) = formulachanges(); [readonly]="!grConfigs?.billingRate?.editable || grConfigs?.billingRate?.evalExp" autocomplete="off"  formControlName="billingRate"
+                                     id="billingRate" name="billingRate" nz-input type='number'
+                                     placeholder="{{grConfigs?.billingRate?.label || 'Billing Rate'}}">
+            </nz-form-control>
+          </div>
+          <div  *ngIf="grConfigs?.freight?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.freight?.label || 'FREIGHT'}}
+              <span *ngIf="grConfigs?.freight?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control><input (change) = formulachanges(); [readonly]="true" autocomplete="off" name="freight"  nz-input  type='number'
+                                     id="freight" formControlName="freight" placeholder="{{grConfigs?.freight?.label || 'FREIGHT'}}">
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.ref1?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.ref1?.label || 'Item Ref 1'}}
+              <span *ngIf="grConfigs?.ref1?.req" class="red-mark">*</span></nz-form-label>
+              <nz-form-control> <input [readonly]="!grConfigs?.ref1?.editable" nz-input name="ref1" id="ref1"  autocomplete="off"
+                                       formControlName="ref1" placeholder="{{grConfigs?.ref1?.label || 'Item Ref 1'}}">
+              </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.ref2?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.ref2?.label || 'Item Ref 2'}}
+              <span *ngIf="grConfigs?.ref2?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input [readonly]="!grConfigs?.ref2?.editable" nz-input name="ref2" id="ref2"  autocomplete="off"
+                                     formControlName="ref2" placeholder="{{grConfigs?.ref2?.label || 'Item Ref 2'}}">
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.ref3?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.ref3?.label || 'Item Ref 3'}}
+              <span *ngIf="grConfigs?.ref3?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input [readonly]="!grConfigs?.ref3?.editable" nz-input name="ref3" id="ref3"  autocomplete="off"
+                                     formControlName="ref3" placeholder="{{grConfigs?.ref3?.label || 'Item Ref 3'}}">
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.ref4?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.ref4?.label || 'Item Ref 4'}}
+              <span *ngIf="grConfigs?.ref4?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input [readonly]="!grConfigs?.ref4?.editable" nz-input name="ref4" id="ref4"  autocomplete="off"
+                                     formControlName="ref4" placeholder="{{grConfigs?.ref4?.label || 'Item Ref 4'}}">
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.ref5?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.ref5?.label || 'Item Ref 5'}}
+              <span *ngIf="grConfigs?.ref5?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input [readonly]="!grConfigs?.ref5?.editable" nz-input name="ref5" id="ref5"  autocomplete="off"
+                                     formControlName="ref5" placeholder="{{grConfigs?.ref5?.label || 'Item Ref 5'}}">
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.ref6?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.ref6?.label || 'Item Ref 6'}}
+              <span *ngIf="grConfigs?.ref6?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input [readonly]="!grConfigs?.ref6?.editable" nz-input name="ref6" id="ref6"  autocomplete="off"
+                                     formControlName="ref6" placeholder="{{grConfigs?.ref6?.label || 'Item Ref 6'}}">
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.num1?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.num1?.label || 'Num1'}}
+              <span *ngIf="grConfigs?.num1?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input (change) = formulachanges(); [readonly]="!grConfigs?.num1?.editable || grConfigs?.num1?.evalExp" autocomplete="off" id="num1" name="num1"   nz-input
+                                     formControlName="num1" placeholder="{{grConfigs?.num1?.label || 'Num 1'}}">
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.num2?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.num2?.label || 'Num2'}}
+              <span *ngIf="grConfigs?.num2?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input (change) = formulachanges(); [readonly]="!grConfigs?.num2?.editable || grConfigs?.num2?.evalExp" autocomplete="off" id="num2"  name="num2" nz-input
+                                     formControlName="num2" placeholder="{{grConfigs?.num2?.label || 'Num 2'}}">
+            </nz-form-control>
+          </div>
+
+          <div  *ngIf="grConfigs?.num3?.visible" nzWidth="150px" nzAlign="center">
+            <nz-form-label style="text-align: left;">{{grConfigs?.num3?.label || 'Num3'}}
+              <span *ngIf="grConfigs?.num3?.req" class="red-mark">*</span></nz-form-label>
+            <nz-form-control> <input (change) = formulachanges(); [readonly]="!grConfigs?.num3?.editable || grConfigs?.num3?.evalExp" autocomplete="off" id="num3"  name="num3" nz-input
+                                     formControlName="num3" placeholder="{{grConfigs?.num3?.label || 'Num 3'}}">
+            </nz-form-control>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

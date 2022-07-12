@@ -1,0 +1,99 @@
+<div class="insight">
+    <div class="insight-head">
+        <div class="insight-title">
+            <!-- <div *ngIf="innerWidth < 500" class="mbbtn" style="margin-right: 25vw;">
+                <app-back-button *ngIf="innerWidth <= 500"></app-back-button>
+            </div> -->
+            <span>Playback List</span>
+        </div>
+        <div class="insight-tools">
+            <div class="tool"></div>
+        </div>
+    </div>
+    <div class="insight-description">
+        <div>
+            <div *ngIf="innerWidth < 500" class="aggregate">
+                <div class="head shadow-d1" *ngFor="let d of playbackData" >
+                    <div class="align">
+                        <div class="grey">Start Time :</div>
+                        <div class="ml-1">{{d?.entering_time ? d?.entering_time: d?.start_time| date:'medium'}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">End Time :</div>
+                        <div class="ml-1">{{d?.leaving_time ? d?.leaving_time: d?.end_time | date:'medium'}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">Location :</div> 
+                        <div class="ml-1">{{d?.start_addr || d?.place_name || 'NA'}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">Latitude :</div>
+                        <div class="ml-1">{{d?.start?.latitude || d?.latitude || 'NA'}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">Longitude :</div>
+                        <div class="ml-1">{{d?.start?.longitude || d?.longitude ||'NA'}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">Nearest Landmark :</div>
+                        <div *ngIf="d?.nearest_landmark?.name" class="ml-1">{{d?.nearest_landmark?.dist/1000 + " KM from " + d?.nearest_landmark?.name || 'NA'}}</div>
+                        <div *ngIf="!d?.nearest_landmark?.name" class="ml-1">NA</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">Speed (Km/h) :</div>
+                        <div class="ml-1">{{d?.top_speed || '0'}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">Duration(hr) :</div>
+                        <div class="ml-1">{{d?.duration || '0'}}</div>
+                    </div>
+                    <div class="align">
+                        <div class="grey">Distance(Kms) :</div>
+                        <div class="ml-1">{{d?.distance  ||d?.km || '0'}}</div>
+                    </div>
+                </div>
+            </div>
+            <nz-table
+          *ngIf="innerWidth >= 500"
+          #nzTable
+          nzBordered
+          [nzShowPagination]="false"
+          [nzData]="playbackData ? playbackData : ''"
+          nzSize="small"
+          [nzScroll]="{ x: '1150px', y: '300px' }"
+          style="overflow-x: auto"
+        >
+          <thead>
+            <tr style="background-color: #3e51b5 !important;">
+              <th nzWidth="100px"  nzAlign="center">Start Time</th>
+              <th nzWidth="100px" nzAlign="center">End Time</th>
+              <th nzWidth="200px" nzAlign="center">Location</th>
+              <th nzWidth="150px" nzAlign="center">Latitude</th>
+              <th nzWidth="150px" nzAlign="center">Longitude</th>
+              <th nzWidth="200px"  nzAlign="center">Nearest Landmark</th>
+              <th nzWidth="70px" nzAlign="center">Speed (Km/h)</th>
+              <th nzWidth="90px" nzAlign="center">Duration(hr)</th>
+              <th nzWidth="90px" nzAlign="center">Distance(Km)</th>
+            </tr>
+          </thead>
+          <tbody >
+            <tr
+              style="cursor: pointer"
+              *ngFor="let item of playbackData"
+            >
+              <td nzAlign="center">{{ item?.entering_time ? item?.entering_time: item?.start_time | date: 'medium'}}</td>
+              <td nzAlign="center">{{ item?.leaving_time ? item?.leaving_time  : item?.end_time | date: 'medium'}}</td>
+              <td nzAlign="center">{{ item?.start_addr || item?.place_name}}</td>
+              <td nzAlign="center">{{ item?.start?.latitude || item?.latitude || 'NA'}}</td>
+              <td nzAlign="center">{{ item?.start?.longitude ||item?.longitude || 'NA'}}</td>
+              <td nzAlign="center" *ngIf="item?.nearest_landmark?.name">{{ item?.nearest_landmark?.dist/1000 + " KM from " + item?.nearest_landmark?.name || 'NA'}}</td>
+              <td nzAlign="center" *ngIf="!item?.nearest_landmark?.name">NA</td>
+              <td nzAlign="center">{{ item?.location?.top_speed || '0'}}</td>
+              <td nzAlign="center">{{ item?.location?.duration ||item?.duration || '0'}}</td>
+              <td nzAlign="center">{{ item?.location?.distance || item?.km || '0'}}</td>
+            </tr>
+          </tbody>
+        </nz-table><br />
+        </div>
+    </div>
+</div>

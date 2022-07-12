@@ -1,0 +1,119 @@
+@import '../../../style/globle.scss';
+
+.heading{
+    display: flex;
+    margin: 5px; 
+  }
+  .user-icon{
+    margin: 5px;
+  }
+  .user-name{
+    color: white;
+    margin: 9px 0 0 15px;
+  }
+
+.mainContainer {
+  height: 100%;
+}
+
+nz-sider {
+    height: 100%;
+}
+@media screen and (max-width: 993px) {
+    nz-sider {
+        z-index: 12;
+        flex: 0 0 0px;
+        height: 100%;
+        max-width: 0px;
+        position: fixed;
+        // background-color: black;
+        min-width: 0px;
+        width: 0px;
+    }
+}
+nz-header {
+    background-color: $bradColor !important;
+    color: $white !important;
+}
+.layout {
+  height: 100vh !important;
+} 
+
+.ant-layout-header{
+  padding: 0 25px;
+}
+
+
+
+//himanshu pare
+
+
+.sideNavHeader{
+  height: 12vh;
+}
+.sideNavBradlogo{
+  text-align: center;
+
+}
+.sideNavBradlogo img{
+  height:64px;
+}
+
+.navIcon{ 
+  margin: 0 15px 0px 25px;
+  font-size: 20px;
+}
+
+::ng-deep {
+  .UserIcone .ant-avatar-string{
+    font-size: 20px !important;
+  }
+   
+  .ant-drawer-content-wrapper {
+    
+.ant-drawer-body{
+  padding: 0 !important;
+  }
+  .ant-drawer-header{
+    padding: 9px 1px 2px 0px !important;
+  }
+  }
+}
+
+
+
+//himanshu
+.sideNavIcon{    font-size: 25px;
+  display: inline-block;
+  margin-top: 0px;
+  padding: 6px;
+  background: $bradColor;
+  color: #fff;
+  border-radius: 20px;
+} 
+
+.sideNavHeading{
+  font-size: 20px;
+  display: inline-block;
+  margin-top: 1px;
+  margin-left: 14px;
+  position: absolute;
+  top: 20px;
+  font-weight: 400;
+}
+
+.navItem{
+  padding: 17px 5px;
+  background: #fafdff; 
+  border-bottom: 4px solid $bradColor;
+}
+.NavlistTittle{
+color: rgb(105, 105, 105);
+}
+
+.navFold{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 20px;
+}

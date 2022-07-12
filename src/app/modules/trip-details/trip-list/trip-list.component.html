@@ -1,0 +1,371 @@
+<div class="insight">
+  <div class="insight-head" *ngIf="innerWidth > 500" >
+    <div class="insight-title">
+      
+    </div>
+    <div class="insight-tools">
+      <div class="tool">
+        <div *ngIf="innerWidth < 500 && selectedRowId" class="mbbtn" (click)="detailView()">
+          <fa-icon [icon]="faEye"></fa-icon>
+        </div>
+        <div *ngIf="innerWidth < 500" class="mbbtn" (click)="isMobFilterVisible = true;">
+          <fa-icon [icon]="faFilter"></fa-icon>
+        </div>
+        <div *ngIf="innerWidth >= 500 && selectedItem"  class="my-btn bg-primary" nz-tooltip nz-button
+                nzTooltipTitle="Detail View" (click)="detailView()">
+                <fa-icon [icon]="faEye" style="font-size: 15px;"></fa-icon>
+              </div>
+              
+              <div *ngIf="innerWidth >= 500" class="my-btn bg-primary" nz-tooltip
+                nzTooltipTitle="Job Risky Report" (click)="downloadJobRiskyReport()">
+                <fa-icon [icon]="faFileDownload" style="font-size: 15px;"></fa-icon>
+        </div>
+        <div *ngIf="innerWidth >= 500" class="my-btn bg-primary" nz-tooltip
+          nzTooltipTitle="Job Order Report" (click)="downloadJobOrderReport()">
+          <fa-icon [icon]="faFileDownload" style="font-size: 15px;"></fa-icon>
+        </div>
+        <div *ngIf="innerWidth >= 500" class="my-btn bg-primary" style="margin-right:20px;"   nz-tooltip
+          nzTooltipTitle="Job Order Power Connect Report" (click)="downloadJobPowerConnectReport()">
+          <fa-icon [icon]="faFileDownload" style="font-size: 15px;"></fa-icon>
+        </div>
+        <div *ngIf="innerWidth < 500" class="mbbtn"  nz-tooltip
+        nzTooltipTitle="Job Risky Report" (click)="downloadJobRiskyReport()">
+        <fa-icon [icon]="faFileDownload" style="font-size: 15px;"></fa-icon>
+      </div>
+      <div *ngIf="innerWidth < 500" class="mbbtn" nz-tooltip
+      nzTooltipTitle="Job Order Report" (click)="downloadJobOrderReport()">
+      <fa-icon [icon]="faFileDownload" style="font-size: 15px;"></fa-icon>
+    </div>
+    <div *ngIf="innerWidth < 500" class="mbbtn" nz-tooltip
+    nzTooltipTitle="Job Order Power Connect Report" (click)="downloadJobPowerConnectReport()">
+    <fa-icon [icon]="faFileDownload" style="font-size: 15px;"></fa-icon>
+  </div>
+</div>
+</div>
+</div>
+<div class="insight-description">
+    <a #donwload target="_blank"></a>
+    <div *ngIf="isMobFilterVisible && innerWidth<=500">
+      <div>
+        <div class="flex-cont">
+          <label></label>
+          <input type="number" nz-input [(ngModel)]="filterObj && filterObj.trip_no" placeholder="Search Trip No">
+        </div>
+        <div class="flex-cont">
+          <label></label>
+          <nz-select [nzDropdownMatchSelectWidth]="false" nzPlaceHolder="Search Gr no."
+                     nzShowSearch nzAllowClear (nzOnSearch)="onSearchGR($event)" nzServerSearch [(ngModel)]="filterObj && filterObj._id" >
+            <nz-option *ngFor="let gr of receivedAllGr"
+                       nzLabel="{{ gr?.grNumber }}" [nzValue]="gr.trip._id">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="flex-cont">
+          <label></label>
+          <input nz-input type="text" [(ngModel)]="filterObj && filterObj['vendorDeal.loading_slip']" placeholder="Hire Slip" />
+        </div>
+        <div class="flex-cont">
+          <label></label>
+          <nz-select [nzDropdownMatchSelectWidth]="false" nzPlaceHolder="Search Vehicle no."
+                     nzShowSearch nzAllowClear (nzOnSearch)="onSearchVeh($event)" nzServerSearch [(ngModel)]="filterObj && filterObj.vehicle" >
+            <nz-option *ngFor="let vehicle of receivedAllVehicles"
+                       nzLabel="{{ vehicle?.vehicle_reg_no }}" [nzValue]="vehicle._id">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="flex-cont">
+          <label></label>
+          <nz-select [nzDropdownMatchSelectWidth]="false" nzPlaceHolder="Search Vendor"
+                     [(ngModel)]="filterObj && filterObj.vendor" nzShowSearch (nzOnSearch)="onSearchvender($event)" nzServerSearch nzAllowClear>
+            <nz-option *ngFor="let vendor of venderget"
+                       nzLabel="{{ vendor?.name}}" [nzValue]="vendor._id">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div class="flex-cont">
+          <label></label>
+          <nz-select [nzDropdownMatchSelectWidth]="false" nzPlaceHolder="Search Customer"
+                     [(ngModel)]="filterObj && filterObj.customer_id" nzShowSearch (nzOnSearch)="getCustomer($event)" nzServerSearch nzAllowClear>
+            <nz-option *ngFor="let customer of getCustomerdata"
+                       nzLabel="{{ customer?.name}}" [nzValue]="customer._id">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div style="margin-top: 5px;" nz-row class="my-row">
+          <div style="margin-top: 5px;" nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+            <span>
+              <nz-date-picker style="width: 70%" [(ngModel)]="filterObj && filterObj.from" nzPlaceHolder="From Date"
+                [ngModelOptions]="{ standalone: true }" nzFormat="dd-MM-yyyy">
+              </nz-date-picker>
+              <nz-time-picker style="width: 30%" [(ngModel)]="fromTime" [ngModelOptions]="{ standalone: true }"
+                nzFormat="HH:mm">
+              </nz-time-picker>
+            </span>
+          </div>
+          <div style="margin-top: 5px;" nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+            <span>
+              <nz-date-picker style="width: 70%" [(ngModel)]="filterObj && filterObj.to" nzPlaceHolder="To Date"
+                [ngModelOptions]="{ standalone: true }" nzFormat="dd-MM-yyyy">
+              </nz-date-picker>
+              <nz-time-picker style="width: 30%" [(ngModel)]="toTime" [ngModelOptions]="{ standalone: true }"
+                nzFormat="HH:mm">
+              </nz-time-picker>
+            </span>
+          </div>
+        </div>
+        <div class="flex-cont">
+          <label></label>
+          <nz-select [nzDropdownMatchSelectWidth]="false" [(ngModel)]="filterObj && filterObj.tripDocType" nzMode="multiple" nzPlaceHolder="Select Some Options">
+            <nz-option *ngFor="let item of aTripDocType"
+                       nzLabel="{{item.key}}" [nzValue]="item.value">
+            </nz-option>
+          </nz-select>
+        </div>
+      </div>
+      <div style="margin-top: 17px;">
+        <button style="width: 50%; color: white;" type="button" class="bg-primary" nz-button (click)="search(); isMobFilterVisible = false;">Search</button>
+        <button style="width: 50%; color: white;" type="button" class="bg-primary" nz-button (click)="reset(); isMobFilterVisible = false;">Reset</button>
+      </div>
+    </div>
+    <div *ngIf="innerWidth >= 500" class="filters-row">
+      <div class="my-row">
+        <!-- branch name or code -->
+        <div class="my-card">
+          <!-- <div class="my-card-header">
+            <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 230px" nzPlaceHolder="Search Branch with name or code"
+              [(ngModel)]="filterObj && filterObj.name" nzShowSearch (nzOnSearch)="onSearch($event)" nzServerSearch>
+              <nz-option *ngFor="let branch of receivedAllTrips"
+                nzLabel="{{ branch?.name}}" [nzValue]="branch.name">
+              </nz-option>
+            </nz-select>
+          </div> -->
+        </div>
+        <!-- vehicle no -->
+        <div class="my-card">
+          <div class="my-card-header">
+            <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 200px" nzPlaceHolder="Search Vehicle no."
+                       nzShowSearch nzAllowClear (nzOnSearch)="onSearchVeh($event)" nzServerSearch [(ngModel)]="filterObj && filterObj.vehicle" >
+              <nz-option *ngFor="let vehicle of receivedAllVehicles"
+                         nzLabel="{{ vehicle?.vehicle_reg_no }}" [nzValue]="vehicle._id">
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <!-- gr no -->
+<!--        <div class="my-card">-->
+<!--          <div class="my-card-header">-->
+<!--            <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 200px" nzPlaceHolder="Search Gr no."-->
+<!--                       nzShowSearch nzAllowClear (nzOnSearch)="onSearchGR($event)" nzServerSearch [(ngModel)]="filterObj && filterObj._id" >-->
+<!--              <nz-option *ngFor="let gr of receivedAllGr"-->
+<!--                         nzLabel="{{ gr?.grNumber }}" [nzValue]="gr.trip._id">-->
+<!--              </nz-option>-->
+<!--            </nz-select>-->
+<!--          </div>-->
+<!--        </div>-->
+
+        <!-- trip no -->
+        <div class="my-card">
+          <div class="my-card-header">
+            <nz-input-number style="min-width: 210px" [(ngModel)]="filterObj && filterObj.trip_no" nzPlaceHolder="Trip No" > </nz-input-number>
+          </div>
+        </div>
+        <!-- hire slip -->
+<!--        <div class="my-card">-->
+<!--          <div class="my-card-header">-->
+<!--            <input nz-input style="min-width: 210px" type="text" [(ngModel)]="filterObj && filterObj['vendorDeal.loading_slip']" placeholder="Hire Slip" />-->
+<!--          </div>-->
+<!--        </div>-->
+        <!-- doc type -->
+        <div class="my-card">
+          <div class="my-card-header">
+            <nz-select [nzDropdownMatchSelectWidth]="false" [(ngModel)]="filterObj && filterObj.tripDocType" style="width: 130px" nzMode="multiple" nzPlaceHolder="Select Some Options">
+              <nz-option *ngFor="let item of aTripDocType"
+                         nzLabel="{{item.key}}" [nzValue]="item.value">
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <!-- vendor -->
+        <div class="my-card">
+          <div class="my-card-header">
+            <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 210px" nzPlaceHolder="Search Vendor"
+                       [(ngModel)]="filterObj && filterObj.vendor" nzShowSearch (nzOnSearch)="onSearchvender($event)" nzServerSearch nzAllowClear>
+              <nz-option *ngFor="let vendor of venderget"
+                         nzLabel="{{ vendor?.name}}" [nzValue]="vendor._id">
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <!-- customer -->
+        <div class="my-card">
+          <div class="my-card-header">
+            <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 210px" nzPlaceHolder="Search Customer"
+                       [(ngModel)]="filterObj && filterObj.customer_id" nzShowSearch (nzOnSearch)="getCustomer($event)" nzServerSearch nzAllowClear>
+              <nz-option *ngFor="let customer of getCustomerdata"
+                         nzLabel="{{ customer?.name}}" [nzValue]="customer._id">
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+        <!-- from date -->
+        <div class="my-card">
+          <div class="my-card-header ">
+            <nz-date-picker [(ngModel)]="filterObj && filterObj.from" nzPlaceHolder="From Date">
+            </nz-date-picker>
+            <nz-time-picker style="width: 30%" [(ngModel)]="fromTime" [ngModelOptions]="{ standalone: true }"
+              nzFormat="HH:mm">
+            </nz-time-picker>
+          </div>
+        </div>
+        <!-- to date -->
+        <div class="my-card">
+          <div class="my-card-header ">
+            <nz-date-picker [(ngModel)]="filterObj && filterObj.to" nzPlaceHolder="To Date"></nz-date-picker>
+            <nz-time-picker style="width: 30%" [(ngModel)]="toTime" [ngModelOptions]="{ standalone: true }"
+            nzFormat="HH:mm">
+          </nz-time-picker>
+          </div>
+        </div>
+        <div class="my-card">
+          <div class="my-card-header">
+            <button class="my-btn bg-primary" (click)="search()">
+              <fa-icon [icon]="faSearch" style="font-size: 15px"></fa-icon>
+            </button>
+          </div>
+        </div>
+        <div class="my-card">
+          <div class="my-card-header">
+            <button class="my-btn bg-primary" (click)="reset()">
+              <fa-icon [icon]="faTimes" style="font-size: 19px"></fa-icon>
+            </button>
+          </div>
+        </div>
+        <div class="my-card">
+          <div class="my-card-header">
+            <button nz-button nzShape="round" (click)="fillDateTime(0)">Today</button>
+          </div>
+        </div>
+        <div class="my-card">
+          <div class="my-card-header">
+            <button nz-button nzShape="round" (click)="fillDateTime(-1)">Yesterday</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- table view start -->
+    <div id="myDIV" (scroll)="getDataOnScroll()">
+      <div *ngIf="innerWidth < 500 && receivedData && receivedData.length" class="aggregate">
+        <div class="head shadow-d1" *ngFor="let d of receivedData; let i=index;" (click)="selectItem(d)"
+             [ngClass]="{SelectHighlight :  selectedRowId && (d?._id === selectedRowId)}" style="background-color:#F2F5E9">
+          <div class="align" style="justify-content: space-between;" *ngIf="d?.gr && d?.gr[0] && d?.gr[0]?.customer">
+            <div class="ml-1"><b>{{i+1}}.&nbsp;&nbsp;{{d?.vehicle_no}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{'(Trip No :  '+ d?.trip_no+')'}}</b><!--<span [ngStyle]="{'color': (d?.vehicle?.ownershipType === 'Own') ? '#4bf002' : ((d?.vehicle?.ownershipType=== 'Market') ? '#f44336': '#f1c232') }">({{d?.vehicle?.ownershipType}})</span>--></div>
+            <div class="mr-1">{{d?.vehicle?.ownershipType === 'Market' ? d?.vehicle?.vendor_name : d?.driver?.name}}</div>
+          </div>
+          <div class="align">
+            <div class="ml-1" style="font-size: small;">{{d?.gr[0]?.customer?.name}}</div>
+          </div>
+          <div class="align" style="justify-content: space-between;">
+            <!-- <div class="grey">Route:</div> -->
+            <!-- <nz-divider nzDashed [nzText]="text">
+              <ng-template #text>
+                <i nz-icon nzType="plus"></i>
+              </ng-template>
+            </nz-divider> -->
+            <div class="ml-1">{{d?.src || 'NA'}}</div>
+            <div style="border-bottom: 1px solid black; width:50vw; text-align: center;">{{d?.rKm || d?.route?.route_distance + ' KM'}}</div>
+            <!-- <div><hr style="border-top:4px solid #000; border-radius:2px;"></div> -->
+            <div>{{d?.dest || 'NA'}}</div>
+          </div>
+          <div class="align" style="justify-content:space-between;">
+            <div class="ml-1">{{d?.statuses |filterstringgetdate:'Trip started'| date: 'dd-MM-yyyy'}}</div>
+            <div>{{d?.statuses |filterstringgetdate:'Trip ended'| date: 'dd-MM-yyyy'}}</div>
+          </div>
+          <div class="align" *ngIf="!(d?.gr && d?.gr[0] && d?.gr[0].grNumber)">
+            <!-- <div class="grey">Trip Status: </div> -->
+            <div class="ml-1">
+              <span><fa-icon [ngStyle]="{'color': (d?.status === 'Trip started') ? '#4bf002' : ((d?.status=== 'Trip ended') ? '#f44336': '#f1c232') }" [icon]="faDotCircle"></fa-icon></span>{{d?.status}}
+            </div>
+            <div *ngIf="config.trips.showConsent && d?.consent">
+              <span [ngStyle]="{'color': (d?.consent== 'ALLOWED') ? '#4bf002' : ((d?.consent=== 'PENDING') ? '#f1c232': '#f44336') }" >
+                {{d?.consent === 'PENDING' ? 'Provide Consent': d?.consent === 'ALLOWED' ? 'Consent Approved': 'Consent Sent'}}</span>
+            </div>
+          </div>
+          <div  class="align" style="justify-content: space-between;" *ngIf="d?.gr && d?.gr[0] && d?.gr[0].grNumber">
+            <!-- <div class="grey">Trip Status: </div> -->
+            <div>
+              {{d?.status}}
+            </div>
+            <div style="margin-right: 1px;">
+              {{d?.gr[0].grNumber}}
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <nz-table
+        *ngIf="innerWidth >= 500"
+        (scroll)="getDataOnScroll()"
+        #nzTable
+        nzBordered
+        [nzShowPagination]="false"
+        [nzData]="receivedData ? receivedData : ''"
+        nzSize="small"
+        [nzScroll]="{ x: '1500px', y: '300px' }"
+        style="overflow-x: auto"
+      >
+        <thead>
+        <tr style="background-color: #3e51b5 !important;">
+          <th nzWidth="60px"  nzAlign="center">Sl. No.</th>
+          <th nzWidth="80px"  nzAlign="center">Trip No.</th>
+          <th nzWidth="120px" nzAlign="center">Trip Base</th>
+          <th nzWidth="100px" nzAlign="center">Vehicle No.</th>
+          <th nzWidth="100px" nzAlign="center">Trip Start</th>
+          <th nzWidth="100px" nzAlign="center">Trip End</th>
+          <th nzWidth="80px"  nzAlign="center">Ownership</th>
+          <th nzWidth="120px" nzAlign="center">Customer</th>
+          <th nzWidth="120px" nzAlign="center">Route</th>
+          <th nzWidth="80px"  nzAlign="center">Route Distance</th>
+          <th nzWidth="120px" nzAlign="center">Device IMEI</th>
+          <th nzWidth="120px" nzAlign="center">Trip Status</th>
+          <th nzWidth="120px" nzAlign="center">Driver Name</th>
+          <th nzWidth="100px" nzAlign="center">Vendor</th>
+          <th nzWidth="80px"  nzAlign="center">No of Docs</th>
+        </tr>
+        </thead>
+        <tbody >
+        <tr
+          style="cursor: pointer"
+          *ngFor="let item of receivedData ;let i=index;"
+          (click)="selectItem(item)"
+          [ngClass]="{SelectHighlight :  selectedRowId && (item?._id === selectedRowId)}"
+        >
+          <td nzAlign="center">{{i+1}}</td>
+          <td nzAlign="center">{{ item?.trip_no || "NA"}}</td>
+          <td nzAlign="center">{{ item?.tripBase || "NA"}}</td>
+          <td nzAlign="center">{{ item?.vehicle_no  || "NA"}}</td>
+          <td nzAlign="center">{{ (item?.statuses |filterstringgetdate:'Trip started'| date: 'dd-MMM-yyyy') || "NA" }}</td>
+          <td nzAlign="center">{{ (item?.statuses | filterstringgetdate:'Trip ended'| date:'dd-MMM-yyyy') || "NA"}}</td>
+          <td nzAlign="center">{{ item?.ownershipType || "NA"}}</td>
+          <td nzAlign="center">{{ item?.gr[0]?.customer?.name || "NA"}}</td>
+          <td nzAlign="center">{{ item?.route_name}}</td>
+          <td nzAlign="center">{{ item?.rKm || item?.route?.route_distance + ' KM' || "NA"}}</td>
+          <td nzAlign="center">{{ item?.device?.imei || item?.vehicle?.device_imei || "NA" }}</td>
+          <td nzAlign="center">{{ item?.status || "NA"}}</td>
+          <td nzAlign="center">{{ item?.driver?.name || "NA"}}</td>
+          <td nzAlign="center">{{ item?.vendor?.name || "NA"}}</td>
+          <td nzAlign="center">{{ item?.noOfDocs || "0"}}</td>
+        </tr>
+        </tbody> </nz-table
+      ><br /><br />
+      <!-- table view end -->
+    </div>
+  </div>
+  <div *ngIf="innerWidth < 500" style="position: fixed; text-align: center; z-index: 3; margin-top: 80vh;width:92vw;">
+    <button nz-button nzType="primary" nzShape="round" (click)="goToCreateTrip()" >
+      <span style="padding-bottom: 5px;"><i nz-icon nzType="plus-circle" nzTheme="twotone"></i></span>
+      &nbsp;Add Trip
+    </button>
+  </div>
+</div>
+

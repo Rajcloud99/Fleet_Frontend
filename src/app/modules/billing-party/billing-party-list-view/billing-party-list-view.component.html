@@ -1,0 +1,242 @@
+<div class="insight">
+  <div class="insight-head" *ngIf="innerWidth > 500"> 
+    <div class="insight-tools">
+      <div class="tool">
+
+        <div class="mbbtn" *ngIf="innerWidth <= 500" (click)="isMobFilterVisible=isMobFilterVisible?false:true;">
+          <fa-icon [icon]="faFilter"></fa-icon>
+        </div>
+
+        <div class="mbbtn"  nz-tooltip nzTooltipTitle="Add Billing Party"
+             (click)="navigateToAdd()">
+          <fa-icon [icon]="faPlusSquare" ></fa-icon>
+        </div>
+        <div class="mbbtn"  nz-tooltip nzTooltipTitle="Edit Billing Party" (click)="navigateToEdit()">
+          <fa-icon [icon]="faEdit" ></fa-icon>
+        </div>
+        <div class="mbbtn" nz-button nz-popconfirm nzPopconfirmTitle="Are you sure?" nzOkText="ok"
+             nzCancelText="cancel" (nzOnConfirm)="showDeleteConfirm(this.selectedItem.name)" nz-tooltip nzTooltipTitle="Disable">
+          <fa-icon [icon]="faTrash" style="color: red !important;"></fa-icon>
+        </div>
+
+
+<!--        <button class="my-btn bg-primary" nz-tooltip nzTooltipTitle="Add Billing Party" (click)="navigateToAdd()">-->
+<!--          <fa-icon [icon]="faPlusSquare" style="font-size: 20px;"></fa-icon>-->
+<!--        </button>-->
+
+<!--        <button [disabled]="!selectedRowId" nzType="primary" class="my-btn bg-primary" nz-button nz-tooltip-->
+<!--          nzTooltipTitle="Edit Billing Party" (click)="navigateToEdit()">-->
+<!--          <fa-icon [icon]="faEdit" style="font-size: 20px"></fa-icon>-->
+<!--        </button>-->
+
+        <button [hidden]="true" class="my-btn bg-primary" nz-tooltip nz-button nzTooltipTitle="View Billing Party"
+          (click)="navigateToDetailView()">
+          <fa-icon [icon]="faEye" style="font-size: 20px;"></fa-icon>
+        </button>
+
+<!--        <button [disabled]="!selectedRowId" nz-button class="my-btn btn-danger shd" nz-tooltip nzTooltipTitle="Delete"-->
+<!--          (click)="showDeleteConfirm(this.selectedItem.name)">-->
+<!--          <fa-icon [icon]="faTrash" style="font-size: 20px"></fa-icon>-->
+<!--        </button>-->
+
+<!--        <button *ngIf="innerWidth < 500" class="my-btn bg-primary" nz-tooltip nz-button nzTooltipTitle="Show Filters"-->
+<!--          type="button" (click)="isMobFilterVisible=isMobFilterVisible?false:true;">-->
+<!--          <fa-icon [icon]="faFilter" style="font-size: 15px"></fa-icon>-->
+<!--        </button>-->
+
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-description">
+
+    <div class="filters-row" *ngIf="innerWidth > 500">
+
+      <div class="my-row">
+        <div class="my-card">
+          <div class="my-card-header">
+            <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 180px" nzPlaceHolder="Search Billing Party"
+              [(ngModel)]="filterObj && filterObj.name" nzShowSearch (nzOnSearch)="onChangeSearch($event, 'name')"
+              nzServerSearch nzAllowClear>
+              <nz-option *ngFor="let item of receivedBillingParty" nzLabel="{{ item?.name}}" [nzValue]="item.name">
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+
+        <div class="my-card">
+          <div class="my-card-header">
+            <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 180px" nzPlaceHolder="Search Address"
+              [(ngModel)]="filterObj && filterObj.address" nzShowSearch (nzOnSearch)="onChangeSearch($event,'address')"
+              nzServerSearch nzAllowClear>
+              <nz-option *ngFor="let item of receivedBillingParty" nzLabel="{{item.address}}" [nzValue]="item.address">
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+
+        <div class="my-card">
+          <div class="my-card-header">
+            <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 180px" nzPlaceHolder="Select State"
+              [(ngModel)]="filterObj && filterObj.state_name" nzShowSearch nzAllowClear>
+              <nz-option *ngFor="let item of aGSTstates" nzLabel="{{item.state}}" [nzValue]="item.state">
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
+
+        <!-- from date -->
+        <div class="my-card">
+          <div class="my-card-header ">
+            <nz-date-picker [(ngModel)]="filterObj && filterObj.from" nzPlaceHolder="Start Date">
+            </nz-date-picker>
+          </div>
+        </div>
+        <!-- to date -->
+        <div class="my-card">
+          <div class="my-card-header ">
+            <nz-date-picker [(ngModel)]="filterObj && filterObj.to" nzPlaceHolder="End Date"></nz-date-picker>
+          </div>
+        </div>
+
+        <div class="my-card">
+          <div class="my-card-header">
+            <button class="my-btn bg-primary" nz-tooltip nzTooltipTitle="Search Driver" (click)="search()">
+              <fa-icon [icon]="faSearch" style="font-size: 20px;"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="my-card">
+          <div class="my-card-header">
+            <button class="my-btn bg-primary" (click)="reset()">
+              <fa-icon [icon]="faTimes" style="font-size: 20px"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="" *ngIf="isMobFilterVisible && innerWidth <= 500">
+      <div>
+        <div class="flex-cont">
+          <label></label>
+          <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 100%" nzPlaceHolder="Search Billing Party"
+          [(ngModel)]="filterObj && filterObj.name" nzShowSearch (nzOnSearch)="onChangeSearch($event, 'name')"
+          nzServerSearch nzAllowClear>
+          <nz-option *ngFor="let item of receivedBillingParty" nzLabel="{{ item?.name}}" [nzValue]="item.name">
+          </nz-option>
+        </nz-select>
+        </div>
+
+        <div class="flex-cont">
+          <label></label>
+          <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 100%" nzPlaceHolder="Search Address"
+          [(ngModel)]="filterObj && filterObj.address" nzShowSearch (nzOnSearch)="onChangeSearch($event,'address')"
+          nzServerSearch nzAllowClear>
+          <nz-option *ngFor="let item of receivedBillingParty" nzLabel="{{item.address}}" [nzValue]="item.address">
+          </nz-option>
+        </nz-select>
+        </div>
+
+        <div class="flex-cont">
+          <label></label>
+          <nz-select [nzDropdownMatchSelectWidth]="false" style="width: 100%" nzPlaceHolder="Select State"
+          [(ngModel)]="filterObj && filterObj.state_name" nzShowSearch nzAllowClear>
+          <nz-option *ngFor="let item of aGSTstates" nzLabel="{{item.state}}" [nzValue]="item.state">
+          </nz-option>
+        </nz-select>
+        </div>
+
+        <!-- from date -->
+
+        <div class="flex-cont">
+          <label></label>
+          <nz-date-picker [(ngModel)]="filterObj && filterObj.from" style="width: 100%" nzPlaceHolder="Start Date">
+          </nz-date-picker>
+        </div>
+
+        <!-- to date -->
+
+        <div class="flex-cont">
+          <label></label>
+          <nz-date-picker [(ngModel)]="filterObj && filterObj.to" style="width: 100%" nzPlaceHolder="End Date">
+          </nz-date-picker>
+        </div>
+      </div>
+
+      <div style="margin-top: 5%; margin-bottom:10%">
+        <button style="width: 50%;color:white;" type="button" class="bg-primary" nz-button
+          (click)="search();isMobFilterVisible = false;">Search</button>
+        <button style="width: 50%;color:white;" type="button" class="bg-primary" nz-button
+          (click)="reset();isMobFilterVisible = false;">Reset</button>
+      </div>
+
+    </div>
+
+    <!-- table view start -->
+    <div id="myDIV" *ngIf="innerWidth > 500">
+      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
+        nzSize="small" [nzScroll]="{ x: '1000px', y: '380px' }" style="overflow-x: auto">
+        <thead>
+          <tr>
+            <th nzWidth="150px" nzAlign="center">Name </th>
+            <th nzWidth="150px" nzAlign="center">Address</th>
+            <th nzWidth="150px" nzAlign="center">Customer</th>
+            <th nzWidth="150px" nzAlign="center">GSTIN NO.</th>
+            <th nzWidth="150px" nzAlign="center">State</th>
+            <th nzWidth="150px" nzAlign="center">Account</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="cursor: pointer" *ngFor="let item of receivedData" (click)="selectItem(item)"
+            [ngClass]="{SelectHighlight :  selectedRowId && (item?._id === selectedRowId)}">
+            <td nzAlign="center">{{ item?.name || 'NA'}}</td>
+            <td nzAlign="center">{{ item?.address || 'NA'}}</td>
+            <td nzAlign="center">{{ item?.customer?.name || 'NA'}}</td>
+            <td nzAlign="center">{{ item?.gstin || 'NA'}}</td>
+            <td nzAlign="center">{{ item?.state_name || 'NA'}}</td>
+            <td nzAlign="center">{{ item?.account?.name || 'NA'}}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+
+    <!-- Card view start -->
+    <div *ngIf="innerWidth <= 500" class="aggregate">
+      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
+        nzSize="small" [nzScroll]="{ y: '425px' }" style="overflow-x: auto">
+        <div
+        class="head shadow-d1"
+        *ngFor="let d of receivedData"
+        (click)="selectItem(d)"  [ngClass]="{SelectHighlight :  selectedRowId && (d?._id === selectedRowId)}">
+        <div class="align">
+          <div class="grey"><b>Name:</b> {{ d?.name || 'NA'}}</div>
+        </div>
+
+        <div class="align">
+          <div class="grey"><b>Address:</b> {{ d?.address || 'NA'}}</div>
+        </div>
+
+        <div class="align">
+          <div class="grey"><b>Customer:</b> {{ d?.customer?.name || 'NA'}}</div>
+        </div>
+
+        <div class="align">
+          <div class="grey"><b>GSTIN NO.:</b> {{ d?.gstin || 'Na' }}</div>
+        </div>
+
+        <div class="align">
+          <div class="grey"><b>State:</b> {{ d?.state_name || 'NA'}}</div>
+        </div>
+
+        <div class="align">
+          <div class="grey"><b>Account:</b> {{ d?.account?.name || 'NA'}}</div>
+        </div>
+
+      </div>
+      </nz-table>
+    </div>
+
+  </div>
+</div>

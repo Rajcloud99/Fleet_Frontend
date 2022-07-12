@@ -1,0 +1,97 @@
+<div class="insight">
+  <div class="insight-head">
+    
+  </div>
+  <div class="insight-description">
+<!--    <nz-spin [ngClass]="{'loader': loadingObservable | async}" nzSimple [nzSpinning]="loadingObservable | async"></nz-spin>-->
+    <!-- <div class="overlay" *ngIf= "loadingObservable | async"></div> -->
+
+    <form nz-form [formGroup]="materialForm" (ngSubmit)="onSubmit()">
+      <div nz-row>
+        <nz-form-item nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Category<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <nz-select formControlName="category" required nzShowSearch>
+              <nz-option *ngFor="let type of categoryList" nzLabel="{{type.name}}"
+                         [nzValue]="type.value">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="materialForm.value.category == 'hsn'" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">HSN Code<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="hsnCode" id="hsnCode" required />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="materialForm.value.category == 'sac'" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">SAC Code<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="sacCode" id="sacCode" required/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item  nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Per Unit Weight<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="pUnitWt" id="pUnitWt" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item  nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">GST<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <nz-select formControlName="gstPercent" required nzShowSearch>
+              <nz-option *ngFor="let type of gstList" nzLabel="{{type.name}}"
+                         [nzValue]="type.value">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item  nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Unit<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <nz-select formControlName="unit" required nzShowSearch>
+              <nz-option *ngFor="let type of unitList" nzLabel="{{type}}"
+                         [nzValue]="type">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item  nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" formArrayName="material"  *ngFor="let item of materialForm.get('material')?.controls; let i = index;">
+          <nz-form-label [class.hide]="i != 0" [nzSpan]="20">Material Type</nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <div style="display: flex">
+              <input [formControlName]="i" nz-input (input)="onInputChange(item, i)" placeholder="Material Name"><br>
+              <button nz-button *ngIf="i != 0"  (click)="remove(i)">X</button>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+
+            <!-- <div class="form-group col-md-3 mb-3" formArrayName="material"  *ngFor="let item of materialForm.get('material')?.controls; let i = index;">
+              <label style="text-align: left;" [class.hide]="i != 0"  required nzFor="mobile"> Material Type</label>
+              <div  >
+                <div style="display: flex">
+                  <input [formControlName]="i" nz-input (input)="onInputChange(item, i)" placeholder="Material Name"><br>
+                  <button nz-button *ngIf="i != 0"  (click)="remove(i)">X</button>
+                </div>
+              </div>
+            </div> -->                  
+      </div>
+
+      <nz-form-item style="padding-top: 5%;">
+        <nz-form-control  [nzSpan]="20" nzErrorTip="Input is required">
+          <button nz-button nzType="primary" type="submit" [disabled]="materialForm?.invalid" >{{'Submit'}}</button>&nbsp;&nbsp;&nbsp;&nbsp;
+          <button nz-button nzType="primary" (click)="backToHome();" >Cancel</button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+<!--      <pre>{{materialForm.value | json}}</pre>-->
+<!--    <pre>{{branchForm.valid}}</pre>-->
+  </div>
+</div>
+

@@ -1,0 +1,73 @@
+<!-- Show module name in top -->
+<div class="head">
+    <div class="NavBarToggle" >
+        <span class="menuIcon pointer delay" (click)="toggle()">
+            <i nz-icon nzType="menu-unfold"  nzTheme="outline"   ></i>
+            
+        </span>
+        <!-- <span class="brandName">Umbrella</span> -->
+    </div>
+    <!-- back button component -->
+    <app-back-button  *ngIf="innerWidth <= 500 && visibleBackBtn"></app-back-button>
+    
+    <div *ngIf="true" class="rgroup" >
+
+
+        <div class="NavBar">
+            <div class="Navlogo">
+                <!-- <img src="../../../../assets/logo.png" alt="logo"  >
+                <br/> -->
+                <span class="NavBarTittle">
+                    {{navTittle}}
+                </span>
+            </div>
+            
+
+        </div>
+        <div class="NavBackBtn"  (click)="goBack()">
+            <!-- <i nz-icon nzType="left" nzTheme="outline"></i> -->
+            <i nz-icon nzType="arrow-left" nzTheme="outline"></i>
+            
+        </div>
+        <div class="moreDiv">
+            <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" class="btnMore" *ngIf="filterArray.length > 0">
+                <i nz-icon nzType="more" nzTheme="outline"></i>
+              </a>
+              <nz-dropdown-menu #menu="nzDropdownMenu">
+                <ul nz-menu >
+                  <li nz-menu-item  (click)="item.clickEventMethode()"  *ngFor="let item of filterArray">
+                    <ng-template #avatarTemplate> 
+                        <i class="fa Faicon {{item.iconName}}" aria-hidden="true"></i>
+                      </ng-template>
+                    <nz-card  style="width:35vw;" class="appCard" >
+                        <nz-card-meta
+                          [nzAvatar]="avatarTemplate"
+                          nzTitle="{{item.tittle}}"
+                        ></nz-card-meta>
+                      </nz-card>
+                  </li>
+                </ul>
+              </nz-dropdown-menu>
+        </div>
+        <!-- <div class="line">
+            <span class="text-color mx-3">{{showName}}</span>
+        </div> --> 
+        <!-- <div class="logout">
+            <button nz-button nz-popover  nzPopoverTitle="Menu" [nzPopoverContent]="contentTemplate" nzPopoverTrigger="click"
+                nzPopoverPlacement="bottomRight">
+                <i nz-icon nzType="user"></i>
+            </button>
+
+            <ng-template #contentTemplate>
+                <div style="font-weight: 700;">
+                    <i class="fas fa-cog" style="color: green;"></i>
+                     Settings
+                </div>
+                <div class="pointer" (click)="logout()" style="font-weight: 700;">
+                    <i class="fas fa-sign-out-alt" style="color: red;"></i>Logout
+                </div>
+            </ng-template>
+        </div> -->
+    </div>
+
+</div>

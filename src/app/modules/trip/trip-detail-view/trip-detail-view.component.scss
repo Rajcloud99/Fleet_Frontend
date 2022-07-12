@@ -1,0 +1,46 @@
+.grey {
+    color: black;
+}
+.aggregate {
+    padding: 6px;
+}
+
+.head {
+    padding: 12px;
+    margin-top: 5px;
+    border-radius: 7px;
+    position: relative;
+}
+
+#myDIV {
+    height: 400px;
+    overflow-y: auto;
+}
+
+.shadow-d1{
+    box-shadow: 0 1px 6px 1.5px rgba(32,33,36,.28) !important;
+  }
+
+  .align {
+    display: flex;
+}
+
+nz-date-picker{
+    width: 100%;
+    nz-picker{
+        width: 100%;
+        display: inline-block;
+        .ant-calendar-picker{
+            width: 100%;
+        }
+    }
+}
+
+@media screen and (max-width: 500px) {
+    #myDIV {
+      height: 500px;
+    }
+    nz-select, nz-date-picker, input {
+        width: 100%;
+    }
+  }

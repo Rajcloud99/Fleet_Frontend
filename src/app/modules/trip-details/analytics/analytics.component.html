@@ -1,0 +1,140 @@
+<div class="insight">
+    <div class="insight-head" *ngIf="innerWidth > 500">
+        <div class="insight-title"> 
+        </div>
+        <div class="insight-tools">
+            <div class="tool">
+                <div *ngIf="innerWidth < 500" class="mbbtn" (click)="gotoAlertList()">
+                    <fa-icon [icon]="faList"></fa-icon>
+                </div>
+                <div *ngIf="innerWidth >= 500" style="margin-right: 5vw;" (click)="gotoAlertList()" class="my-btn bg-primary" nz-tooltip nzTooltipTitle="List View" nz-button>
+                    <fa-icon [icon]="faList" style="font-size: 15px;"></fa-icon>
+                </div>
+                <div *ngIf="innerWidth < 500 && !selectedTrip" class="mbbtn" (click)="isMobFilterVisible = !isMobFilterVisible;">
+                    <fa-icon [icon]="faFilter"></fa-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="insight-description">
+        <div *ngIf="isMobFilterVisible && innerWidth <= 500">
+            <div>
+                <div class="flex-count">
+                    <label></label>
+                    <nz-select style="min-width: 300px;" nzPlaceHolder="Search Vehicle no."
+                        [(ngModel)]="selectedVehicle"
+                        nzShowSearch nzAllowClear
+                        (nzOnSearch)="searchVehicle($event)">
+                        <nz-option *ngFor="let veh of vehDataCopy;" nzLabel="{{veh.vehicle_reg_no}}" [nzValue]="veh">
+                        </nz-option>
+                    </nz-select>
+                </div>
+                <div class="flex-cont">
+                    <label></label>
+                    <nz-select style="min-width: 300px;" [(ngModel)]="group">
+                        <nz-option nzValue="exception" nzLabel="Exception"></nz-option>
+                        <nz-option nzValue="day" nzLabel="Day Wise"></nz-option>
+                        <nz-option nzValue="month" nzLabel="Month Wise"></nz-option>
+                    </nz-select>
+                </div>
+                <div class="flex-cont">
+                    <label></label>
+                    <nz-date-picker style="min-width:300px;" [(ngModel)]="startDate" nzPlaceHolder="Start Date">
+                    </nz-date-picker>
+                </div>
+                <div class="flex-cont">
+                    <label></label>
+                    <nz-date-picker style="min-width:300px;" [(ngModel)]="endDate" nzPlaceHolder="End Date">
+                    </nz-date-picker>
+                </div>
+                <div style="margin-top: 17px;">
+                    <button style="width: 50%; color: white;" type="button" class="bg-primary" nz-button nzShape="round" (click)="search(); isMobFilterVisible = false;">Search</button>
+                    <button style="width: 50%; color: white;" type="button" class="bg-primary" nz-button nzShape="round" (click)="reset(); isMobFilterVisible = false;">Reset</button>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="innerWidth >=500" class="filters-row">
+            <div class="my-card">
+                <div class="my-card-header">
+                    <nz-select style="min-width: 200px;" nzPlaceHolder="Search Vehicle no."
+                        [(ngModel)]="selectedVehicle"
+                        nzShowSearch nzAllowClear
+                        (nzOnSearch)="searchVehicle($event)">
+                        <nz-option *ngFor="let veh of vehDataCopy;" nzLabel="{{veh.vehicle_reg_no}}" [nzValue]="veh">
+                        </nz-option>
+                    </nz-select>
+                </div>
+            </div>
+            <div class="my-card">
+                <div class="my-card-header">
+                    <nz-select style="min-width: 100px;" [(ngModel)]="group">
+                        <nz-option nzValue="exception" nzLabel="Exception"></nz-option>
+                        <nz-option nzValue="day" nzLabel="Day Wise"></nz-option>
+                        <nz-option nzValue="month" nzLabel="Month Wise"></nz-option>
+                    </nz-select>
+                </div>
+            </div>
+            <div class="my-card">
+                <div class="my-card-header">
+                    <nz-date-picker style="min-width:200px;" [(ngModel)]="startDate" nzPlaceHolder="Start Date">
+                    </nz-date-picker>
+                </div>
+            </div>
+            <div class="my-card">
+                <div class="my-card-header">
+                    <nz-date-picker style="min-width:200px;" [(ngModel)]="endDate" nzPlaceHolder="End Date">
+                    </nz-date-picker>
+                </div>
+            </div>
+            <div class="my-card">
+                <div class="my-card-header">
+                    <div class="my-btn bg-primary" (click)="search()">
+                        <fa-icon [icon]="faSearch" style="font-size: 19px"></fa-icon>
+                    </div>
+                </div>
+            </div>
+            <div class="my-card">
+                <div class="my-card-header">
+                  <button class="my-btn bg-primary" (click)="reset()">
+                    <fa-icon [icon]="faTimes" style="font-size: 19px"></fa-icon>
+                  </button>
+                </div>
+              </div>
+        </div>
+        <div *ngIf="selectedTrip" style="display: flex; justify-content: space-around; gap:20vw;">
+            <div style="display: flex;flex-wrap: wrap;justify-content: flex-start;gap:10px;">
+                <div class="bold">{{selectedTrip?.vehicle_no}}</div>
+                <div class="bold">{{startDate | date: 'medium'}}</div>
+                <div class="bold">{{endDate | date: 'medium'}}</div>
+                <div class="bold">{{selectedTrip?.route?.route_name}}</div>
+                <div *ngIf="selectedTrip?.route?.route_distance" class="bold">{{selectedTrip?.route?.route_distance + ' km'}}</div>
+            </div>
+            <div>
+                <nz-select [(ngModel)]="group" (ngModelChange)="groupChange()">
+                    <nz-option nzValue="exception" nzLabel="Exception"></nz-option>
+                    <nz-option nzValue="day" nzLabel="Day Wise"></nz-option>
+                </nz-select>
+            </div>
+        </div>
+        <div style="display: flex;flex-wrap:wrap;">
+            <div *ngIf="exceptionData" style="flex-grow: 0.8;">
+                <h6 style="text-align:center;">
+                <u>{{e_options?.name}}</u>
+                </h6>
+                <nvd3 [options]="e_options" [data]="exceptionData"></nvd3>
+            </div>
+            <div *ngIf="!exceptionData && daywiseData" style="flex-grow: 0.8;">
+                <h6 style="text-align:center;">
+                    <u>{{e_options?.name}}</u>
+                </h6>
+            <nvd3 [options]="d_options" [data]="daywiseData"></nvd3>            
+            </div>
+            <div *ngIf="selectedTrip" style="margin-top:0vh;" style="flex-grow: 0.8;">
+                <h6 style="text-align:center;">
+                <u>{{p_options?.name}}</u>
+                </h6>
+                <nvd3 [options]="p_options" [data]="pData"></nvd3>
+            </div>
+        </div>
+</div>
+</div>

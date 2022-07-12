@@ -1,0 +1,60 @@
+<ImagePicker
+  [files]="fileList"
+  [capture]="true"
+  [multiple]="multiple"
+  [accept]="'image/*,application/*'"
+  [selectable]="fileList.length < size"
+  (onImageClick)="onImageClick($event)"
+  (onChange)="fileChange($event)"
+  (onAddImageClick)="addImageClick($event)"
+>
+  <ng-content></ng-content>
+</ImagePicker>
+
+<nz-modal
+  [nzVisible]="previewVisible"
+  [nzContent]="modalContent"
+  [nzFooter]="null"
+  (nzOnCancel)="previewVisible = false"
+>
+  <ng-template #modalContent>
+    <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+  </ng-template>
+</nz-modal>
+
+<nz-drawer
+  [nzClosable]="false"
+  [nzVisible]="showAttachmentSource"
+  nzPlacement="bottom"
+  [nzHeight]="151"
+  [nzMaskClosable]="true"
+  [nzBodyStyle]="{ paddingTop: '10px', paddingBottom: '0px' }"
+  (nzOnClose)="onDrawerClose()"
+  nzTitle="Add Attachment from"
+>
+  <button class="btn btn-primary" (click)="openCamera('camera')"> Camera </button>
+  <button class="btn btn-primary" (click)="openCamera('camera')"> Camera 1 </button>
+  <!--
+  <button
+    nz-button
+    type="button"
+    nzType="link"
+    (click)="openCamera('camera')"
+    class="w-fit h-fit shadow-0 pb-1 button"
+  >
+    <fa-icon [icon]="faCamera" style="font-size: 30px"></fa-icon>
+    <h5 class="bold text-center">Camera</h5>
+  </button>
+
+  <button
+    nz-button
+    type="button"
+    nzType="link"
+    (click)="openCamera('gallery')"
+    class="w-fit h-fit shadow-0 pb-1 button ml-2"
+  >
+    <fa-icon [icon]="faImage" style="font-size: 30px"></fa-icon>
+    <h5 class="bold text-center">Gallery</h5>
+  </button>
+  -->
+</nz-drawer>
