@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "ngServe": "node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng serve",
+    "ngBuild": "node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng build --prod",
     "ilpd": "npm install --legacy-peer-deps",
     "hmr": "ng serve --configuration hmr",
     "ng-high-memory-serve": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng serve",
