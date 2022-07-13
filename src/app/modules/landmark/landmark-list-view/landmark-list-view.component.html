@@ -11,7 +11,7 @@
         <button *ngIf="selectedData?._id" class="my-btn bg-primary"  nz-tooltip nzTooltipTitle=" View LandMark" (click)="navigateToDetails()">
           <fa-icon [icon]="faEye" style="font-size: 15px;"></fa-icon>
         </button>
-        <button *ngIf="selectedData?._id" class="my-btn bg-primary"  (click)="deletelandMark(selectedData)">
+        <button *ngIf="selectedData?._id" class="my-btn bg-primary"  (click)="showDeleteConfirm(selectedData)">
           <fa-icon [icon]="faTrash" style="font-size: 15px;color: red !important;"></fa-icon>
         </button>
       </div>
@@ -27,7 +27,7 @@
         <div *ngIf="selectedData?._id" class="mbbtn "  nz-tooltip nzTooltipTitle="View LandMark" (click)="navigateToDetails()">
           <fa-icon [icon]="faEye" ></fa-icon>
         </div>
-        <div *ngIf="selectedData?._id" class="mbbtn "  nz-tooltip nzTooltipTitle="Delete LandMark" (click)="deletelandMark(selectedData)">
+        <div *ngIf="selectedData?._id" class="mbbtn "  nz-tooltip nzTooltipTitle="Delete LandMark" (click)="showDeleteConfirm(selectedData)">
           <fa-icon [icon]="faTrash" style="color: red !important;" ></fa-icon>
         </div>
         <div *ngIf="innerWidth < 500" class="mbbtn " nz-tooltip nz-button nzTooltipTitle="Show Filters"

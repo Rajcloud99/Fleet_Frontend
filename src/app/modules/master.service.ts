@@ -1844,6 +1844,7 @@ export class MasterService {
     request.selected_uid = this.gpsId;
     request.login_uid = this.gpsId;
     request.user_uid = this.gpsId;
+    request.user_id=this.gpsId;
     request.sort = {_id: -1};
     request.type_url = 'gps_url';
     return this.http.post(URL.POST_GET_ALERTS,request).pipe(

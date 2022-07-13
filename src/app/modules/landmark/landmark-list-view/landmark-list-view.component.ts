@@ -93,7 +93,7 @@ export class LandmarkListViewComponent implements OnInit {
         iconName:"fa-trash",
         isVisible:false,
         clickEventMethode:()=>{
-          this.deletelandMark(this.selectedData);
+          this.showDeleteConfirm(this.selectedData);
         }
       }
     ];
@@ -120,6 +120,18 @@ export class LandmarkListViewComponent implements OnInit {
   navigateToDetails() {
     this.router.navigateByUrl("home/tracking/landmark/Upsert/" +'Preview',{state: this.selectedData});
   }
+
+  showDeleteConfirm(event: any): void {
+    this.modal.confirm({
+      nzTitle: `Are you sure you want to delete?`,
+      nzOkText: 'Yes',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () => this.deletelandMark(event),
+      nzCancelText: 'Cancel',
+    });
+  }
+
   deletelandMark(data:any){
    if(!data){
      this.commonService.error('Please Select any Row');

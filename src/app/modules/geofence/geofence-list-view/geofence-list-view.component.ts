@@ -37,7 +37,7 @@ export class GeofenceListViewComponent implements OnInit {
   timer: any;
   logInUser: any;
   filterObj: any = {
-    name: null,
+    get_zeozone_by_name: null,
   };
   vehicle_no: any;
   name:any;
@@ -255,7 +255,7 @@ export class GeofenceListViewComponent implements OnInit {
             mContext.masterService
               .getGeofence({
                 no_of_docs: 10,
-                skip: mContext.pageNumber,
+                pageState: mContext.pageNumber,
                 ...this.filterObj,
               })
               .subscribe((data) => {

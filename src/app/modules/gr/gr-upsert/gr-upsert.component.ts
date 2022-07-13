@@ -240,7 +240,11 @@ export class GrUpsertComponent implements OnInit {
     }
   }
   grdatafill(){
-    this.GrSubmissionFrom.controls['grNumber'].patchValue(this.getstationarydata[0]);
+    if(this.config && this.config.GR && this.config.GR.manualGr){
+      this.GrSubmissionFrom.controls['grNumber'].patchValue(this.getstationarydata[0].bookNo);
+    }else {
+      this.GrSubmissionFrom.controls['grNumber'].patchValue(this.getstationarydata[0]);
+    }
   }
 // get config when edit gr
   getFormList() {
@@ -664,17 +668,23 @@ export class GrUpsertComponent implements OnInit {
         requestObj.sch = 'onBook';
         requestObj.auto = true;
       }
-    if(this.config && this.config.GR && this.config.GR.manualGr) return;
+    if(this.config && this.config.GR && this.config.GR.manualGr && viewValue  != 'centrailized') return;
     this.masterService.getBillStationary(requestObj).subscribe((data: any) => {
       if (viewValue === 'centrailized' || viewValue === 'auto') {
       if (data[0]) {
         this.getstationarydata=[];
-           this.GrSubmissionFrom.controls['grNumber'].patchValue(data[0]);
-           this.getstationarydata = data[0];
-      }}
-      if(data){
-        this.getstationarydata=[];
-        this.getstationarydata = data;
+        if(this.config && this.config.GR && this.config.GR.manualGr){
+          this.GrSubmissionFrom.controls['grNumber'].patchValue(data[0].bookNo);
+        }else {
+          this.GrSubmissionFrom.controls['grNumber'].patchValue(data[0]);
+          this.getstationarydata = data[0];
+        }
+
+      }}else {
+        if (data) {
+          this.getstationarydata = [];
+          this.getstationarydata = data;
+        }
       }
     });
   }
@@ -1105,7 +1115,7 @@ export class GrUpsertComponent implements OnInit {
         'sGST_percent': this.sGST_percent,
         'totalAmount': this.totalAmt,
         'totalFreight': this.totalFreight,
-        grNumber:this.GrSubmissionFrom.controls['grNumber']?.value?.bookNo,
+        grNumber:this.GrSubmissionFrom.controls['grNumber']?.value?.bookNo || this.GrSubmissionFrom.controls['grNumber']?.value,
       }
       this.GRpopupdata = GRdata;
       console.log('gr data submit');
@@ -1122,7 +1132,7 @@ export class GrUpsertComponent implements OnInit {
       customer: formData?.customer?._id,
       gr_type: "Own",
       stationaryId:this.GrSubmissionFrom.controls['grNumber'].value.billBookId,
-      grNumber:this.GrSubmissionFrom.controls['grNumber'].value.bookNo,
+      grNumber:this.GrSubmissionFrom.controls['grNumber'].value.bookNo || this.GrSubmissionFrom.controls['grNumber'].value,
       iGST: this.iGst,
       iGST_percent: this.iGST_percent,
       sGST: this.sGst,
