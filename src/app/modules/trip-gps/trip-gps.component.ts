@@ -39,6 +39,7 @@ export class TripGpsComponent implements OnInit {
   prim_contact_no: any;
   employee_code:any;
   receivedAllVendors: any = [];
+  receivedAllBranches: any;
   selectedClient: any;
   vendorId: any;
   receivedData : any;
@@ -363,6 +364,14 @@ export class TripGpsComponent implements OnInit {
         this.router.navigateByUrl('home/operation/tripDetails');
       }
     });
+  }
+
+  onChangeBranch(value: any) {
+    if (value) {
+      this.masterService.getAllBranch({ name: value }).subscribe((res: any) => {
+        this.receivedAllBranches = res;
+      });
+    }
   }
 
   today = new Date();

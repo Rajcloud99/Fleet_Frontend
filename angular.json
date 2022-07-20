@@ -20,6 +20,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies":["d3","ng2-nvd3","nvd3","ngx-socket-io"],
+            "progress": true,
+            "preserveSymlinks": true,
             "outputPath": "dist/myapp",
             "index": "src/index.html",
             "main": "src/main.ts",

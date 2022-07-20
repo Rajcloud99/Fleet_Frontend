@@ -37,7 +37,7 @@
     >
       <div style="border-bottom: 5px solid #e6e6e6; padding: 1px 0 0 0">
         <agm-map [latitude]="marker.lat" [longitude]="marker.lng"  [zoom]="zoom" [streetViewControl]="false" [keyboardShortcuts]="false"
-                 [fullscreenControl]="false" [gestureHandling]="'greedy'">
+                 [fullscreenControl]="false" [gestureHandling]="'greedy'" (mapReady)="onMapReady($event)">
           <agm-marker *ngFor="let m of markers; let i = index;" [latitude]="m.lat" [longitude]="m.lng" [markerDraggable]="true"
           >
           </agm-marker>
@@ -80,6 +80,30 @@
         </agm-map>
 
       </div>
+      <!--    for geozone edit -->
+      <nz-modal style="z-index: 50" [(nzVisible)]="visible" nzTitle="Add Geozone" (nzOnCancel)="handleCancel()"
+                (nzOnOk)="handleSubmit()">
+
+        <ng-container *nzModalContent>
+          <div nz-col nzXs="24" nzSm="12" nzMd="24" nzLg="24">
+            <nz-form-label style="text-align: left" nzFor="Name">Name<span class="red-mark">*</span>
+            </nz-form-label>
+            <nz-form-control>
+              <input nz-input style="width: 95%" [(ngModel)]="name" [ngModelOptions]="{ standalone: true }"
+                     placeholder="Enter Geozone  Name " autocomplete="off" />
+            </nz-form-control>
+          </div>
+          <div nz-col nzXs="24" nzSm="12" nzMd="24" nzLg="24">
+            <nz-form-label style="text-align: left" nzFor="Name">Description
+            </nz-form-label>
+            <nz-form-control>
+            <textarea type="text" nz-input style="width: 95% ; height: 120px" [(ngModel)]="description" [ngModelOptions]="{ standalone: true }"
+                      placeholder="Enter Description " autocomplete="off" >
+            </textarea>
+            </nz-form-control>
+          </div>
+        </ng-container>
+      </nz-modal>
     </div>
   </div>
 </div>

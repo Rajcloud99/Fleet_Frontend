@@ -103,13 +103,6 @@ export class DutyListViewComponent implements OnInit {
   }
 
   searchDuty(){
-    let params = new HttpParams()
-      .set('sort',-1)
-      // .set('deleted',false)
-      .set('all',true)
-      .set('request_id',Date.now()+''+Math.round(Math.random()*100))
-      .set('no_of_docs',  10)
-      .set('validate','all');
     this.clean(this.filterObj);
     if(this.customer)
       this.filterObj.customer_id = this.customer._id;
@@ -124,7 +117,7 @@ export class DutyListViewComponent implements OnInit {
       this.receivedDutyData = res;
       if(res.length){
         this.scrollTable = document.getElementsByClassName("ant-table-body");
-        this.scrollTable[0].addEventListener('scroll',() => {
+        this.scrollTable[0]?.addEventListener('scroll',() => {
           this.getDataOnScroll();
         });
       }else{
@@ -163,7 +156,7 @@ export class DutyListViewComponent implements OnInit {
 
   getDataOnScroll(){
     if (true) {
-      let divElement: any = document.getElementById('myDIVCard');
+      let divElement: any = document.getElementsByClassName("ant-table-body") ||  document.getElementById('myDIV');
       console.log('divElement', divElement);
       if ((divElement.scrollTop + divElement.clientHeight) >= divElement.scrollHeight) {
         if (this.stopScrolling === false) {

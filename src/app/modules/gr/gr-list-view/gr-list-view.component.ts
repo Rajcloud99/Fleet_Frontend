@@ -215,7 +215,7 @@ export class GrListViewComponent implements OnInit {
   onScroll() {
 
     if (true) {
-      let divElement: any = document.getElementsByClassName("ant-table-body")[0];
+      let divElement: any = document.getElementsByClassName("ant-table-body")[0] || document.getElementById('myDIV');
       if (
         divElement.scrollTop + divElement.clientHeight >=
         divElement.scrollHeight

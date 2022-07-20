@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { RESOURCE_CACHE_PROVIDER } from '@angular/platform-browser-dynamic';
 import { Observable } from 'rxjs';
 import { catchError, debounceTime, map } from 'rxjs/operators';
 import { CommonService } from '../services/common.service';
@@ -97,6 +98,10 @@ const URL = {
   //cencle trip GR
   CANCEL_TRIP_GR: "api/trip_gr/cancel/",
   GET_CONFIGS : "api/configs/",
+
+  // for broker memo
+  POST_BROKER_MEMO: "api/brokerMemo/get",
+  POST_BROKER_MEMO_UPDATE : "api/brokerMemo/update/",
   //for trip memo get
   GET_ALL_TRIP_MEMO:"api/trip_memo/get_trip_memo",
   POST_TRIP_MEMO_UPDATE:"API/trip_memo/updateTripMemo/",
@@ -111,6 +116,12 @@ const URL = {
   MATERIAL_GROUP_EDIT : "api/material/group/update/",
   MATERIAL_GROUP_DELETE : "api/material/group/delete/",
 
+  //sensor
+  SENSOR_ADD : "sensor/add",
+  SENSOR_EDIT : "sensor/update",
+  SENSOR_GET : "sensor/get/",
+  SENSOR_DELETE : "sensor/remove/",
+
   //for bookings and duty
   BOOKING_GET : "api/bookings/get/",
   DUTY_ADD : "api/bookings/add/",
@@ -120,6 +131,7 @@ const URL = {
   POST_GET_GEOZONE : "api/geozone/get",
   POST_DELETE_GEOZONE : "api/geozone/remove",
   POST_EDIT_GEOZONE : "api/geozone/update",
+  POST_ADD_GEOZONE : "api/geozone/create",
   //for Transport Router
   TRANSPORT_ROUTE_GET: "api/transportroute/get/",
   TRANSPORT_ROUTE_UPDATE_PUT:"api/transportroute/update/",
@@ -144,7 +156,13 @@ const URL = {
   POST_GET_ALARMS: "api/alarm/get",
   POST_UPDATE_ALARM: "api/alarm/update",
   POST_CREATE_ALARM: "api/alarm/create",
-  POST_REMOVE_ALARM: "api/alarm/remove"
+  POST_REMOVE_ALARM: "api/alarm/remove",
+
+  //GPS Reports
+
+  POST_GET_GPS_REPORTS:"api/reports/",
+  POST_GET_ALERTS_REPORTS: "alert/",
+
 }
 @Injectable({
   providedIn: 'root'
@@ -152,6 +170,8 @@ const URL = {
 export class MasterService {
   gpsgaadi_token: any;
   gpsId: any;
+  reportType:any;
+  userId:any;
   constructor(
     private http: HttpClient,
     private commonService: CommonService,
@@ -174,7 +194,7 @@ export class MasterService {
         if (res.data) {
           return res.data;
         } else if(res && res.url) {// for download case
-            return res;
+          return res;
         } else {
           this.commonService.error(res.message);
           return false;
@@ -286,7 +306,7 @@ export class MasterService {
         if (res.data) {
           return res.data;
         } else if(res && res.url) {// for download case
-            return res;
+          return res;
         } else {
           this.commonService.error(res.message);
           return false;
@@ -309,7 +329,7 @@ export class MasterService {
         if (res.data) {
           return res.data;
         } else if(res && res.url) {// for download case
-            return res;
+          return res;
         } else {
           this.commonService.error(res.message);
           return false;
@@ -367,7 +387,7 @@ export class MasterService {
   getAllGrWithOutTrip(request?: any): Observable<any> {
     request = request || {};
     request.request_id= Date.now() + '' + Math.round(Math.random() * 100),
-    request.validate= 'all'
+      request.validate= 'all'
     return this.http.post(URL.POST_GR_WITHOUT_TRIP_GET, request).pipe(
       map((res: any) => {
         if (res.data) {
@@ -388,7 +408,7 @@ export class MasterService {
   getDocuments(request?: any): Observable<any> {
     request = request || {};
     request.request_id= Date.now() + '' + Math.round(Math.random() * 100),
-    request.validate= 'all'
+      request.validate= 'all'
     return this.http.post(URL.POST_DOC_GET, request).pipe(
       map((res: any) => {
         if (res.data) {
@@ -468,7 +488,7 @@ export class MasterService {
   getBillStationary(request?: any): Observable<any> {
     request = request || {};
     request.request_id= Date.now() + '' + Math.round(Math.random() * 100),
-    request.validate= 'all'
+      request.validate= 'all'
     return this.http.post(URL.POST_STATIONARY_GET, request).pipe(
       map((res: any) => {
         if (res.data) {
@@ -955,7 +975,7 @@ export class MasterService {
   getAllVehicle(request?: any): Observable<any> {
     request = request || {};
     request.validate = "all";
-      // request.skip = 1,
+    // request.skip = 1,
     request.request_id =(Date.now() + '' + Math.round(Math.random() * 100));
     return this.http.post(URL.POST_VEHICLE_GET,request).pipe(
       map((res: any) => {
@@ -1501,7 +1521,7 @@ export class MasterService {
     request.validate = 'all';
     request.request_id = this.getRandomNo();
     request.sort = -1,
-    request.skip = 1
+      request.skip = 1
     return this.http.delete(URL.MATERIAL_DELETE + id, request).pipe(
       map((res: any) => {
         if(res.data) {
@@ -1597,6 +1617,27 @@ export class MasterService {
       })
     );
   }
+  //broker memo  RELATED
+  getAllBrokerMemo(request?: any): Observable<any> {
+    request = request || {};
+    request.validate = "all";
+    // request.skip = 1,
+    request.request_id =(Date.now() + '' + Math.round(Math.random() * 100));
+    return this.http.post(URL.POST_BROKER_MEMO,request).pipe(
+      map((res: any) => {
+        if (res.data) {
+          return res;
+        } else {
+          this.commonService.error(res.message);
+          return false;
+        }
+      }),
+      catchError(err => {
+        return [];
+      })
+    );
+  }
+
 //trip memo  RELATED
   getAllTripMemo(request?: any): Observable<any> {
     request = request || {};
@@ -1635,6 +1676,26 @@ export class MasterService {
       })
     );
   }
+
+  brokermemoupdate(id: string, request?: any): Observable<any> {
+    request = request || {};
+    return this.http.post(URL.POST_BROKER_MEMO_UPDATE + id, request).pipe(
+      map((res: any) => {
+        if (res.data) {
+          this.commonService.success(res.message);
+          return res.data;
+        } else {
+          this.commonService.error(res.message);
+          return false;
+        }
+      }),
+      catchError(err => {
+        this.commonService.error(err.error.message);
+        return [];
+      })
+    );
+  }
+
   GetCustomerRate(request?: any): Observable<any> {
     request = request || {};
     let params = new HttpParams();
@@ -1660,29 +1721,29 @@ export class MasterService {
   }
 
   autosuggestCity(request ?: any): Observable<any> {
-     let params = new HttpParams();
-       request = {'query' : request.requestObj.query ,'request_id':this.getRandomNo(),'validate': 'all'};
-      for(const key in request) {
+    let params = new HttpParams();
+    request = {'query' : request.requestObj.query ,'request_id':this.getRandomNo(),'validate': 'all'};
+    for(const key in request) {
       params = params.append(key,request[key]);
-      }
-      return this.http.post(URL.AUTOSUGGESR_CITY,request).pipe(
-        map((res:any)=>{
-         if(res.data) {
-         return res.data;
-         } else {
-         this.commonService.error(res.message);
-         return false;
-         }
-        }),
-       catchError( err => {
-         // console.log('ritikaError' + err && err.error && err.error.message);
-         this.commonService.errorModal('Error',err && err.error && err.error.message);
-         return [];
-       })
-     )
-   }
+    }
+    return this.http.post(URL.AUTOSUGGESR_CITY,request).pipe(
+      map((res:any)=>{
+        if(res.data) {
+          return res.data;
+        } else {
+          this.commonService.error(res.message);
+          return false;
+        }
+      }),
+      catchError( err => {
+        // console.log('ritikaError' + err && err.error && err.error.message);
+        this.commonService.errorModal('Error',err && err.error && err.error.message);
+        return [];
+      })
+    )
+  }
 
-   getAllTransportRoutes(request ?: any): Observable<any> {
+  getAllTransportRoutes(request ?: any): Observable<any> {
     let params = new HttpParams();
     request = {...request,'request_id':this.getRandomNo(),'validate': 'all'};
     for(const key in request) {
@@ -2095,7 +2156,7 @@ export class MasterService {
     );
   }
 
-getplayData(request?: any): Observable<any> {
+  getplayData(request?: any): Observable<any> {
     request.request = 'playback';
     request.version = 2;
     request.type_url = 'trucku';
@@ -2165,14 +2226,14 @@ getplayData(request?: any): Observable<any> {
     this.gpsId = this.store.get('gpsId');
     request = request || {};
     request.request = "get_geozone",
-    request.type_url = 'trucku';
+      request.type_url = 'trucku';
     request.validate = "all";
     request.selected_uid = this.gpsId;
     request.login_uid = this.gpsId;
-     request.user_id = this.gpsId;
+    request.user_id = this.gpsId;
     request.request_id = this.getRandomNo();
     request.row_count = 13,
-    request.no_of_docs = 13;
+      request.no_of_docs = 13;
     return this.http.post(URL.POST_GET_GEOZONE,request).pipe(
       map((res: any) => {
         if (res.data) {
@@ -2192,7 +2253,7 @@ getplayData(request?: any): Observable<any> {
   }
   DeleteGeofence(request?: any): Observable<any> {
     request.request = "remove_geozone",
-    request.type_url = 'trucku';
+      request.type_url = 'trucku';
     this.gpsId = this.store.get('gpsId');
     request.selected_uid = this.gpsId;
     request.login_uid = this.gpsId;
@@ -2241,6 +2302,31 @@ getplayData(request?: any): Observable<any> {
       })
     );
   }
+  AddGeofence(request?: any): Observable<any> {
+    request.request = "add_geozone",
+      request.type_url = 'trucku';
+    this.gpsId = this.store.get('gpsId');
+    request.selected_uid = this.gpsId;
+    request.login_uid = this.gpsId;
+    request.user_id = this.gpsId;
+    request.validate = "all";
+    request.request_id = this.getRandomNo();
+    return this.http.post(URL.POST_ADD_GEOZONE,request).pipe(
+      map((res: any)=> {
+        if(res.status == 'OK') {
+          this.commonService.success(res.data.message);
+          return res;
+        } else {
+          this.commonService.error(res.data.message);
+          return false;
+        }
+      }),
+      catchError((err) => {
+        this.commonService.errorModal('Error', err && err.error && err.error.message);
+        return [];
+      })
+    );
+  }
 
   //*************************
 
@@ -2273,7 +2359,7 @@ getplayData(request?: any): Observable<any> {
         if (res.data) {
           return res.data;
         } else if(res && res.url) {// for download case
-            return res;
+          return res;
         } else {
           this.commonService.error(res.message);
           return false;
@@ -2294,7 +2380,7 @@ getplayData(request?: any): Observable<any> {
         if (res.data) {
           return res.data;
         } else if(res && res.url) {// for download case
-            return res;
+          return res;
         } else {
           this.commonService.error(res.message);
           return false;
@@ -2315,7 +2401,7 @@ getplayData(request?: any): Observable<any> {
         if (res.data) {
           return res.data;
         } else if(res && res.url) {// for download case
-            return res;
+          return res;
         } else {
           this.commonService.error(res.message);
           return false;
@@ -2327,4 +2413,165 @@ getplayData(request?: any): Observable<any> {
       })
     );
   }
+
+  getGpsReports(request?: any, type?:any): Observable<any> {
+    this.gpsId = this.store.get('gpsId');
+    this.userId=this.store.get('user');
+    request.user_id = this.gpsId;
+    request.type_url = 'trucku';
+    request.selected_uid = this.gpsId;
+    request.login_uid = this.gpsId;
+    request.lms_uid = this.userId;
+    request.download = true;
+    request.validate = "all";
+    request.request_id = this.getRandomNo();
+    return this.http.post(URL.POST_GET_GPS_REPORTS+type,request).pipe(
+      map((res: any)=> {
+        if(res.status == 'OK'|| res.message=='Report Successfully Created') {
+          this.commonService.success(res?.data?.message||res.message);
+          return res;
+        } else {
+          this.commonService.error(res.data.message);
+          return false;
+        }
+      }),
+      catchError((err) => {
+        this.commonService.errorModal('Error', err && err.error && err.error.message);
+        return [];
+      })
+    );
+  }
+
+  getAlertsReports(request?: any, type?:any): Observable<any> {
+    request = request || {};
+    this.gpsId = this.store.get('gpsId');
+    this.userId=this.store.get('user');
+    request.download = true;
+    request.login_uid = this.gpsId;
+    request.user_id = this.gpsId;
+    request.type_url = 'gps_url';
+    return this.http.post(URL.POST_GET_ALERTS_REPORTS+type, request).pipe(
+      map((res: any)=> {
+        if(res.status=='SUCCESS') {
+          this.commonService.success(res.message);
+          return res;
+        } else {
+          this.commonService.error(res.message);
+          return false;
+        }
+      }),
+      catchError((err) => {
+        this.commonService.errorModal('Error', err && err.error && err.error.message);
+        return [];
+      })
+    );
+  }
+
+  addSensor(request? : any) : Observable<any> {
+    request = request || {};
+    // requst.category = 'Fuel';
+    // request.s_id = "12345678";
+
+    // request.validate = 'all';
+    // request.request_id = this.getRandomNo();
+
+    return this.http.post(URL.SENSOR_ADD, request).pipe(
+      map((res: any) => {
+        if(res.data) {
+          this.commonService.success(res.message);
+          return res.data;
+        } else {
+          this.commonService.error(res.message);
+          return false;
+        }
+      }),
+      catchError((err) => {
+        this.commonService.errorModal('Error', err && err.error && err.error.message);
+        return [];
+      })
+    );
+  }
+
+  getAllSensorData(request?: any): Observable<any> {
+    // request = request || {};
+    // request.type_url = 'gps_url';
+
+    request.type_url = 'gps_url';
+    request.validate = "all";
+    this.gpsId = this.store.get('gpsId');
+    request.authorizationToken = this.gpsgaadi_token;
+    request.selected_uid = this.gpsId;
+    request.login_uid = this.gpsId;
+    request.user_id = this.gpsId;
+    request.request_id = this.getRandomNo();
+
+    return this.http.post(URL.SENSOR_GET,request).pipe(
+      map((res: any) => {
+        if (res.data) {
+          return res.data;
+        } else {
+          this.commonService.error(res.message);
+          return false;
+        }
+      }),
+      catchError(err => {
+        return [];
+      })
+    );
+  }
+
+  editSensor(id: string, request?: any) : Observable<any> {
+    request = request || {};
+    // requst.category = 'Fuel';
+    // request.s_id = "1234567";
+    request.type_url = 'gps_url';
+    request.user_id = this.gpsId;
+    request._id = id;
+
+    // request.validate = 'all';
+    // request.request_id = this.getRandomNo();
+
+    return this.http.post(URL.SENSOR_EDIT, request).pipe(
+      map((res: any) => {
+        if(res.data) {
+          this.commonService.success(res.message);
+          return res.data;
+        } else {
+          this.commonService.error(res.message);
+          return false;
+        }
+      }),
+      catchError((err) => {
+        this.commonService.errorModal('Error', err && err.error && err.error.message);
+        return [];
+      })
+    );
+  }
+
+  deleteSensor(id: string, request?: any) : Observable<any> {
+    request = request || {};
+    // request.s_id = "1234567";
+    request.type_url = 'gps_url';
+    request.user_id = this.gpsId;
+
+    // request.validate = 'all';
+    // request.request_id = this.getRandomNo();
+
+    return this.http.post(URL.SENSOR_DELETE, request).pipe(
+      map((res: any) => {
+        if(res.data) {
+          this.commonService.success(res.message);
+          return res.data;
+        } else {
+          this.commonService.error(res.message);
+          return false;
+        }
+      }),
+      catchError((err) => {
+        this.commonService.errorModal('Error', err && err.error && err.error.message);
+        return [];
+      })
+    );
+  }
+
 }

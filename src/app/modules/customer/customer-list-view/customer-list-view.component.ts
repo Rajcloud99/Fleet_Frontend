@@ -93,19 +93,13 @@ export class CustomerListViewComponent implements OnInit {
   }
 
   search () {
-    let params = new HttpParams()
-      .set('sort',-1)
-      .set('deleted',false)
-      .set('all',true)
-      .set('request_id',Date.now()+''+Math.round(Math.random()*100))
-      .set('validate','all');
     this.clean(this.filterObjType);
-    this.masterService.getAllCustomer({...this.filterObjType}).subscribe((res: any) => {
+    this.masterService.getAllCustomer({no_of_docs: 10, skip:1,...this.filterObjType}).subscribe((res: any) => {
       this.receivedData = res;
       if(res){
         this.scrollTable = document.getElementsByClassName("ant-table-body");
         // console.log("seracht" + this.scrollTable);
-        this.scrollTable[0].addEventListener('scroll',() => {
+        this.scrollTable[0]?.addEventListener('scroll',() => {
           // console.log('scroll');
           this.getDataOnScroll();
         });
@@ -136,7 +130,7 @@ export class CustomerListViewComponent implements OnInit {
 
   getDataOnScroll() {
     if (true) {
-      let divElement: any = document.getElementsByClassName('ant-table-body')[0] ||document.getElementById('myDIVCard');
+      let divElement: any = document.getElementsByClassName('ant-table-body')[0] ||document.getElementById('myDIV');
       // console.log('divElement', divElement);
       if ((divElement.scrollTop + divElement.clientHeight) >= divElement.scrollHeight) {
         if (this.stopScrolling === false) {

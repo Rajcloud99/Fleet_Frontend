@@ -230,8 +230,9 @@ export class TripListComponent implements OnInit,OnDestroy {
     if(this.filterObj.trip_no) req.trip_no = this.filterObj.trip_no;
     this.masterService.downloadJobRiskyReport(req).subscribe((res:any) => {
       if(res && res.url) {
-        this.donwloadAnchor.nativeElement.href = res.url;
-          this.donwloadAnchor.nativeElement.click();
+        this.commonService.downloadFileWithUrl(res.url);
+        // this.donwloadAnchor.nativeElement.href = res.url;
+        //   this.donwloadAnchor.nativeElement.click();
       }
     })
   }
@@ -246,8 +247,9 @@ export class TripListComponent implements OnInit,OnDestroy {
     if(this.filterObj.trip_no) req.trip_no = this.filterObj.trip_no;
     this.masterService.downloadJobOrderReport(req).subscribe((res:any) => {
       if(res && res.url) {
-        this.donwloadAnchor.nativeElement.href = res.url;
-          this.donwloadAnchor.nativeElement.click();
+        this.commonService.downloadFileWithUrl(res.url);
+        // this.donwloadAnchor.nativeElement.href = res.url;
+        //   this.donwloadAnchor.nativeElement.click();
       }
     })
   }
@@ -262,8 +264,9 @@ export class TripListComponent implements OnInit,OnDestroy {
     if(this.filterObj.trip_no) req.trip_no = this.filterObj.trip_no;
     this.masterService.downloadJobPowerConnectReport(req).subscribe((res:any) => {
       if(res && res.url) {
-        this.donwloadAnchor.nativeElement.href = res.url;
-          this.donwloadAnchor.nativeElement.click();
+        this.commonService.downloadFileWithUrl(res.url);
+        // this.donwloadAnchor.nativeElement.href = res.url;
+        //   this.donwloadAnchor.nativeElement.click();
       }
     })
   }

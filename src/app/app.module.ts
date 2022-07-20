@@ -107,7 +107,15 @@ import { GeofenceListViewComponent } from './modules/geofence/geofence-list-view
 import { GeofenceUpsertComponent } from './modules/geofence/geofence-upsert/geofence-upsert.component';
 import { AlarmComponent } from './modules/alarm/alarm.component';
 import { AlarmListViewComponent } from './modules/alarm/alarm-list-view/alarm-list-view.component';
+import { SensorComponent } from './modules/sensor/sensor.component';
+import { SensorListViewComponent } from './modules/sensor/sensor-list-view/sensor-list-view.component';
+import { SensorUpsertComponent } from './modules/sensor/sensor-upsert/sensor-upsert.component';
 import { AlarmUpsertComponent } from './modules/alarm/alarm-upsert/alarm-upsert.component';
+import { GpsReportsComponent } from './modules/gps-reports/gps-reports.component';
+import { CalibComponent } from './modules/sensor/calib/calib.component';
+import {BrokerMemoListViewComponent} from "./modules/broker-memo/broker-memo-list-view/broker-memo-list-view.component";
+import {BrokerMemoUpsertComponent} from "./modules/broker-memo/broker-memo-upsert/broker-memo-upsert.component";
+import {BrokerMemoComponent} from "./modules/broker-memo/broker-memo.component";
 
 const config: SocketIoConfig = { url: environment.ws, options: {} };
 registerLocaleData(en);
@@ -204,7 +212,15 @@ registerLocaleData(en);
     GeofenceListViewComponent,
     AlarmComponent,
     AlarmListViewComponent,
-    AlarmUpsertComponent
+    AlarmUpsertComponent,
+    GpsReportsComponent,
+    BrokerMemoComponent,
+    BrokerMemoListViewComponent,
+    BrokerMemoUpsertComponent,
+    SensorComponent,
+    SensorListViewComponent,
+    SensorUpsertComponent,
+    CalibComponent
   ],
   imports: [
     BrowserModule,

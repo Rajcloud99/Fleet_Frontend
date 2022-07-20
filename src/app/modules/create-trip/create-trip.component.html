@@ -164,18 +164,24 @@
         </div>
       </div>
         <div style="margin-top: 5px" *ngIf="innerWidth <= 500">
-          <button nz-button style="margin-bottom: 5px; width:100%;" class="invbtn"  nzType="primary" (click)="upsertGrModal('Add GR',null,-1,$event)">
+          <button *ngIf="!isBroker" nz-button style="margin-bottom: 5px; width:100%;" class="invbtn"  nzType="primary" (click)="upsertGrModal('Add GR',null,-1,$event)">
             ADD GR
           </button>
-          <button *ngIf="configs.tripMemo && configs.tripMemo.show" nzType="primary" nz-button style="margin-bottom: 5px; width:100%;" class="invbtn"
+          <button *ngIf="!isBroker && configs.tripMemo && configs.tripMemo.show" nzType="primary" nz-button style="margin-bottom: 5px; width:100%;" class="invbtn"
             (click)="AdTMmodel('Trip Memo Popup',null,-1)">
             TRIP MEMO
           </button>
 
-          <button *ngIf="this.f.ownership_type.value === 'Market'"  nzType="primary" nz-button class="invbtn" style="margin-bottom: 5px; width:100%;"
+          <button *ngIf="isBroker" nzType="primary" nz-button style="margin-bottom: 5px; width:100%;" class="invbtn"
+            (click)="AdBMmodel('Broker Memo Popup',null,-1)">
+            BROKER MEMO
+          </button>
+
+          <button *ngIf="!isBroker && f.ownership_type.value === 'Market'"  nzType="primary" nz-button class="invbtn" style="margin-bottom: 5px; width:100%;"
             (click)="addvendordealModal('Edit Vendor Deal',VdealpopupData,0)">
             VENDOR DEAL
           </button>
+
         </div>
         <br>
         <!-- <div *ngIf="innerWidth > 500">
@@ -229,19 +235,23 @@
       <thead>
         <th>#</th>
         <th>Customer</th>
-        <th>GR Info</th>
-        <th *ngIf="configs.tripMemo && configs.tripMemo.show">Trip Memo</th>
+        <th *ngIf="!isBroker">GR Info</th>
+        <th *ngIf="!isBroker && configs.tripMemo && configs.tripMemo.show">Trip Memo</th>
+        <th *ngIf="isBroker">Broker Memo</th>
       </thead>
       <tbody>
         <tr *ngFor="let data of preparegrArr; let i=index;">
           <td nzAlign="center"><span style="text-decoration: underline; color: blue; cursor: pointer;"
               (click)="delRow(i)">Delete</span></td>
           <td nzAlign="center">{{customer?.name || ''}}</td>
-          <td nzAlign="center"><span style="text-decoration: underline; color: blue; cursor: pointer;"
+          <td nzAlign="center" *ngIf="!isBroker"><span style="text-decoration: underline; color: blue; cursor: pointer;"
               (click)="upsertGrModaldata('Edit GR',data,i)">Gr Details</span></td>
-          <td nzAlign="center" *ngIf="configs.tripMemo && configs.tripMemo.show"><span
+          <td nzAlign="center" *ngIf="!isBroker && configs.tripMemo && configs.tripMemo.show"><span
               style="text-decoration: underline; color: blue; cursor: pointer;"
               (click)="AdTMmodel('Trip Memo Popup',data,-1)">Trip Memo Info</span></td>
+          <td nzAlign="center" *ngIf="isBroker"><span
+            style="text-decoration: underline; color: blue; cursor: pointer;"
+            (click)="AdBMmodel('Broker Memo Popup',data,-1)">Broker Memo Info</span></td>
         </tr>
       </tbody>
     </nz-table>

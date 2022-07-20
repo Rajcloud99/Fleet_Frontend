@@ -6,6 +6,12 @@
     flex-direction: column;
   }
 }
+
+#myDIV {
+  height: 100%;
+  overflow-y: auto;
+}
+
 .head {
   padding: 12px;
   margin-top: 5px;

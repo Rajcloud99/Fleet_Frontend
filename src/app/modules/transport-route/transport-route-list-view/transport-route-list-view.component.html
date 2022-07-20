@@ -68,10 +68,10 @@
       </div>
     </div>
 
-    <!-- Card view start *ngIf="innerWidth <= 500" -->
+<!-- table view start *ngIf="innerWidth > 500" -->
+    <div id="myDIV" (scroll)="onScroll();">
+      <!-- Card view start *ngIf="innerWidth <= 500" -->
     <div class="aggregate" *ngIf="innerWidth <500">
-      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
-        nzSize="small" [nzScroll]="{ y: '425px' }" style="overflow-x: auto">
         <div class="head shadow-d1" *ngFor="let d of receivedData" (click)="selectItem(d)"
           [ngClass]="{SelectHighlight :  selectedRowId && (d?._id === selectedRowId)}">
 
@@ -100,12 +100,9 @@
           </div>
 
         </div>
-      </nz-table>
     </div>
 
-<!-- table view start *ngIf="innerWidth > 500" -->
-    <div id="myDIV" *ngIf="innerWidth > 500">
-      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
+      <nz-table #nzTable *ngIf="innerWidth > 500" nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
                 nzSize="small"  [nzScroll]="{ x: '2000', y: '350px' }" style="overflow-x: auto">
         <thead>
         <tr>
@@ -132,7 +129,6 @@
         </tr>
         </tbody>
       </nz-table>
-      <br/><br/>
     </div>
 
 

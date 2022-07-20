@@ -17,6 +17,7 @@
 }
 
 #myDIV {
+    height: 100%;
     overflow-y: auto;
 }
 
@@ -29,7 +30,8 @@
 }
 @media screen and (max-width: 500px) {
     #myDIV {
-      height: 500px;
+      height: 100%;
+      overflow-y: auto;
     }
     nz-select, nz-date-picker, input {
         width: 100%;

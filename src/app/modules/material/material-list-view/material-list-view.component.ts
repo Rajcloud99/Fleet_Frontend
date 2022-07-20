@@ -117,19 +117,13 @@ export class MaterialListViewComponent implements OnInit {
   }
 
   search () {
-    let params = new HttpParams()
-      .set('sort',-1)
-      .set('deleted',false)
-      .set('all',true)
-      .set('request_id',Date.now()+''+Math.round(Math.random()*100))
-      .set('validate','all');
      this.clean(this.filterObjType);
-    this.masterService.getAllMaterial({...this.filterObjType}).subscribe((res: any) => {
+    this.masterService.getAllMaterial({no_of_docs: 15, skip: 1,...this.filterObjType}).subscribe((res: any) => {
       this.receivedData = res;
       if(res){
         this.scrollTable = document.getElementsByClassName("ant-table-body");
         // console.log("seracht" + this.scrollTable);
-        this.scrollTable[0].addEventListener('scroll',() => {
+        this.scrollTable[0]?.addEventListener('scroll',() => {
           // console.log('scroll');
           this.getDataOnScroll();
         });
@@ -139,17 +133,11 @@ export class MaterialListViewComponent implements OnInit {
   }
 
   searchGroup(){
-    let params = new HttpParams()
-      .set('sort',-1)
-      // .set('deleted',false)
-      .set('all',true)
-      .set('request_id',Date.now()+''+Math.round(Math.random()*100))
-      .set('validate','all');
     this.masterService.getAllMaterialType({...this.filterObj}).subscribe((res: any) => {
       this.receivedGroupData = res;
       if(res){
         this.scrollTable = document.getElementsByClassName("ant-table-body");
-        this.scrollTable[0].addEventListener('scroll',() => {
+        this.scrollTable[0]?.addEventListener('scroll',() => {
           this.getGroupOnScroll();
         });
       }
@@ -247,7 +235,7 @@ export class MaterialListViewComponent implements OnInit {
 
   getDataOnScroll() {
     if (true) {
-        let divElement: any = document.getElementsByClassName('ant-table-body')[0] ||document.getElementById('myDIVCard');
+        let divElement: any = document.getElementsByClassName('ant-table-body')[0] ||document.getElementById('myDIV');
       // console.log('divElement', divElement);
       if ((divElement.scrollTop + divElement.clientHeight) >= divElement.scrollHeight) {
         if (this.stopScrolling === false) {
@@ -256,7 +244,7 @@ export class MaterialListViewComponent implements OnInit {
           }
           const mContext = this;
           this.timer = window.setTimeout( ()=> {
-            mContext.masterService.getAllMaterial({ no_of_docs: 10, skip: mContext.pageNumber,
+            mContext.masterService.getAllMaterial({ no_of_docs: 15, skip: mContext.pageNumber,
                ...this.filterObjType }).subscribe(data => {
               if (data) {
                 if (data.length=== 0) {
@@ -284,7 +272,7 @@ export class MaterialListViewComponent implements OnInit {
           }
           const mContext = this;
           this.groupTimer = setTimeout( ()=> {
-            mContext.masterService.getAllMaterialType({ no_of_docs: 10, skip: mContext.groupPageNumber,
+            mContext.masterService.getAllMaterialType({ no_of_docs: 15, skip: mContext.groupPageNumber,
               name: this.filterObj.name }).subscribe(data => {
               if (data) {
                 if (data.length=== 0) {

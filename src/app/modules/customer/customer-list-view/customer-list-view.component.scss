@@ -2,24 +2,36 @@
   background-color: antiquewhite !important;
 }
 @media screen and (max-width: 500px) {
-  .main-div {
-    flex-direction: column;
+  nz-select, nz-date-picker, input {
+    width: 100%;
   }
 }
+
+#myDIV {
+  height: 100%;
+  overflow-y: auto;
+}
+
 .head {
-  padding: 12px;
-  margin-top: 5px;
-  border-radius: 7px;
+  padding: 3px;
+  margin-top: 4px;
+  border-radius: 5px;
   position: relative;
 }
+
 .aggregate {
-  min-width: 100px;
-  width: 100%;
-  min-height: 100px;
-  background: white;
+  padding: 3px;
+}
+
+.align {
   display: flex;
-  flex-direction: column;
-  padding: 5px 15px;
-  box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
-  border-radius: 4px;
+  justify-content: space-between;
+}
+
+.shadow-d1{
+  box-shadow: 0 1px 6px 1.5px rgba(32,33,36,.28) !important;
+}
+
+.insight-head {
+  justify-content: space-between;
 }

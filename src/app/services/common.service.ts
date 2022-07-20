@@ -5,6 +5,12 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {StorageService} from './storage.service';
 import { Location } from '@angular/common';
 import {MoreMenu} from '../shared/modal/moreMenu.modal';
+
+declare let device: any;
+declare let FileTransfer: any;
+declare let cordova: any;
+declare let navigator: any;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -99,4 +105,76 @@ export class CommonService {
   loginUserInfo(){
     return this.store.get('userData', {});
   }
+
+  toBase64(file:any) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
+
+  isBase64(string: string): boolean{
+    return !!string.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+  }
+  downloadFileWithUrl(url:any){
+    let fileName= url.substr(url.lastIndexOf("/")+1);
+    fileName=fileName.replaceAll(':','_');
+    this.downloadFile(url,fileName);
+
+  }
+  downloadFile(fileurl:any, filename:any): void {
+    if (typeof cordova != 'undefined' && typeof device != 'undefined') {
+      let blob = null;
+      let xhr = new XMLHttpRequest();
+      xhr.open('GET', fileurl);
+      xhr.responseType = 'blob';//force the HTTP response, response-type header to be blob
+
+      xhr.onprogress = (evt) => {
+        if (evt.lengthComputable) {
+          let percent = (evt.loaded / evt.total) * 100;
+          percent = Math.round((percent * 100) / 100);
+          this.success(`Downloaded ${percent}%`);
+        }
+      };
+
+      xhr.onload = function () {
+        blob = xhr.response;//xhr.response is now a blob object
+        console.log(blob);
+        let storageLocation = '';
+        switch (device.platform) {
+          case 'Android':
+            storageLocation = 'file:///storage/emulated/0/';
+            break;
+          case 'iOS':
+            storageLocation = cordova.file.documentsDirectory;
+            break;
+        }
+        let folderpath = storageLocation + 'Download';
+        let DataBlob = blob;
+        (<any>window).resolveLocalFileSystemURL(folderpath, function (dir:any) {
+          dir.getFile(filename, {create: true}, function (file:any) {
+            file.createWriter(function (fileWriter:any) {
+              fileWriter.write(DataBlob);
+              alert(`${filename} saved to Download folder`)
+            }, function (err:any) {
+              alert(`${err} Failed to download`);
+              console.log(err);
+            });
+          });
+        });
+      };
+      xhr.send();
+    } else {
+      let a = document.createElement('a');
+      a.href = fileurl;
+      a.download = filename;
+      a.target = '_blank';
+      a.click();
+    }
+  }
+
+
+
 }

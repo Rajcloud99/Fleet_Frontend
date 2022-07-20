@@ -642,7 +642,8 @@ export class TripListViewComponent implements OnInit {
   }
 
   docDownload(path: any) {
-    window.open(path, '_new');
+    this.commonService.downloadFileWithUrl(path);
+    //window.open(path, '_new');
   }
 
   docPreview(path: any) {

@@ -31,34 +31,9 @@
           (click)="reset();isMobFilterVisible = false;">Reset</button>
       </div>
     </div>
-
-    <!-- <-- card view -->
-    <div id="myDIVCard" *ngIf="innerWidth < 500" (scroll)="getDataOnScroll()">
-      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedAlertsData ? receivedAlertsData : ''"
-        nzSize="small" [nzScroll]="{ y: '425px' }" style="overflow-x: auto">
-        <div class="head shadow-d1 aggregate" *ngFor="let d of receivedAlertsData" (click)="selectAlerts(d)"
-          [ngClass]="{SelectHighlight :  selectedAlertsRowId && (d?._id === selectedAlertsRowId)}">
-
-          <div class="align">
-            <div class="ml-1" style="font-size: 13px; padding-top: 5px; ">{{d?.reg_no}}</div>
-          </div>
-
-          <div class="align">
-            <div class="ml-1" style="font-size: 13px; padding-top: 5px; "><b>Date :</b> {{d?.datetime| date:
-              'dd-MMM-yyyy'}}</div>
-          </div>
-
-          <div class="align">
-            <div class="grey" style="font-size: 13px;  padding-left: 5px;"><b>Address :</b> {{ d?.location &&
-              d?.location.address || 'NA' }}</div>
-          </div>
-        </div>
-      </nz-table>
-    </div>
-
     <!-- Table View -->
-    <div id="myDIV" *ngIf="innerWidth > 500">
-      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedAlertsData ? receivedAlertsData : ''"
+    <div id="myDIV" (scroll)="getDataOnScroll()" >
+      <nz-table #nzTable *ngIf="innerWidth > 500" nzBordered [nzShowPagination]="false" [nzData]="receivedAlertsData ? receivedAlertsData : ''"
                 nzSize="small"  [nzScroll]="{ x: '2000', y: '350px' }" style="overflow-x: auto">
         <thead>
         <tr>
@@ -81,7 +56,26 @@
         </tr>
         </tbody>
       </nz-table>
-      <br/><br/>
+      <!-- <-- card view -->
+    <div *ngIf="innerWidth < 500">
+        <div class="head shadow-d1 aggregate" *ngFor="let d of receivedAlertsData" (click)="selectAlerts(d)"
+          [ngClass]="{SelectHighlight :  selectedAlertsRowId && (d?._id === selectedAlertsRowId)}">
+
+          <div class="align">
+            <div class="ml-1" style="font-size: 13px; padding-top: 5px; ">{{d?.reg_no}}</div>
+          </div>
+
+          <div class="align">
+            <div class="ml-1" style="font-size: 13px; padding-top: 5px; "><b>Date :</b> {{d?.datetime| date:
+              'dd-MMM-yyyy'}}</div>
+          </div>
+
+          <div class="align">
+            <div class="grey" style="font-size: 13px;  padding-left: 5px;"><b>Address :</b> {{ d?.location &&
+              d?.location.address || 'NA' }}</div>
+          </div>
+        </div>
+    </div>
     </div>
 
   </div>

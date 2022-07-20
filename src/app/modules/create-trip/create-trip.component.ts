@@ -13,6 +13,7 @@ import { GrUpsertComponent } from '../gr/gr-upsert/gr-upsert.component';
 import { VendordealPopupComponent } from '../vendordeal-popup/vendordeal-popup.component';
 import {TripMemoUpsertComponent} from "../trip-memo/trip-memo-upsert/trip-memo-upsert.component";
 import { HttpParams } from '@angular/common/http';
+import { BrokerMemoUpsertComponent } from '../broker-memo/broker-memo-upsert/broker-memo-upsert.component';
 @Component({
   selector: 'app-create-trip',
   templateUrl: './create-trip.component.html',
@@ -77,6 +78,9 @@ export class CreateTripComponent implements OnInit {
   receivedAllDrivers: any;
   serviceTyp:any = 'Standard';
   aServiceTyp: any = [];
+  User: any;
+  isBroker = false;
+  oBrokerMemo:any;
 
   @HostListener("window: resize", ["$event"])
   onResize() {
@@ -106,6 +110,10 @@ export class CreateTripComponent implements OnInit {
     this.serviceTyp = 'Normal';
     this.aServiceTyp = ['Normal','Express','Empty'];
     this.configs = this.storageServ.get('userData').configs;
+    this.User = this.storageServ.get('userData').user;
+    if (this.User.user_type.indexOf('Broker')+1) {
+      this.isBroker = true;
+    }
     // for preventing enter key to click on next event
     // so to stop event propagation
     this.ldEle = document.getElementById("loading");
@@ -401,7 +409,7 @@ export class CreateTripComponent implements OnInit {
       values.date.setHours(this.time.getHours());
       values.date.setMinutes(this.time.getMinutes());
       values.date.setMilliseconds(0);
-      if(new Date(values.date).getTime() > this.today.getTime()){
+      if(new Date(values.date).getTime() > new Date().getTime()){
         this.commonService.errorModal('Error','Please select trip start date and time on today or before');
         return;
       }
@@ -594,15 +602,23 @@ export class CreateTripComponent implements OnInit {
     }
 
   }
+
+  AdBMmodel(mod:string,grdata:any,idx:number){
+    if(this.preparegrArr && this.preparegrArr[0] && this.preparegrArr[0].bMemo){
+      this.addbrokermemoModal('Broker Memo Popup',this.preparegrArr[0],idx =0);
+    }else if(this.preparegrArr && this.preparegrArr[0] &&  this.preparegrArr[0].grNumber){
+      return this.commonService.error('Gr already assign not able to add broker memo');
+    }else{
+      this.addbrokermemoModal('Broker Memo Popup',grdata,idx);
+    }
+
+  }
+
   upsertGrModaldata(mod:string,grdata:any,idx:number){
     if(grdata && grdata.tMemo &&  grdata.tMemo.tMNo){
-
       this.addtripmemoModal('Trip Memo Popup',grdata,idx);
-
     }else{
-
       this.upsertGrModal('Edit GR',grdata,idx,true);
-
     }
 
   }
@@ -724,6 +740,42 @@ export class CreateTripComponent implements OnInit {
               this.oTripMemo = componentInstance?.aTripData;
               this.oTripMemo.gr_type = "Trip Memo";
               this.addRowGr(idx,this.oTripMemo);
+              modal.destroy();
+            }
+          }
+        }
+      ]
+    });
+  }
+
+  addbrokermemoModal(mod:string,oBrokerMemo:any,idx:number) {
+    oBrokerMemo = oBrokerMemo || {};
+    if(this.customer)
+    oBrokerMemo.customer = this.customer;
+    const modal = this.modal.create({
+      nzTitle: 'Broker  Memo',
+      nzWidth: '90%',
+      nzCentered: true,
+      nzZIndex: 6,
+      nzContent: BrokerMemoUpsertComponent,
+      nzComponentParams: {
+        'mod': mod,
+        aTripData: oBrokerMemo,
+      },
+      nzViewContainerRef: this.viewContainerRef,
+      nzOnOk: () => new Promise(resolve => setTimeout(resolve, 1000)),
+      nzFooter: [
+        {
+          label: 'submit',
+          onClick: componentInstance => {
+            console.log(componentInstance);
+            componentInstance?.onSubmit();
+            console.log(componentInstance?.aTripData);
+            if(componentInstance?.dealForm?.valid){
+              this.oBrokerMemo = {};
+              this.oBrokerMemo = componentInstance?.aTripData;
+              this.oBrokerMemo.gr_type = "Broker Memo";
+              this.addRowGr(idx,this.oBrokerMemo);
               modal.destroy();
             }
           }

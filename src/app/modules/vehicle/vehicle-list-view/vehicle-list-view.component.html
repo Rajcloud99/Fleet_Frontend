@@ -131,8 +131,8 @@
         </div>
       </div>
     </div>
-    <div id="myDIV" *ngIf="innerWidth > 500">
-      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
+    <div id="myDIV" (scroll)="onScroll()">
+      <nz-table *ngIf="innerWidth > 500" #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
                 nzSize="small"  [nzScroll]="{ x: '2000', y: '350px' }" style="overflow-x: auto">
         <thead>
         <tr>
@@ -174,47 +174,39 @@
         </tr>
         </tbody>
       </nz-table>
-      <br/><br/>
-    </div>
-
-
-    <!--     vehicle  table convert in card view-->
+      <!--     vehicle  table convert in card view-->
     <div *ngIf="innerWidth <= 500" class="aggregate">
-      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
-                nzSize="small"  [nzScroll]="{ y: '425px' }" style="overflow-x: auto">
-        <div
-          class="head shadow-d1 "
-          *ngFor="let d of receivedData"
-          (click)="selectItem(d)"  [ngClass]="{SelectHighlight :  selectedRowId && (d?._id === selectedRowId)}">
-          <div class="align">
-            <div class="grey"><b>Vehicle No:</b> {{ d?.vehicle_reg_no || 'NA'  }}</div>
+      <div
+        class="head shadow-d1 "
+        *ngFor="let d of receivedData"
+        (click)="selectItem(d)"  [ngClass]="{SelectHighlight :  selectedRowId && (d?._id === selectedRowId)}">
+        <div class="align">
+          <div class="grey"><b>Vehicle No:</b> {{ d?.vehicle_reg_no || 'NA'  }}</div>
 
-          </div>
-          <div class="align">
-            <div class="grey"><b>Vehicle Status:</b> {{ d?.status || 'NA'}}</div>
+        </div>
+        <div class="align">
+          <div class="grey"><b>Vehicle Status:</b> {{ d?.status || 'NA'}}</div>
 
-          </div>
-          <div class="align">
-            <div class="grey"><b>Ownership:</b> {{ d?.ownershipType || 'NA'}}</div>
+        </div>
+        <div class="align">
+          <div class="grey"><b>Ownership:</b> {{ d?.ownershipType || 'NA'}}</div>
 
-          </div>
-          <div class="align">
-            <div class="grey"><b>Device IMEI:</b> {{ d?.device_imei || 'Na' }}</div>
+        </div>
+        <div class="align">
+          <div class="grey"><b>Device IMEI:</b> {{ d?.device_imei || 'Na' }}</div>
 
-          </div>
-          <div *ngIf="d?.veh_type_name " class="align">
-            <div class="grey"><b>Vehicle Type:</b> {{ d?.veh_type_name || 'Na' }}</div>
+        </div>
+        <div *ngIf="d?.veh_type_name " class="align">
+          <div class="grey"><b>Vehicle Type:</b> {{ d?.veh_type_name || 'Na' }}</div>
 
-          </div>
+        </div>
 <!--          <div class="align">-->
 <!--            <div class="grey"><b>Vendor:</b> {{ d?.vendor_name || 'NA'}}</div>-->
 
 <!--          </div>-->
 
-        </div>
-      </nz-table>
+      </div>
+  </div>
     </div>
-
-    <!--    vehicle table card view end -->
   </div>
 </div>

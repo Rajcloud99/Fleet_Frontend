@@ -2,8 +2,9 @@
   background-color: antiquewhite !important;
 }
 @media screen and (max-width: 500px) {
-  .main-div {
-    flex-direction: column;
+  #myDIV {
+    height: 100%;
+    overflow-y: auto;
   }
 }
 .head {

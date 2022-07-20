@@ -2,8 +2,9 @@
   background-color: antiquewhite !important;
 }
 @media screen and (max-width: 500px) {
-  .main-div {
-    flex-direction: column;
+  #myDIV {
+    height: 100%;
+    overflow-y: auto;
   }
 }
 .head {
@@ -13,13 +14,5 @@
   position: relative;
 }
 .aggregate {
-  min-width: 100px;
-  width: 100%;
-  min-height: 100px;
-  background: white;
-  display: flex;
-  flex-direction: column;
-  padding: 5px 15px;
-  box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
-  border-radius: 4px;
+  padding: 3px;
 }

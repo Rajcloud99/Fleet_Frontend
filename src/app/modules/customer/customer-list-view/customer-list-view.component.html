@@ -1,29 +1,25 @@
-<div class="main-div" >
-  <div class="insight">
-    <div class="insight-head" *ngIf="innerWidth > 500"  > 
+ <div class="insight">
+    <div class="insight-head" *ngIf="innerWidth > 500"  >
+      <div class="insight-title">
+
+      </div>
       <div class="insight-tools">
         <div class="tool" >
           <div class="mbbtn" *ngIf="innerWidth <= 500" (click)="isMobFilterVisible = true;">
             <fa-icon [icon]="faFilter"></fa-icon>
           </div>
-          <div class="mbbtn"  nz-tooltip nzTooltipTitle="Add Material Type"
+          <div class="mbbtn"  nz-tooltip nzTooltipTitle="Add Customer"
                (click)="gotoAddCustomer()">
             <fa-icon [icon]="faPlusSquare" ></fa-icon>
           </div>
           <div class="mbbtn"  nz-tooltip nzTooltipTitle="Edit" (click)="navigateTo()">
             <fa-icon [icon]="faEdit" ></fa-icon>
           </div>
-<!--          <div class="mbbtn" nz-tooltip nzTooltipTitle="Delete"(click) ="delete()" nz-tooltip nzTooltipTitle="Disable">-->
-<!--            <fa-icon [icon]="faTrash" style="color: red !important;"></fa-icon>-->
-<!--          </div>-->
         </div>
       </div>
     </div>
-    <div  *ngIf="innerWidth > 500" class="insight-description">
-      <!--      <nz-spin [nzSize]="'large'" [ngClass]="{'loader': loadingObservable | async}" nzSimple [nzSpinning]="loadingObservable | async"></nz-spin>-->
-
-
-      <div class="filters-row">
+    <div class="insight-description">
+      <div *ngIf="innerWidth > 500" class="filters-row">
         <div class="my-row">
 <!--          Customer name filter-->
               <div class="my-card">
@@ -48,17 +44,52 @@
           </div>
         </div>
       </div>
+      <div id="myDIV" (scroll)="getDataOnScroll()">
+       <div *ngIf="innerWidth < 500 && receivedData && receivedData.length" class="aggregate">
+            <div
+              class="head shadow-d1 aggregate"
+              *ngFor="let d of receivedData"
+              (click)="selectItem(d)"  [ngClass]="{SelectHighlight :  selectedRowId && (d?._id === selectedRowId)}">
 
-      <div >
-        <nz-table
+
+              <div class="align">
+                <div class="grey"><b>Name:</b> {{ d?.name || 'NA'  }}</div>
+
+              </div>
+              <div class="align">
+                <div class="grey"><b>City:</b> {{ d?.address.city || 'NA'}}</div>
+
+              </div>
+              <div class="align">
+                <div class="grey"><b>State:</b> {{ d?.address.state || 'NA'}}</div>
+
+              </div>
+              <div class="align">
+                <div class="grey"><b>Type:</b> {{ d?.type || 'Na' }}</div>
+
+              </div>
+              <div class="align">
+                <div class="grey"><b>Address:</b> {{ d?.address.line1 || 'Na' }}</div>
+
+              </div>
+              <div class="align">
+                <div class="grey"><b>GST No:</b> {{ d?.gstin_no || 'Na' }}</div>
+
+              </div>
+
+            </div>
+       </div>
+
+       <nz-table
+          *ngIf="innerWidth >= 500"
           (scroll)="getDataOnScroll()"
           #nzTable
           nzBordered
           [nzShowPagination]="false"
           [nzData]="receivedData ? receivedData : ''"
           nzSize="small"
-          [nzScroll]="{ x: '600px', y: '360px' }"
-          style="overflow-x: auto"
+          [nzScroll]="{ x: '600px', y: '300px' }"
+          style="overflow-y: auto"
         >
           <thead>
           <tr style="background-color: #3e51b5 !important;">
@@ -86,60 +117,10 @@
           </tr>
           </tbody> </nz-table
         ><br /><br />
-        <!--        <pre>{{selectedRowId}}</pre>-->
       </div>
     </div>
   </div>
 
-
-  <div *ngIf="innerWidth < 500" id="myDIVCard" (scroll)="getDataOnScroll()">
-
-    <div   class="">
-      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
-                nzSize="small"  [nzScroll]="{ y: '425px' }" style="overflow-x: auto">
-        <div
-          class="head shadow-d1 aggregate"
-          *ngFor="let d of receivedData"
-          (click)="selectItem(d)"  [ngClass]="{SelectHighlight :  selectedRowId && (d?._id === selectedRowId)}">
-
-
-          <div class="align">
-            <div class="grey"><b>Name:</b> {{ d?.name || 'NA'  }}</div>
-
-          </div>
-          <div class="align">
-            <div class="grey"><b>City:</b> {{ d?.address.city || 'NA'}}</div>
-
-          </div>
-          <div class="align">
-            <div class="grey"><b>State:</b> {{ d?.address.state || 'NA'}}</div>
-
-          </div>
-          <div class="align">
-            <div class="grey"><b>Type:</b> {{ d?.type || 'Na' }}</div>
-
-          </div>
-          <div class="align">
-            <div class="grey"><b>Address:</b> {{ d?.address.line1 || 'Na' }}</div>
-
-          </div>
-          <div class="align">
-            <div class="grey"><b>GST No:</b> {{ d?.gstin_no || 'Na' }}</div>
-
-          </div>
-          <!--          <div class="align">-->
-          <!--            <div class="grey">Vendor: {{ d?.vendor_name || 'NA'}}</div>-->
-
-          <!--          </div>-->
-
-        </div>
-      </nz-table>
-    </div>
-
-  </div>
-
-
-</div>
 <div *ngIf="isMobFilterVisible" class="flt">
   <div class="flt_heading">Filters</div>
     <div>
@@ -147,10 +128,7 @@
         <label> Customer Name </label>
         <input nz-input [(ngModel)]="filterObjType && filterObjType.name" placeholder="Search Customer Name">
       </div>
-<!--      <div class="flex-cont">-->
-<!--        <label> Code </label>-->
-<!--        <input nz-input [(ngModel)]="filterObjType && filterObjType.hsnCode" placeholder="Search Material Code">-->
-<!--      </div>-->
+
     </div>
 
   <div style="margin-top: 17px;">

@@ -152,7 +152,7 @@ export class TransportRouteListViewComponent implements OnInit {
   onScroll() {
     if (this.clickSearch) {
       let divElement: any =
-        document.getElementsByClassName('ant-table-body')[0];
+        document.getElementsByClassName('ant-table-body')[0] || document.getElementById('myDIV');
       if (
         divElement.scrollTop + divElement.clientHeight >=
         divElement.scrollHeight

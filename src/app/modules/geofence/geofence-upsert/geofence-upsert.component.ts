@@ -43,6 +43,8 @@ export class GeofenceUpsertComponent implements OnInit {
   };
   oFilter :any ={};
   markers: any = [];
+  visible:boolean = false;
+  Newgeofencedata:any = [];
   disabled: boolean = false;
   geoZoneListRoot: any;
   @ViewChild("address", { static: false })
@@ -58,7 +60,8 @@ export class GeofenceUpsertComponent implements OnInit {
   device: any;
   Preview:boolean =false;
   // for geozone
-
+ name:any;
+  description :any;
   CircleGeoZone:any =[];
   RectangleGeoZone:any =[];
   PolygonGeoZone:any =[];
@@ -134,7 +137,7 @@ export class GeofenceUpsertComponent implements OnInit {
   setviewpostion(marker: any){
     this.marker.lat = marker?.lat;
     this.marker.lng = marker?.lng;
-    this.zoom=15;
+    this.zoom=18;
   }
   popupinfo(x:any,y:any){
 
@@ -146,7 +149,7 @@ export class GeofenceUpsertComponent implements OnInit {
       }
       this.marker.lat = geoZoneListRoot[0].geozone[0].latitude;
       this.marker.lng = geoZoneListRoot[0].geozone[0].longitude;
-      this.zoom = 7;
+      this.zoom = geoZoneListRoot[0].zoom_level || 15;
     }
   }
   setLayerData(mapData:any) {
@@ -180,6 +183,105 @@ export class GeofenceUpsertComponent implements OnInit {
   min(coordType: 'latitude' | 'longitude',geozone:any) {
     return Math.min(...geozone.map((marker: { [x: string]: any; }) => marker[coordType]));
   }
+//  for drowing shape
+  onMapReady(map: any) {
+    if(this.mode =='Add') {
+      this.initDrawingManager(map);
+    }
+  }
+  initDrawingManager(map: any) {
+    const mContext = this;
+    const options: any = {
+      drawingControl: true,
+      drawingControlOptions: {
+        drawingModes: ["polygon", "circle", "rectangle"]
+      },
+      polygonOptions: {
 
+      },
+      drawingMode: [
+        google.maps.drawing.OverlayType.POLYGON,
+        google.maps.drawing.OverlayType.CIRCLE,
+        google.maps.drawing.OverlayType.RECTANGLE],
+    };
 
+    const drawingManager = new google.maps.drawing.DrawingManager(options);
+    drawingManager.setMap(map);
+    google.maps.event.addListener(drawingManager, 'overlaycomplete', function (event) {
+      if (event.type == 'circle') {
+        let GEODATA : any ={
+          ptype : event.type,
+          radius :event.overlay.getRadius(),
+          zoom_level:event.overlay.map.zoom,
+          geozone:[{
+            "latitude": event.overlay.center.lat(), "longitude":  event.overlay.center.lng()},
+          ]
+        };
+        mContext.openoppup(GEODATA);
+      }
+      if (event.type == 'rectangle') {
+        var bounds = event.overlay.getBounds();
+        var NE = bounds.getNorthEast();
+        var SW = bounds.getSouthWest();
+        var NW = new google.maps.LatLng(NE.lat(),SW.lng());
+        var SE = new google.maps.LatLng(SW.lat(),NE.lng());
+        let GEODATA={
+          ptype : event.type,
+          zoom_level:event.overlay.map.zoom,
+          geozone:[{"latitude": NE.lat(), "longitude": NE.lng()},
+            {"latitude": SW.lat(), "longitude": SW.lng()},
+            {"latitude": NW.lat(), "longitude": NW.lng()},
+            {"latitude": SE.lat(), "longitude": SE.lng()}
+          ]
+        };
+        mContext.openoppup(GEODATA);
+      }
+      if (event.type == 'polygon') {
+        const zone = [];
+        const vertices = event.overlay.getPath();
+        for (let i = 0; i < vertices.getLength(); i++) {
+          const xy = vertices.getAt(i);
+          zone.push({latitude: xy.lat(), longitude:xy.lng()});
+      }
+        let GEODATA={
+          zoom_level:event.overlay.map.zoom,
+          ptype : event.type,
+          geozone:zone,
+        };
+        mContext.openoppup(GEODATA);
+      }
+      drawingManager.setDrawingMode(null);
+    });
+  }
+  openoppup(data:any){
+    this.name = undefined;
+    this.description = undefined;
+    this.Newgeofencedata={};
+    this.Newgeofencedata = data;
+    if(this.Newgeofencedata){
+      this.visible = true;
+    }
+
+  }
+    AddGeozone(geodata:any){
+      this.masterService
+        .AddGeofence(geodata).subscribe((data: any) => {
+          if (data) {
+            this.visible = false;
+          }
+        });
+    }
+  handleCancel(){
+    this.name = undefined;
+    this.description = undefined;
+    this.visible = false;
+  }
+  handleSubmit(){
+    if(!this.name){
+      return this.common.error("Geofence Name is Mandatory");
+    }
+    this.Newgeofencedata.name = this.name;
+    this.Newgeofencedata.description = this.description;
+    this.AddGeozone(this.Newgeofencedata);
+  }
 }

@@ -1,5 +1,7 @@
 <div class="insight">
   <div class="insight-head"  *ngIf="innerWidth > 500"> 
+    <div class="insight-title">
+    </div>
     <div class="insight-tools">
       <div class="tool">
 
@@ -182,8 +184,8 @@
     </div>
 
     <!-- table view start -->
-    <div id="myDIV" *ngIf="innerWidth > 500">
-      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
+    <div id="myDIV" (scroll)="onScroll()">
+      <nz-table *ngIf="innerWidth > 500" #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
         nzSize="small" [nzScroll]="{ x: '1000px', y: '380px' }" style="overflow-x: auto">
         <thead>
           <tr>
@@ -209,12 +211,8 @@
           </tr>
         </tbody>
       </nz-table>
-    </div>
-
-    <!-- Card view start -->
-    <div *ngIf="innerWidth <= 500" class="aggregate">
-      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
-        nzSize="small" [nzScroll]="{ y: '425px' }" style="overflow-x: auto">
+      <!-- Card view start -->
+      <div *ngIf="innerWidth <= 500" class="aggregate">
         <div class="head shadow-d1" *ngFor="let d of receivedData" (click)="selectItem(d)"
           [ngClass]="{SelectHighlight :  selectedRowId && (d?._id === selectedRowId)}">
           <div class="align">
@@ -246,7 +244,7 @@
           </div>
 
         </div>
-      </nz-table>
+      </div>
     </div>
 
     <!-- Document upload Model -->

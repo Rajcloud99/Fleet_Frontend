@@ -4,7 +4,7 @@
       >
     </div>
     <div style="padding-left: 5%;" class="insight-title">
-      
+
     </div>
     <div *ngIf="skipDuty && innerWidth <= 500" class="mbbtn "  nz-tooltip nzTooltipTitle="Skip Duty" (click)="gotoSkipDuty()" style="padding-right: 15px">
       <fa-icon [icon]="faForward" ></fa-icon>
@@ -211,6 +211,18 @@
           <button nz-button type="button" class="btn-icon" (click)="addVendor()">
             <i nz-icon nzType="plus-circle" style="font-size: 15px;" nzTheme="outline"></i>
           </button>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5">Branch:</nz-form-label>
+          <nz-form-control nzErrorTip="Search Branch">
+            <nz-select  style="width: 54%" [nzDropdownMatchSelectWidth]="false"
+                        nzPlaceHolder="Search Branch" formControlName="branch"  nzShowSearch
+                        (nzOnSearch)="onChangeBranch($event)" nzServerSearch nzAllowClear>
+              <nz-option *ngFor="let branch of receivedAllBranches" nzLabel="{{ branch?.name}}" [nzValue]="branch">
+              </nz-option>
+            </nz-select>
           </nz-form-control>
         </nz-form-item>
 

@@ -4437,7 +4437,7 @@ export class ConstantService {
 
     custTypes : ['Customer', 'Consignee', 'Consignor', 'Billing party', 'CHA', 'Transporter', 'Others'],
 
-		categoryList : ['Fleet', 'Freight', 'Freight and Fleet','Contractual Fleet','Contractual Freight', 'Export', 'Market Topay', 'Tobacco'],
+		categoryList : ['Fleet', 'Freight', 'Freight and Fleet'],
 
 		aCategory: ["RCM", "FCM"],
 

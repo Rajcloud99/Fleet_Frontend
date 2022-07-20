@@ -1,5 +1,5 @@
 <div class="insight">
-  <div class="insight-head" *ngIf="innerWidth > 500" > 
+  <div class="insight-head" *ngIf="innerWidth > 500">
     <div class="insight-tools">
       <div class="tool">
 
@@ -33,11 +33,11 @@
       </div>
     </div>
   </div>
-  <div *ngIf="innerWidth > 500" class="insight-description">
+  <div class="insight-description">
     <!--      <nz-spin [nzSize]="'large'" [ngClass]="{'loader': loadingObservable | async}" nzSimple [nzSpinning]="loadingObservable | async"></nz-spin>-->
 
 
-    <div class="filters-row">
+    <div class="filters-row" *ngIf="innerWidth > 500">
       <div class="my-row">
         <!-- branch name or code -->
         <div class="my-card">
@@ -67,12 +67,10 @@
       </div>
     </div>
 
-    <!--      <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">-->
-
-    <div (scroll)="getGroupOnScroll()">
+    <div id="myDIV" (scroll)="getGroupOnScroll()">
       <nz-table
-        (scroll)="getGroupOnScroll()"
         #nzTable
+        *ngIf="innerWidth > 500"
         nzBordered
         [nzShowPagination]="false"
         [nzData]="receivedGroupData ? receivedGroupData : ''"
@@ -101,57 +99,46 @@
           <!--            <td nzAlign="center">{{ item?.material}}</td>-->
         </tr>
         </tbody> </nz-table
-      ><br /><br />
-      <!--        <pre>{{selectedGroupRowId}}</pre>-->
-
-    </div>
-    <!--      </cdk-virtual-scroll-viewport>-->
-  </div>
-
-
-</div>
-
-
-<div id="myDIVCard" (scroll)="getGroupOnScroll()">
-
-  <div *ngIf="innerWidth <= 500" class="">
-    <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedGroupData ? receivedGroupData : ''"
-              nzSize="small"  [nzScroll]="{ y: '425px' }" style="overflow-x: auto">
-
-      <div
-        class="head shadow-d1 aggregate"
-        *ngFor="let d of receivedGroupData"
-        (click)="selectGroupItem(d)"  [ngClass]="{SelectHighlight :  selectedGroupRowId && (d?._id === selectedGroupRowId)}">
-
-        <div class="align">
-          <div class="grey"><b>Material Group:</b> </div>
-          <div class="ml-1">{{d?.name}}</div>
-        </div>
-
-
-        <div class="align">
-          <div class="grey"><b>Code:</b> {{ d?.code || 'NA'  }}</div>
-
-        </div>
-
-
-        <div class="align">
-          <div class="grey"><b>Unit:</b> {{ d?.unit || 'NA'  }}</div>
-
-        </div>
-
-
-        <div class="align">
-          <div class="grey"><b>Description:</b> {{ d?.description || 'NA'  }}</div>
-
-        </div>
-
-
+      >
+      <div *ngIf="innerWidth <= 500" class="">
+            <div
+              class="head shadow-d1 aggregate"
+              *ngFor="let d of receivedGroupData"
+              (click)="selectGroupItem(d)"  [ngClass]="{SelectHighlight :  selectedGroupRowId && (d?._id === selectedGroupRowId)}">
+      
+              <div class="align">
+                <div class="grey"><b>Material Group:</b> </div>
+                <div class="ml-1">{{d?.name}}</div>
+              </div>
+      
+      
+              <div class="align">
+                <div class="grey"><b>Code:</b> {{ d?.code || 'NA'  }}</div>
+      
+              </div>
+      
+      
+              <div class="align">
+                <div class="grey"><b>Unit:</b> {{ d?.unit || 'NA'  }}</div>
+      
+              </div>
+      
+      
+              <div class="align">
+                <div class="grey"><b>Description:</b> {{ d?.description || 'NA'  }}</div>
+      
+              </div>
+      
+      
+            </div>
+          
       </div>
-    </nz-table>
+    </div>
   </div>
-
 </div>
+
+
+
 
 <div *ngIf="isMobFilterVisible" class="flt">
   <div class="flt_heading">Filters</div>

@@ -142,7 +142,8 @@ th{
 }
 @media screen and (max-width: 500px) {
   #myDIV {
-    height: 30vh;
+    height: 100%;
+    overflow-y: auto;
   }
 }
 

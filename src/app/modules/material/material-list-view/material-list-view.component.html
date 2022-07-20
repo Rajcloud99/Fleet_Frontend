@@ -1,5 +1,4 @@
-<div class="main-div" >
-  <div class="insight">
+<div class="insight">
     <div class="insight-head" *ngIf="innerWidth > 500">
       <div class="insight-tools">
         <div class="tool" >
@@ -32,11 +31,11 @@
         </div>
       </div>
     </div>
-    <div *ngIf="innerWidth > 500" class="insight-description">
+    <div class="insight-description">
       <!--      <nz-spin [nzSize]="'large'" [ngClass]="{'loader': loadingObservable | async}" nzSimple [nzSpinning]="loadingObservable | async"></nz-spin>-->
 
 
-      <div class="filters-row">
+      <div *ngIf="innerWidth > 500" class="filters-row">
         <div class="my-row">
           <!-- branch name or code -->
           <div class="my-card">
@@ -67,15 +66,16 @@
         </div>
       </div>
 
-      <div *ngIf="innerWidth > 500">
+      <div id="myDIV" (scroll)="getDataOnScroll()">
         <nz-table
           (scroll)="getDataOnScroll()"
           #nzTable
+          *ngIf="innerWidth > 500"
           nzBordered
           [nzShowPagination]="false"
           [nzData]="receivedData ? receivedData : ''"
           nzSize="small"
-          [nzScroll]="{ x: '600px', y: '360px' }"
+          [nzScroll]="{ x: '600px', y: '330px' }"
           style="overflow-x: auto"
         >
           <thead>
@@ -99,62 +99,46 @@
             <td nzAlign="center">{{ item?.material}}</td>
           </tr>
           </tbody> </nz-table
-        ><br /><br />
-        <!--        <pre>{{selectedRowId}}</pre>-->
+        >
+        <div *ngIf="innerWidth <= 500">
+            <div
+              class="head shadow-d1 aggregate"
+              *ngFor="let d of receivedData"
+              (click)="selectItem(d)"  [ngClass]="{SelectHighlight :  selectedRowId && (d?._id === selectedRowId)}">
+    
+              <div class="align">
+                <div class="grey"><b>Trip No.</b></div>
+                <div class="ml-1">{{d?.trip_no}}</div>
+              </div>
+    
+    
+              <div class="align">
+                <div class="grey"><b>Material Name:</b> {{ d?.material || 'NA'  }}</div>
+    
+              </div>
+              <div class="align">
+                <div class="grey"><b>HSN/SAC Code:</b> {{ d?.hsnCode || 'NA'}}</div>
+    
+              </div>
+              <div class="align">
+                <div class="grey"><b>GST Percent:</b> {{ d?.gstPercent || 'NA'}}</div>
+    
+              </div>
+              <div class="align">
+                <div class="grey"><b>Category:</b> {{ d?.category || 'Na' }}</div>
+    
+              </div>
+              <!--          <div class="align">-->
+              <!--            <div class="grey">Vendor: {{ d?.vendor_name || 'NA'}}</div>-->
+    
+              <!--          </div>-->
+    
+            </div>
+        </div>
       </div>
     </div>
-  </div>
-
-  <!--  <div style="display:flex">-->
-  <!--    <div>Vehicle No:</div>-->
-  <!--    <div>{{vehicle_NO}}</div>-->
-  <!--  </div>-->
-
-  <div id="myDIVCard" (scroll)="getDataOnScroll()">
-
-    <div *ngIf="innerWidth <= 500" class="">
-      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
-                nzSize="small"  [nzScroll]="{ y: '425px' }" style="overflow-x: auto">
-        <div
-          class="head shadow-d1 aggregate"
-          *ngFor="let d of receivedData"
-          (click)="selectItem(d)"  [ngClass]="{SelectHighlight :  selectedRowId && (d?._id === selectedRowId)}">
-
-          <div class="align">
-            <div class="grey"><b>Trip No.</b></div>
-            <div class="ml-1">{{d?.trip_no}}</div>
-          </div>
-
-
-          <div class="align">
-            <div class="grey"><b>Material Name:</b> {{ d?.material || 'NA'  }}</div>
-
-          </div>
-          <div class="align">
-            <div class="grey"><b>HSN/SAC Code:</b> {{ d?.hsnCode || 'NA'}}</div>
-
-          </div>
-          <div class="align">
-            <div class="grey"><b>GST Percent:</b> {{ d?.gstPercent || 'NA'}}</div>
-
-          </div>
-          <div class="align">
-            <div class="grey"><b>Category:</b> {{ d?.category || 'Na' }}</div>
-
-          </div>
-          <!--          <div class="align">-->
-          <!--            <div class="grey">Vendor: {{ d?.vendor_name || 'NA'}}</div>-->
-
-          <!--          </div>-->
-
-        </div>
-      </nz-table>
-    </div>
-
-  </div>
-
-
 </div>
+
 <div *ngIf="isMobFilterVisible" class="flt">
   <div class="flt_heading">Filters</div>
   <div>

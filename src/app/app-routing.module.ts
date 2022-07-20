@@ -61,7 +61,14 @@ import { AlertListComponent } from './modules/trip-details/alert-list/alert-list
 import {GeofenceListViewComponent} from "./modules/geofence/geofence-list-view/geofence-list-view.component";
 import {GeofenceUpsertComponent} from "./modules/geofence/geofence-upsert/geofence-upsert.component";
 import { AlarmListViewComponent } from './modules/alarm/alarm-list-view/alarm-list-view.component';
+import {SensorComponent} from "./modules/sensor/sensor.component";
+import {SensorUpsertComponent} from "./modules/sensor/sensor-upsert/sensor-upsert.component";
+import { SensorListViewComponent } from './modules/sensor/sensor-list-view/sensor-list-view.component';
 import { AlarmUpsertComponent } from './modules/alarm/alarm-upsert/alarm-upsert.component';
+import { CalibComponent } from './modules/sensor/calib/calib.component';
+import { GpsReportsComponent } from './modules/gps-reports/gps-reports.component';
+import { BrokerMemoListViewComponent } from './modules/broker-memo/broker-memo-list-view/broker-memo-list-view.component';
+import { BrokerMemoUpsertComponent } from './modules/broker-memo/broker-memo-upsert/broker-memo-upsert.component';
 
 const routes: Routes = [
   {
@@ -77,38 +84,38 @@ const routes: Routes = [
       path:'',
       component: HomeComponent
     },
-    {
-      path: 'master/branch',
-      component: BranchListViewComponent
-    }, {
-      path: 'master/branch/view',
-      component: BranchDetailViewComponent
-    }, {
-      path: 'master/branch/view/:_id',
-      component: BranchDetailViewComponent
-    }, {
-      path: 'master/branch/upsert/:_id',
-      component: BranchUpsertComponent
-    }, {
-      path: 'master/branchUpsert',
-      component: BranchUpsertComponent
-    },
-    {
-      path: 'master/billingParty',
-      component: BillingPartyListViewComponent
-    }, {
-      path: 'master/billingParty/view',
-      component: BillingPartyDetailViewComponent
-    }, {
-      path: 'master/billingParty/view/:_id',
-      component: BillingPartyDetailViewComponent
-    }, {
-      path: 'master/billingParty/upsert/:_id',
-      component: BillingPartyUpsertComponent
-    }, {
-      path: 'master/billingPartyUpsert',
-      component: BillingPartyUpsertComponent
-    },
+      {
+        path: 'master/branch',
+        component: BranchListViewComponent
+      }, {
+        path: 'master/branch/view',
+        component: BranchDetailViewComponent
+      }, {
+        path: 'master/branch/view/:_id',
+        component: BranchDetailViewComponent
+      }, {
+        path: 'master/branch/upsert/:_id',
+        component: BranchUpsertComponent
+      }, {
+        path: 'master/branchUpsert',
+        component: BranchUpsertComponent
+      },
+      {
+        path: 'master/billingParty',
+        component: BillingPartyListViewComponent
+      }, {
+        path: 'master/billingParty/view',
+        component: BillingPartyDetailViewComponent
+      }, {
+        path: 'master/billingParty/view/:_id',
+        component: BillingPartyDetailViewComponent
+      }, {
+        path: 'master/billingParty/upsert/:_id',
+        component: BillingPartyUpsertComponent
+      }, {
+        path: 'master/billingPartyUpsert',
+        component: BillingPartyUpsertComponent
+      },
       {
         path: 'master/driver',
         component: DriverListViewComponent
@@ -192,7 +199,7 @@ const routes: Routes = [
       {
         path: 'operation/createTrip',
         component: CreateTripComponent
-    },
+      },
       {
         path: 'operation/duty',
         component: DutyListViewComponent
@@ -233,32 +240,32 @@ const routes: Routes = [
         path: 'operation/tripDetails/upload',
         component: UploadComponent
       },
-    {
-      path: 'operation/trip',
-      component: TripListViewComponent
-    },
+      {
+        path: 'operation/trip',
+        component: TripListViewComponent
+      },
       {
         path: 'operation/trip/emptyTrip/:_id',
         component: EmptyTripComponent
       },
-    {
-      path: 'operation/trip/:_id',
-      component: TripListViewComponent
-    },
-    {
-      path: 'operation/trip/view/:_id',
-      component: TripDetailViewComponent
-    },
-    {
-      path: 'operation/grWithOutTrip',
-      component: GrWithoutTripListViewComponent
-    }, {
-      path: 'operation/grWithOutTrip/upsert/:_id',
-      component: GrWithoutTripUpsertComponent
-    }, {
-      path: 'operation/grWithOutTripUpsert',
-      component: GrWithoutTripUpsertComponent
-    },
+      {
+        path: 'operation/trip/:_id',
+        component: TripListViewComponent
+      },
+      {
+        path: 'operation/trip/view/:_id',
+        component: TripDetailViewComponent
+      },
+      {
+        path: 'operation/grWithOutTrip',
+        component: GrWithoutTripListViewComponent
+      }, {
+        path: 'operation/grWithOutTrip/upsert/:_id',
+        component: GrWithoutTripUpsertComponent
+      }, {
+        path: 'operation/grWithOutTripUpsert',
+        component: GrWithoutTripUpsertComponent
+      },
       {
         path: 'operation/gr',
         component:GrListViewComponent
@@ -279,6 +286,15 @@ const routes: Routes = [
       {
         path: 'operation/trip-memo/Upsert/:mode',
         component: TripMemoUpsertComponent
+      },
+      //for broker memo
+      {
+        path: 'operation/broker-memo',
+        component:BrokerMemoListViewComponent
+      },
+      {
+        path: 'operation/broker-memo/Upsert/:mode',
+        component: BrokerMemoUpsertComponent
       },
       {
         path: 'operation/tripGPS',
@@ -331,6 +347,10 @@ const routes: Routes = [
         component: LandmarkUpsertComponent
       },
       {
+        path: 'tracking/gpsreports',
+        component: GpsReportsComponent
+      },
+      {
         path: 'tracking/geofence',
         component:GeofenceListViewComponent
       },
@@ -355,9 +375,9 @@ const routes: Routes = [
         component: AlertsListViewComponent
       },
       {
-             path: 'operation/playback-list',
-       component: PlaybackListComponent
-},
+        path: 'operation/playback-list',
+        component: PlaybackListComponent
+      },
       {
         path: 'tracking/analytics',
         component: AnalyticsComponent
@@ -371,14 +391,30 @@ const routes: Routes = [
         component:AlarmListViewComponent
       },
       {
+        path: 'tracking/sensor/upsert',
+        component:SensorUpsertComponent
+      },
+      {
+        path: 'tracking/sensor/upsert/:_id',
+        component: SensorUpsertComponent
+      },
+      {
+        path: 'tracking/sensor',
+        component: SensorListViewComponent
+      },
+      {
+        path: 'tracking/calibration',
+        component: CalibComponent
+      },
+      {
         path: 'tracking/alarm/upsert/:_id',
         component: AlarmUpsertComponent
-      }, 
+      },
       {
         path: 'tracking/alarmUpsert',
         component: AlarmUpsertComponent
       }
-      ]
+    ]
   },
   {
     path: 'login',

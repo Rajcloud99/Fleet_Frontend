@@ -455,6 +455,17 @@ export class SidebarComponent implements OnInit {
               "isSelected": true,
               "disable": false
             },
+            {
+              "_id": "5f61f63dd474bf0c535b38058",
+              "id": 1,
+              "parent_id": "1",
+              "label": "Broker Memo",
+              "value": "Broker Memo",
+              "title": "Broker Memo",
+              "path": "broker-memo",
+              "isSelected": true,
+              "disable": false
+            },
               {
                 "_id": "5f61f63dd474bf0c535a48d1",
                 "id": 1,
@@ -643,6 +654,17 @@ export class SidebarComponent implements OnInit {
               "disable": false
           },
           {
+            "_id": "5fd0b3a86b709d32b4765dd9",
+            "id": 1,
+            "parent_id": "1",
+            "label": "GPS Reports",
+            "value": "GPS Reports",
+            "title": "GPS Reports",
+            "path": "gpsreports",
+            "isSelected": true,
+            "disable": false
+        },
+          {
             "_id": "5fd0b3a86b718d32b4765dd9",
             "id": 1,
             "parent_id": "1",
@@ -683,6 +705,17 @@ export class SidebarComponent implements OnInit {
             "value": "Geofence",
             "title": "Geofence",
             "path": "geofence",
+            "isSelected": true,
+            "disable": false
+          },
+          {
+            "_id": "5fd0b3a86b709d32b4765cd32",
+            "id": 1,
+            "parent_id": "1",
+            "label": "Sensor",
+            "value": "Sensor",
+            "title": "Sensor",
+            "path": "sensor",
             "isSelected": true,
             "disable": false
           },

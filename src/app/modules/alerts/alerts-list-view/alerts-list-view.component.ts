@@ -20,7 +20,7 @@ export class AlertsListViewComponent implements OnInit {
   isMobFilterVisible = false;
   timer: any;
   receivedAlertsData: any;
-  pageNumber = 1;
+  pageNumber = 2;
   receivedAlerts : any;
   selectedAlertsRowId : any;
   innerWidth: any;
@@ -62,11 +62,9 @@ export class AlertsListViewComponent implements OnInit {
   }
 
   search () {
-      this.filterObj.skip = 1;
       this.filterObj.no_of_docs = 15;
-      this.filterObj.row_count = 8;
     this.clean(this.filterObj);
-    this.masterService.getAllAlerts({...this.filterObj}).subscribe((res: any) => {
+    this.masterService.getAllAlerts({row_count: 8, skip:1, ...this.filterObj}).subscribe((res: any) => {
       if(res){
         this.receivedAlertsData = res;
         this.scrollTable = document.getElementsByClassName("ant-table-body");
@@ -80,7 +78,7 @@ export class AlertsListViewComponent implements OnInit {
 
   getDataOnScroll(){
     if (true) {
-      let divElement: any = document.getElementsByClassName('ant-table-body')[0];
+      let divElement: any = document.getElementsByClassName('ant-table-body')[0] || document.getElementById('myDIV');
       // console.log('divElement', divElement);
       if ((divElement.scrollTop + divElement.clientHeight) >= divElement.scrollHeight) {
         if (this.stopScrolling === false) {
@@ -89,7 +87,7 @@ export class AlertsListViewComponent implements OnInit {
           }
           const mContext = this;
           this.timer = window.setTimeout( ()=> {
-            mContext.masterService.getAllAlerts({ no_of_docs: 15, skip: mContext.pageNumber,
+            mContext.masterService.getAllAlerts({ no_of_docs: 15,row_count:8, skip: mContext.pageNumber,
               ...this.filterObj }).subscribe(data => {
               if (data) {
                 if (data.length=== 0) {

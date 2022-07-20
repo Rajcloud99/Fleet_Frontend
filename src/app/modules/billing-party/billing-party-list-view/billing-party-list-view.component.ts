@@ -126,7 +126,7 @@ export class BillingPartyListViewComponent implements OnInit {
       if (data) {
         this.receivedData = data;
         this.scrollTable = document.getElementsByClassName("ant-table-body");
-        this.scrollTable[0].addEventListener('scroll',() => {
+        this.scrollTable[0]?.addEventListener('scroll',() => {
           console.log('scroll');
           this.onScroll();
         } )
@@ -153,7 +153,7 @@ export class BillingPartyListViewComponent implements OnInit {
 
   onScroll() {
     if (this.clickSearch) {
-      let divElement: any = document.getElementsByClassName("ant-table-body")[0];
+      let divElement: any = document.getElementsByClassName("ant-table-body")[0] || document.getElementById('myDIV');
       if (
         divElement.scrollTop + divElement.clientHeight >=
         divElement.scrollHeight
