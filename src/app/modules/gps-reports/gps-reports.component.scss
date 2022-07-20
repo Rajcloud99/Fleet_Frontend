@@ -1,0 +1,39 @@
+[nz-radio] {
+    display: block;
+    height: 32px;
+    line-height: 32px;
+}
+
+.insight-description{
+    height: 100%;
+}
+
+.center {
+    text-align: center;
+}
+.vehicles {
+    width: 50%;
+    max-height: 80vh;
+}
+.insight-head {
+    justify-content: center;
+}
+
+@media screen and (min-width: 500px){
+    .days {
+        width: 50%;
+        margin-left: 50%;
+        flex: 1;
+    }
+    .input-box {
+        width: 30% !important;
+    }
+    .calendar {
+        width: 40% !important;
+        margin-right: 60%;
+
+    }
+    // .bottom {
+    //     width: 50%;
+    // }
+}

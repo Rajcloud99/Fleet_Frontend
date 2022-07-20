@@ -1,0 +1,337 @@
+<div class="insight">
+    <div class="insight-head">
+    </div>
+    <div class="insight-description">
+      <form nz-form [formGroup]="dealForm" (ngSubmit)="onSubmit()">
+        <div>
+          <div nz-row>
+            <!--Branch -->
+            <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" >
+              <nz-form-label style="text-align: left;" nzErrorTip="Please Enter Branch " nzFor="Branch">Branch Name<span
+                class="red-mark">*</span></nz-form-label>
+              <nz-form-control>
+                <nz-select  [nzDisabled] ="!mod || this.previewMd" [nzDropdownMatchSelectWidth]="false"  style="width: 95%"  formControlName="branch"
+                            nzPlaceHolder="Search branch"
+                            nzShowSearch (nzOnSearch)="onSearchbranch($event)" nzServerSearch nzAllowClear>
+                  <nz-option *ngFor="let branch of branchgetdata"
+                             nzLabel="{{ branch?.name}}" [nzValue]="branch">
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+  
+            </div>
+
+            <!-- customer -->
+            <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" >
+              <nz-form-label style="text-align: left;">Customer</nz-form-label>
+              <nz-form-control>
+                {{user$.brokerCustName}}
+              </nz-form-control>
+  
+            </div>
+
+            <!-- billing party -->
+            <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" >
+              <nz-form-label style="text-align: left;">Billing Party</nz-form-label>
+              <nz-form-control>
+                {{user$.brokerbpName}}
+              </nz-form-control>
+  
+            </div>
+
+            <!-- pod customer -->
+
+            <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+              <nz-form-label style="text-align: left;" nzFor="podCustomer"> POD Customer</nz-form-label>
+              <nz-form-control>
+                <input nz-input type="text" placeholder="Enter pod customer name" [(ngModel)]="podCustomer" [ngModelOptions]="{standalone: true}" />
+              </nz-form-control>
+            </div>
+
+            <!--Transporter -->
+            <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" >
+              <nz-form-label style="text-align: left;" nzErrorTip="Please Enter Transporter " nzFor="Transporter">Transporter<span
+                class="red-mark">*</span></nz-form-label>
+              <nz-form-control>
+                <nz-select [(ngModel)]="transporter" [ngModelOptions]="{ standalone: true} " style="width: 95%" 
+                            nzPlaceHolder="Search transporter"
+                            nzShowSearch (nzOnSearch)="onSearchtransporter($event)" nzServerSearch nzAllowClear>
+                  <nz-option *ngFor="let transporter of transportergetdata"
+                             nzLabel="{{ transporter?.name}}" [nzValue]="transporter">
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+  
+            </div>
+            <!--        ***********************  customer consignee consignor billing party-->
+  
+            <div  *ngIf="!mod" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+              <nz-form-label style="text-align: left;" nzErrorTip="Select Type " nzFor="vehicle type">Vehicle Type<span
+                class="red-mark">*</span></nz-form-label>
+              <nz-form-control nzErrorTip="Please Select Vehicle  type">
+                <nz-select [nzDisabled] ="true"  [nzDropdownMatchSelectWidth]="false"  style="width: 95%"  formControlName="vehicle"
+                           nzPlaceHolder="Select Type"
+                           nzShowSearch (nzOnSearch)="onSearchvehicletype()" nzServerSearch nzAllowClear>
+                  <nz-option *ngFor="let type of vehicletypedata"
+                             nzLabel="{{ type?.veh_type_name}}" [nzValue]="type">
+                  </nz-option>
+  
+                </nz-select>
+              </nz-form-control>
+  
+            </div>
+  
+            <div  *ngIf="mod" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+              <nz-form-label style="text-align: left;" nzErrorTip="Select Type " nzFor="vehicle type">Vehicle Type<span
+                class="red-mark">*</span></nz-form-label>
+              <nz-form-control nzErrorTip="Please Select Vehicle  type">
+                <nz-select   [nzDropdownMatchSelectWidth]="false"  style="width: 95%"  formControlName="vehicle"
+                           nzPlaceHolder="Select Type"
+                           nzShowSearch (nzOnSearch)="onSearchvehicletype()" nzServerSearch nzAllowClear>
+                  <nz-option *ngFor="let type of vehicletypedata"
+                             nzLabel="{{ type?.name}}" [nzValue]="type">
+                  </nz-option>
+  
+                </nz-select>
+              </nz-form-control>
+  
+            </div>
+  
+  
+            <!--       *************************   customer consignee consignor and billing party end-->
+  
+  
+            <!--          // broker memo date and broker memo slip no-->
+            <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" formGroupName="bMemo">
+              <nz-form-label style="text-align: left;" nzFor="Deal date">broker Memo Date<span class="red-mark">*</span></nz-form-label>
+              <nz-form-control>
+                <nz-date-picker [nzDisabled] ="this.previewMd || this.recAmValid"  style="width: 95%" formControlName="date"   autocomplete="off" placeholder="Choose Trip Memo Date"></nz-date-picker>
+              </nz-form-control>
+            </div>
+            <div   nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" formGroupName="bMemo" >
+              <nz-form-label nzFor="loading_slip">Broker Memo  Slip <span
+                class="red-mark">*</span></nz-form-label>
+              <nz-form-control>
+                <nz-select   [nzDisabled] ="this.previewMd || this.recAmValid" style="width: 80%"   [nzDropdownMatchSelectWidth]="false"
+                            formControlName="bmNo" nzPlaceHolder="Search Broker Memo slip " nzShowSearch
+                            (nzOnSearch)="getBillBookNo($event)" nzAllowClear nzServerSearch>
+                  <nz-option *ngFor="let item of selectedStationary" nzLabel="{{ item?.bookNo}}" [nzValue]=" item">
+                  </nz-option>
+                </nz-select>
+                <button  [disabled] ="this.previewMd || this.recAmValid" type="button" class="btn-icon" nz-tooltip nzTooltipTitle="Centrailized"
+                        (click)="getBillBookNo('centrailized')">
+                  <i nz-icon nzType="plus-circle" style="font-size: 20px;" nzTheme="outline"></i>
+                </button>
+  
+  
+              </nz-form-control>
+  
+            </div>
+            <!--           end    // broker memo date and broker memo slip no-->
+  
+            <!--          gr details-->
+            <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" >
+              <nz-form-label nzFor="grDate">{{'GR Date'}} </nz-form-label>
+              <nz-form-control nzErrorTip="Enter Gr Date">
+                <nz-date-picker  [nzDisabled] ="this.previewMd" [nzFormat]="dateFormat"  id="grDate"   style="width: 95%"
+                                     formControlName="grDate"></nz-date-picker>
+              </nz-form-control>
+            </div>
+  
+            <div   nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" >
+              <nz-form-label nzFor="grNumber">{{'Gr Number'}}</nz-form-label>
+              <!--            //**********************-->
+              <nz-form-control>
+                <nz-select  [nzDisabled] ="this.previewMd" style="width: 80%"   [nzDropdownMatchSelectWidth]="false"
+                            formControlName="grNumber" nzPlaceHolder="Search gr " nzShowSearch
+                            (nzOnSearch)="getBillBookNo1($event)" nzAllowClear nzServerSearch>
+                  <nz-option *ngFor="let item of getGRstationarydata" nzLabel="{{ item?.bookNo}}" [nzValue]=" item">
+                  </nz-option>
+                </nz-select>
+                <button  [disabled] ="this.previewMd" type="button" class="btn-icon" nz-tooltip nzTooltipTitle="Centrailized"
+                          (click)="getBillBookNo1('centrailized')">
+                  <i nz-icon nzType="plus-circle" style="font-size: 20px;" nzTheme="outline"></i>
+                </button>
+  
+  
+              </nz-form-control>
+  
+            </div>
+            <!--gr details end-->
+            <!--payment details  -->
+            <div  nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6"  formGroupName="bMemo">
+              <nz-form-label nzFor="payment_type">Payment Type <span
+                class="red-mark">*</span></nz-form-label>
+              <nz-form-control >
+                <nz-select [nzDisabled] ="this.previewMd || this.recAmValid" nzPlaceHolder="Select Payment Type"
+                           style="width: 95%" formControlName="payment_type"  (ngModelChange)="paymenttypechange();" nzShowSearch>
+                  <nz-option *ngFor="let item of ptList" nzLabel="{{item}}"
+                             [nzValue]="item">
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </div>
+  
+            <div [hidden]="this.dealForm.value.bMemo.payment_type == null"  nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" formGroupName="bMemo">
+              <nz-form-label nzFor="payment_basis">Payment Basis <span
+                class="red-mark">*</span></nz-form-label>
+              <nz-form-control nzErrorTip="Please Select Payment basis">
+                <nz-select [nzDisabled] ="this.previewMd || this.recAmValid" nzPlaceHolder="Select Payment Basis"
+                           style="width: 95% ; padding-left: 2px" formControlName="weight_type" (ngModelChange)="paymenttypechange();" nzShowSearch>
+                  <nz-option  *ngFor="let item of pbList" nzLabel="{{item}}"
+                              [nzValue]="item">
+                  </nz-option>
+                </nz-select>
+              </nz-form-control>
+            </div>
+            <!--          punit-->
+            <!--          No. of boxes-->
+            <div *ngIf="dealForm.value.bMemo?.weight_type == 'PUnit'" nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" formGroupName="bMemo">
+              <nz-form-label style="text-align: left;" nzFor="No. of boxes">No. of boxes<span class="red-mark">*</span></nz-form-label>
+              <nz-form-control>
+                <input [readonly] ="this.previewMd || this.recAmValid" type='number' nz-input formControlName="perUnitPrice" (change)="calculateTotalpunit();" style="width: 95%" />
+              </nz-form-control>
+            </div>
+            <!--          Price per box-->
+            <div *ngIf="dealForm.value.bMemo.weight_type == 'PUnit'"  nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" formGroupName="bMemo">
+              <nz-form-label style="text-align: left;" nzFor="Price per box">Price per box<span class="red-mark">*</span></nz-form-label>
+              <nz-form-control>
+                <input [readonly] ="this.previewMd || this.recAmValid" type='number' nz-input formControlName="totalUnits"(ngModelChange)="calculateTotalpunit();" style="width: 95%" />
+              </nz-form-control>
+            </div>
+            <!--          punit end-->
+            <!--          PMT-->
+            <!--          PMT Weight-->
+            <div *ngIf="dealForm.value.bMemo.weight_type == 'PMT'"  nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" formGroupName="bMemo">
+              <nz-form-label style="text-align: left;" nzFor="PMT Weight">PMT Weight<span class="red-mark">*</span></nz-form-label>
+              <nz-form-control>
+                <input  [readonly] ="this.previewMd || this.recAmValid" type='number' nz-input formControlName="pmtWeight" (change)="calculateTotalPMT();" style="width: 95%" />
+              </nz-form-control>
+            </div>
+            <!--          Price per box-->
+            <div *ngIf="dealForm.value.bMemo.weight_type == 'PMT'"  nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" formGroupName="bMemo">
+              <nz-form-label style="text-align: left;" nzFor="PMT Rate ">PMT Rate <span class="red-mark">*</span></nz-form-label>
+              <nz-form-control>
+                <input  [readonly] ="this.previewMd || this.recAmValid" type='number' nz-input formControlName="pmtRate" (ngModelChange)="calculateTotalPMT();" style="width: 95%" />
+              </nz-form-control>
+            </div>
+            <!--          PMT end-->
+            <!--for fixed-->
+            <!--          total -->
+            <div  [hidden]="this.dealForm.value.bMemo.payment_type == null"  nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6"formGroupName="bMemo" >
+              <nz-form-label style="text-align: left;" nzFor="total">TOTAL<span class="red-mark">*</span></nz-form-label>
+              <nz-form-control>
+                <input  type='number'  [readOnly]="dealForm.value.bMemo?.weight_type != 'Fixed'" nz-input formControlName="rate" (ngModelChange)="munsiayanacal();" style="width: 95%" />
+              </nz-form-control>
+            </div>
+            <!--          munshiyana-->
+            <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" formGroupName="bMemo">
+              <nz-form-label style="text-align: left;" nzFor="munshiyana">munshiyana</nz-form-label>
+              <nz-form-control>
+                <input   [readonly] ="previewMd || recAmValid" type='number' nz-input formControlName="munshiyana" (ngModelChange)="munsiayanacal();" style="width: 95%" />
+              </nz-form-control>
+            </div>
+            <!--          total with munshiyana-->
+            <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" formGroupName="bMemo">
+              <nz-form-label style="text-align: left;" nzFor="totWithMunshiyana">totWithMunshiyana<span class="red-mark">*</span></nz-form-label>
+              <nz-form-control>
+                <input  [readonly]= "true" type='number' nz-input formControlName="total" style="width: 95%" />
+              </nz-form-control>
+            </div>
+            <!--          advance-->
+            <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" formGroupName="bMemo">
+              <nz-form-label style="text-align: left;" nzFor="advance">advance<span class="red-mark">*</span></nz-form-label>
+              <nz-form-control>
+                <input  type='number' [readOnly]="(dealForm.value.bMemo?.payment_type == 'To pay' || dealForm.value.bMemo?.payment_type == 'To be billed' || previewMd || recAmValid)" nz-input formControlName="advance" (ngModelChange)="munsiayanacal();" style="width: 95%" />
+              </nz-form-control>
+            </div>
+            <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" formGroupName="bMemo">
+              <nz-form-label style="text-align: left;" nzFor="toPay">toPay<span class="red-mark">*</span></nz-form-label>
+              <nz-form-control>
+                <input   [readonly]= "true" type='number' nz-input formControlName="toPay" style="width: 95%" />
+              </nz-form-control>
+            </div>
+            
+            <!-- Charges details -->
+
+            <!-- dala charges -->
+            <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+              <nz-form-label style="text-align: left;" nzFor="dala_charges">Dala Charge</nz-form-label>
+              <nz-form-control>
+                <input nz-input type="number" [(ngModel)]="dala_charges" (ngModelChange)="calcTotalFreight();" [ngModelOptions]="{ standalone: true }" style="width:95%;" />
+              </nz-form-control>
+            </div>
+
+            <!-- other charges -->
+            <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+              <nz-form-label style="text-align: left;" nzFor="other_charges">Other Charge</nz-form-label>
+              <nz-form-control>
+                <input nz-input type="number" [(ngModel)]="other_charges" (ngModelChange)="calcTotalFreight();" [ngModelOptions]="{ standalone: true }" style="width:95%;" />
+              </nz-form-control>
+            </div>
+
+
+            <!-- Deductions -->
+
+            <!-- dala commisions -->
+
+            <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+              <nz-form-label style="text-align: left;" nzFor="dala_comisson">Dala Comission </nz-form-label>
+              <nz-form-control>
+                <input nz-input type="number" [(ngModel)]="dalaComission" (ngModelChange)="calcTotalFreight();" [ngModelOptions]="{ standalone: true }" style="width:95%;" />
+              </nz-form-control>
+            </div>
+
+            <!-- TDS -->
+            <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+              <nz-form-label style="text-align: left;" nzFor="tds">TDS </nz-form-label>
+              <nz-form-control>
+                <input nz-input type="number" [(ngModel)]="tds" (ngModelChange)="calcTotalFreight();" [ngModelOptions]="{ standalone: true }" style="width:95%;" />
+              </nz-form-control>
+            </div>
+
+            <!-- basic freight and total freight-->
+  
+  
+            <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+              <nz-form-label style="text-align: left;" nzFor="basic freight">Basic Freight<span class="red-mark">*</span></nz-form-label>
+              <nz-form-control>
+                <input  [readonly]= "true" type='number' nz-input formControlName="basicFreight" style="width: 95%" />
+              </nz-form-control>
+            </div>
+            <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+              <nz-form-label style="text-align: left;" nzFor="toPay">total Freight<span class="red-mark">*</span></nz-form-label>
+              <nz-form-control>
+                <input [readonly]= "true" type='number' nz-input formControlName="totalFreight" style="width: 95%" />
+              </nz-form-control>
+            </div>
+            <!--          fixed end-->
+  
+            <!--          card view total-->
+            <!--          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" formGroupName="tMemo" >-->
+            <!--            <nz-form-label style="text-align: left;" nzFor="totalPayable">totalPayable<span class="red-mark">*</span></nz-form-label>-->
+            <!--            <nz-form-control>-->
+            <!--              <input  [readonly]= "true" type='number' nz-input formControlName="totalPayable" style="width: 95%" />-->
+            <!--            </nz-form-control>-->
+            <!--          </div>-->
+            <!--          <div nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" formGroupName="tMemo" >-->
+            <!--            <nz-form-label style="text-align: left;" nzFor="remainingAmount">remainingAmount<span class="red-mark">*</span></nz-form-label>-->
+            <!--            <nz-form-control>-->
+            <!--              <input   [readonly]= "true" type='number' nz-input formControlName="remainingAmount" style="width: 95%" />-->
+            <!--            </nz-form-control>-->
+            <!--          </div>-->
+          </div>
+        </div>
+        <div  *ngIf="!mod" [ngClass]="{ 'pull-right':this.innerWidth > 500 }">
+          <nz-form-item>
+            <nz-form-control>
+              <button [disabled] ="this.previewMd" class=" invbtn" style="margin-top: 15px; width:140px; margin-right: 5px" nz-button type="submit" nzType="primary">SUBMIT</button>
+              <button  nzDanger class="invbtnback" type="button" style="margin-top: 15px ;width: 140px" (click)="backToListView();">BACK </button>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </form>
+  
+    </div>
+  </div>
+  

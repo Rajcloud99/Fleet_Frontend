@@ -1,0 +1,110 @@
+<div class="insight">
+  <div class="insight-head">
+
+  </div>
+  <div class="insight-description">
+
+    <form nz-form [formGroup]="sensorForm" (ngSubmit)="onSubmit()">
+      <div class="mbbtn"  nz-tooltip nzTooltipTitle="Add Sensor Calibration"
+           (click)="addCalibration()">
+        <fa-icon [icon]="faPlusSquare" ></fa-icon>
+      </div>
+
+      <div class="mbbtn"  nz-tooltip nzTooltipTitle="Upload Document" (click)="uploadDocumentModel()">
+        <fa-icon [icon]="faUpload" ></fa-icon>
+      </div>
+
+      <div nz-row>
+<!--        <nz-form-item nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">-->
+<!--          <nz-form-label [nzSpan]="20">Category<span class="red-mark">*</span></nz-form-label>-->
+<!--          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">-->
+<!--            <nz-select formControlName="category" required nzShowSearch>-->
+<!--              <nz-option *ngFor="let type of categoryList" nzLabel="{{type}}"-->
+<!--                         [nzValue]="type">-->
+<!--              </nz-option>-->
+<!--            </nz-select>-->
+<!--          </nz-form-control>-->
+<!--        </nz-form-item>-->
+        <nz-form-item nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Sensor Id<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="s_id" id="s_id" required />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Company<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="company" id="company" required />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Device<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="device" id="device" required/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Output Unit<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="out_unit" id="out_unit" required/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Conversion Fact<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="conversion_fact" id="conversion_fact" required/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Version<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="ver" id="ver" required/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item  nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Fill Diff<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="fill_diff" id="fill_diff" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item  nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6">
+          <nz-form-label [nzSpan]="20">Drain Diff<span class="red-mark">*</span></nz-form-label>
+          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">
+            <input nz-input formControlName="drain_diff" id="drain_diff" />
+          </nz-form-control>
+        </nz-form-item>
+
+
+
+<!--        <nz-form-item  nz-col nzXs="24" nzSm="12"  nzMd="8" nzLg="6" formArrayName="material"  *ngFor="let item of materialForm.get('material')?.controls; let i = index;">-->
+<!--          <nz-form-label [class.hide]="i != 0" [nzSpan]="20">Material Type</nz-form-label>-->
+<!--          <nz-form-control [nzSpan]="20" nzErrorTip="Input is required">-->
+<!--            <div style="display: flex">-->
+<!--              <input [formControlName]="i" nz-input (input)="onInputChange(item, i)" placeholder="Material Name"><br>-->
+<!--              <button nz-button *ngIf="i != 0"  (click)="remove(i)">X</button>-->
+<!--            </div>-->
+<!--          </nz-form-control>-->
+<!--        </nz-form-item>-->
+
+
+      </div>
+
+      <nz-form-item style="padding-top: 5%;">
+        <nz-form-control  [nzSpan]="20" nzErrorTip="Input is required">
+          <button nz-button nzType="primary" type="submit" [disabled]="sensorForm?.invalid" >{{'Submit'}}</button>&nbsp;&nbsp;&nbsp;&nbsp;
+<!--          <button nz-button nzType="primary" (click)="backToHome();" >Cancel</button>-->
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+    <!--      <pre>{{materialForm.value | json}}</pre>-->
+    <!--    <pre>{{branchForm.valid}}</pre>-->
+  </div>
+</div>
+

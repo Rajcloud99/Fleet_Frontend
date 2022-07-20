@@ -1,0 +1,171 @@
+<div class="main-div" >
+  <div class="insight">
+    <div class="insight-head" *ngIf="innerWidth > 500">
+      <div class="insight-tools">
+        <div class="tool" >
+<!--          <div class="mbbtn" *ngIf="innerWidth <= 500"  (click)="isMobFilterVisible = true;">-->
+<!--          <div class="mbbtn" (click)="isMobFilterVisible = true;">-->
+<!--            <fa-icon [icon]="faFilter"></fa-icon>-->
+<!--          </div>-->
+          <div class="mbbtn"  nz-tooltip nzTooltipTitle="Add Sensor"
+               (click)="addSensor()">
+            <fa-icon [icon]="faPlusSquare" ></fa-icon>
+          </div>
+          <div class="mbbtn"  nz-tooltip nzTooltipTitle="Edit" (click)="navigateTo()">
+            <fa-icon [icon]="faEdit" ></fa-icon>
+          </div>
+          <div class="mbbtn" nz-tooltip nzTooltipTitle="Delete"(click) ="delete()" nz-tooltip nzTooltipTitle="Disable">
+            <fa-icon [icon]="faTrash" style="color: red !important;"></fa-icon>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div *ngIf="innerWidth > 500" class="insight-description">
+      <!--      <nz-spin [nzSize]="'large'" [ngClass]="{'loader': loadingObservable | async}" nzSimple [nzSpinning]="loadingObservable | async"></nz-spin>-->
+
+
+      <div class="filters-row">
+        <div class="my-row">
+
+<!--          <div class="my-card">-->
+<!--            <div class="my-card-header">-->
+<!--              <input nz-input  [(ngModel)]="filterObjType && filterObjType.material" placeholder="Material Type Name" id="searchType" />-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="my-card">-->
+<!--            <div class="my-card-header">-->
+<!--              <input nz-input  [(ngModel)]="filterObjType && filterObjType.hsnCode" placeholder="Code" id="searchSACType" />-->
+<!--            </div>-->
+<!--          </div>-->
+
+          <div class="my-card">
+            <div class="my-card-header">
+              <button class="my-btn bg-primary" (click)="search()">
+                <fa-icon [icon]="faSearch" style="font-size: 15px"></fa-icon>
+              </button>
+            </div>
+          </div>
+<!--          <div class="my-card">-->
+<!--            <div class="my-card-header">-->
+<!--              <button class="my-btn bg-primary" (click)="reset()">-->
+<!--                <fa-icon [icon]="faTimes" style="font-size: 19px"></fa-icon>-->
+<!--              </button>-->
+<!--            </div>-->
+<!--          </div>-->
+        </div>
+      </div>
+
+      <div *ngIf="innerWidth > 500">
+        <nz-table
+          (scroll)="getDataOnScroll()"
+          #nzTable
+          nzBordered
+          [nzShowPagination]="false"
+          [nzData]="receivedData ? receivedData : ''"
+          nzSize="small"
+          [nzScroll]="{ x: '600px', y: '360px' }"
+          style="overflow-x: auto"
+        >
+          <thead>
+          <tr style="background-color: #3e51b5 !important;">
+            <th nzWidth="80px"  nzAlign="center">Device</th>
+            <th nzWidth="80px"  nzAlign="center">Out unit</th>
+            <th nzWidth="150px" nzAlign="center">Conversion Fact</th>
+            <th nzWidth="120px" nzAlign="center">Fill difference </th>
+            <th nzWidth="120px" nzAlign="center">Drain Diff </th>
+            <th nzWidth="120px" nzAlign="center"> Category </th>
+            <th nzWidth="120px" nzAlign="center">s_id </th>
+
+          </tr>
+          </thead>
+          <tbody >
+          <tr
+            style="cursor: pointer"
+            *ngFor="let item of receivedData"
+            (click)="selectItem(item)"
+            [ngClass]="{SelectHighlight :  selectedRowId && (item?._id === selectedRowId)}"
+          >
+            <td nzAlign="center">{{ item?.device }} </td>
+            <td nzAlign="center">{{ item?.out_unit}}</td>
+            <td nzAlign="center">{{ item?.conversion_fact}}</td>
+            <td nzAlign="center">{{ item?.fill_diff}}</td>
+            <td nzAlign="center">{{ item?.drain_diff}}</td>
+            <td nzAlign="center">{{ item?.category}}</td>
+            <td nzAlign="center">{{ item?.s_id}}</td>
+          </tr>
+          </tbody> </nz-table
+        ><br /><br />
+
+      </div>
+    </div>
+  </div>
+
+
+  <div id="myDIVCard" (scroll)="getDataOnScroll()">
+
+    <div *ngIf="innerWidth <= 500" class="">
+      <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="receivedData ? receivedData : ''"
+                nzSize="small"  [nzScroll]="{ y: '425px' }" style="overflow-x: auto">
+        <div
+          class="head shadow-d1 aggregate"
+          *ngFor="let d of receivedData"
+          (click)="selectItem(d)"  [ngClass]="{SelectHighlight :  selectedRowId && (d?._id === selectedRowId)}">
+
+          <div class="align">
+            <div class="grey"><b> Device :</b></div>
+            <div class="ml-1">{{d?.device}}</div>
+          </div>
+
+          <div class="align">
+            <div class="grey"><b>Out unit :</b> {{ d?.out_unit || 'NA'  }}</div>
+
+          </div>
+          <div class="align">
+            <div class="grey"><b> Conversion Fact :</b> {{ d?.conversion_fact || 'NA'}}</div>
+
+          </div>
+          <div class="align">
+            <div class="grey"><b> Fill Diff :</b> {{ d?.fill_diff || 'NA'}}</div>
+
+          </div>
+          <div class="align">
+            <div class="grey"><b> Drain Diff :</b> {{ d?.drain_diff || 'Na' }}</div>
+
+          </div>
+          <div class="align">
+            <div class="grey"><b> Category : </b>{{ d?.category || 'NA'}}</div>
+
+          </div>
+          <div class="align">
+            <div class="grey"><b> s_id : {{ d?.s_id || 'NA'}} </b></div>
+
+          </div>
+
+        </div>
+      </nz-table>
+    </div>
+
+  </div>
+
+
+</div>
+<div *ngIf="isMobFilterVisible" class="flt">
+  <div class="flt_heading">Filters</div>
+  <div>
+    <div class="flex-cont">
+      <label> Material Type </label>
+<!--      <input nz-input [(ngModel)]="filterObjType && filterObjType.material" placeholder="Search Material Type">-->
+    </div>
+    <div class="flex-cont">
+      <label> Code </label>
+<!--      <input nz-input [(ngModel)]="filterObjType && filterObjType.hsnCode" placeholder="Search Material Code">-->
+    </div>
+  </div>
+
+  <div style="margin-top: 17px;">
+    <button style="width: 50%;" type="primary" nz-button (click)="search(); isMobFilterVisible = false;">Search</button>
+    <button style="width: 50%;" type="primary" nz-button (click)="reset(); isMobFilterVisible = false;">Reset</button>
+  </div>
+</div>
+

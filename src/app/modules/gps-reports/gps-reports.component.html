@@ -1,0 +1,109 @@
+<div class="insight">
+    <div class="insight-description">
+
+        <div nz-row nz-row nzJustify="start" nzAlign="middle" style="margin-top:2%;">
+
+            <div style="margin-top:2%;"  nz-col nzXs="12" nzSm="8" nzMd="6" nzLg="4"><button nz-button nzShape="round" (click)="fillDateTime(0)">Today</button>
+            </div>
+
+            <div style="margin-top:2%;" nz-col nzXs="12" nzSm="8" nzMd="6" nzLg="4"><button nz-button nzShape="round" (click)="fillDateTime(-1)">Yesterday</button>
+            </div>
+
+            <div style="margin-top:2%;" nz-col nzXs="12" nzSm="8" nzMd="6" nzLg="4"><button nz-button nzShape="round" (click)="fillDateTime(-2)">Last 2 days</button>
+            </div>
+
+            <div style="margin-top:2%;" nz-col nzXs="12" nzSm="8" nzMd="6" nzLg="4"><button nz-button nzShape="round" (click)="fillDateTime(-3)">Last 3 days</button>
+            </div>
+
+            <div style="margin-top:2%;" nz-col nzXs="12" nzSm="8" nzMd="6" nzLg="4"><button nz-button nzShape="round" (click)="fillDateTime(-7)">Last Week</button>
+            </div> 
+
+            <div *ngIf="(reportType == 'report_mileage2')" style="margin-top:2%;" nz-col nzXs="12" nzSm="8" nzMd="6" nzLg="4">
+                <nz-date-picker nzMode="month" [(ngModel)]="monthPicker" (ngModelChange)="fillDateTime(-30)"></nz-date-picker>
+            </div>
+            
+            <div style="margin-top: 5px; margin-right:3%" nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+                <span>
+                  <nz-date-picker style="width: 70%" [nzDisabledDate]="disabledDate" [(ngModel)]="start_date" nzPlaceHolder="From Date"
+                    [ngModelOptions]="{ standalone: true }" (ngModelChange)="onDateChange('startDate');" nzFormat="dd-MM-yyyy">
+                  </nz-date-picker>
+                  <nz-time-picker style="width: 30%" [(ngModel)]="start_time" [ngModelOptions]="{ standalone: true }"
+                    nzFormat="HH:mm">
+                  </nz-time-picker>
+                </span>
+              </div>
+              <div style="margin-top: 5px; margin-right:3%" nz-col nzXs="24" nzSm="12" nzMd="8" nzLg="6">
+                <span>
+                  <nz-date-picker [nzDisabledDate]="disabledDate" style="width: 70%" [(ngModel)]="end_date" nzPlaceHolder="To Date"
+                    [ngModelOptions]="{ standalone: true }" (ngModelChange)="onDateChange('endDate');" nzFormat="dd-MM-yyyy">
+                  </nz-date-picker>
+                  <nz-time-picker style="width: 30%" [(ngModel)]="end_time" [ngModelOptions]="{ standalone: true }"
+                    nzFormat="HH:mm">
+                  </nz-time-picker>
+                </span>
+              </div>
+            
+        </div>
+
+        <div nz-row nzJustify="start" nzAlign="middle" nz-row style="margin-top:2%;">
+
+            <div style="margin-top:3%; margin-right:3%; align-self: center;"  nz-col nzXs="24" nzSm="10" nzMd="8" nzLg="5">
+                <nz-select [ngModelOptions]="{standalone: true}" (ngModelChange)="deviceIMEI=[];selectAllRow(false);selectedVehicleR=false;" [nzDropdownMatchSelectWidth]="false"
+                    style="width: 100%" nzPlaceHolder="Select Type" [(ngModel)]="reportType" nzShowSearch nzAllowClear>
+                    <nz-option *ngFor="let report of aReportTypes" nzLabel="{{report?.name}}" [nzValue]="report.scope">
+                    </nz-option>
+                </nz-select>
+            </div>
+
+            <div style="margin-top:3%; margin-right:3%; align-self: center;" nz-col nzXs="24" nzSm="10" nzMd="8" nzLg="5">
+                <nz-select [ngModelOptions]="{standalone: true}" (ngModelChange)="searchVehicleSegment($event);deviceIMEI=[];selectAllRow(false);selectedVehicleR=false;" [nzDropdownMatchSelectWidth]="false"
+                    style="width: 100%" nzPlaceHolder="Select Segment" [(ngModel)]="segmentType" nzShowSearch
+                    nzAllowClear>
+                    <nz-option *ngFor="let segment of aSegmentType" nzLabel="{{segment}}" [nzValue]="segment">
+                    </nz-option>
+                </nz-select>
+            </div>
+
+            <div style="margin-top:3%; margin-right:3%; align-self: center;" nz-col nzXs="24" nzSm="10" nzMd="8" nzLg="5">
+                <button style="width: 100%" nz-button nzType="primary" nzShape="round" (click)="generate()">Generate</button>
+            </div>
+
+        </div>
+
+        <div nz-row nzJustify="start" nzAlign="middle" nz-row style="margin-top:2%;height: 40vh;">
+            <div style="margin-top:3%; margin-right:3%; " nz-col nzXs="24" nzSm="10" nzMd="8" nzLg="5">
+                <input type="text" nz-input style="width:100%;" placeholder="Enter Vehicle No." nzAllowClear
+                (input)="searchVehicle($event)" />
+
+                <nz-table #nzTable nzBordered [nzShowPagination]="false" [nzData]="vehDataCopy ? vehDataCopy : ''"
+                          nzSize="small"  [nzScroll]="{ x: '80px', y: '250px' }" style="overflow-x: auto">
+                  <thead>
+                  <tr>
+                    <th nzWidth="50px" *ngIf="!(reportType == 'report_activity_interval' || reportType == 'report_activity_trip' || reportType == 'report_ac' || reportType == 'report_parking' || reportType == 'report_activity' || reportType === 'report_idealing' || reportType === 'report_driver_activity_single' || reportType === 'details_analysis')" nzAlign="center" >
+                        <input type="checkbox" [checked]="checkedAll" (change)="selectAllRow(checkedAll = !checkedAll);" ><span style="justify-self:middle;">Select All</span>
+                    </th>
+                    <th *ngIf="reportType == 'report_activity_interval' || reportType == 'report_activity_trip' || reportType == 'report_ac' || reportType == 'report_parking' || reportType == 'report_activity' || reportType === 'report_idealing' || reportType === 'report_driver_activity_single' || reportType === 'details_analysis'" nzWidth="50px" nzAlign="center">Select Vehicle</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr
+                    style="cursor: pointer"
+                    *ngFor="let veh of vehDataCopy; let i=index; ">
+                    <td *ngIf="!(reportType == 'report_activity_interval' || reportType == 'report_activity_trip' || reportType == 'report_ac' || reportType == 'report_parking' || reportType == 'report_activity' || reportType === 'report_idealing' || reportType === 'report_driver_activity_single' || reportType === 'details_analysis')" nzAlign="left">
+                        <label nz-checkbox [(ngModel)]="veh.selected" (ngModelChange)="checkedVehicle(veh,veh.selected)" >{{veh.vehicle_reg_no}}</label>
+                    </td>
+                    <td *ngIf="reportType == 'report_activity_interval' || reportType == 'report_activity_trip' || reportType == 'report_ac' || reportType == 'report_parking' || reportType == 'report_activity' || reportType === 'report_idealing' || reportType === 'report_driver_activity_single' || reportType === 'details_analysis'" nzAlign="left">
+                        <nz-radio-group (ngModelChange)="checkedVehicleR(veh)" [(ngModel)]="selectedVehicleR">
+                            <label nz-radio [nzValue]="veh"> {{veh.vehicle_reg_no}}</label>
+                        </nz-radio-group>
+                    </td>
+                  </tr>
+                  </tbody>
+                </nz-table>
+                <br/><br/>
+            </div> 
+
+        </div>
+
+    </div>
+</div>
