@@ -7,7 +7,7 @@
     "hmr": "ng serve --configuration hmr",
     "ng-high-memory-serve": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng serve",
     "ng-high-memory-prod": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --configuration=prod",
-    "ng-high-memory": "node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng build",
+    "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build",
     "start": "ng serve  --no-live-reload",
     "buildDev": "ng build --base-href ./ --output-path ./cordova-build/www",
     "buildProd": "ng build --prod --base-href ./ --output-path ./cordova-build/www",
