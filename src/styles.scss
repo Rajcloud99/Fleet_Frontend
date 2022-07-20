@@ -1077,3 +1077,10 @@ a:active {
   border-radius: 7px;
   border-color: #d9d9d9;
 }
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
